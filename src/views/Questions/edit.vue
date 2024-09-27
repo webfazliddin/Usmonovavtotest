@@ -157,10 +157,10 @@ const saveData = async (submit: SubmitEventPromise) => {
       </UiParentCard>
 
       <v-row class="mt-4">
-        <v-col cols="12" md="6">
-          <v-btn color="error"> {{ $t("back") }} </v-btn>
+        <v-col cols="6" >
+          <v-btn color="error" @click="router.back()"> {{ $t("back") }} </v-btn>
         </v-col>
-        <v-col cols="12" md="6" class="text-right">
+        <v-col cols="6"  class="text-right">
           <v-btn type="submit" color="success"> {{ $t("save") }} </v-btn>
         </v-col>
       </v-row>
