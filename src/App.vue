@@ -16,13 +16,13 @@ onMounted(() => {
 });
 </script>
 <style>
- tr:nth-child(odd) {
-  background: rgb(var(--v-theme-oddTableColor));
-}
-
 a {
   text-decoration: none;
   outline: none;
   color: inherit;
+}
+
+body{
+  background-color: rgb(var(--v-theme-background));
 }
 </style>

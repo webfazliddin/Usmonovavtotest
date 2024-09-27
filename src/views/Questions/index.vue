@@ -18,6 +18,9 @@ const fetchQuestion = (id: string | number) => {
     },
   });
 };
+
+
+store.fetchQuestions()
 </script>
 
 <template>
@@ -33,7 +36,7 @@ const fetchQuestion = (id: string | number) => {
       </v-col>
       <v-col md="6" cols="12" class="text-lg-right">
         <v-btn color="info" @click="fetchQuestion(0)">
-          {{ $t("createQuestion") }}
+          {{ $t("createTest") }}
         </v-btn>
       </v-col>
     </v-row>

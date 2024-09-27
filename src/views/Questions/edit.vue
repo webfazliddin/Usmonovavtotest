@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import FormCheckbox from "@/components/form/FormCheckbox.vue";
 import FormInput from "@/components/form/FormInput.vue";
+import FormSelect from "@/components/form/FormSelect.vue";
 import UiParentCard from "@/components/UiParentCard.vue";
 import { QuestionsService } from "@/services/services/Questions";
 import { notify } from "@kyvg/vue3-notification";
@@ -14,6 +15,8 @@ interface IQuestions {
   questionText: string;
   description: string;
   choices: IQuestionsChoices[];
+  formFile: File | null;
+  categoryId: number | null;
 }
 
 interface IQuestionsChoices {
@@ -37,11 +40,14 @@ const formModel = ref<IQuestions>({
   questionText: "",
   choices: [],
   description: "",
+  categoryId: null,
+  formFile: null,
 });
 
 const addChoice = () => {
   formModel.value.choices.push(JSON.parse(JSON.stringify(choiceModel.value)));
 };
+
 const deleteChoice = (index: number) => {
   formModel.value.choices.splice(index, 1);
 };
@@ -57,9 +63,15 @@ const saveData = async (submit: SubmitEventPromise) => {
   if (valid) {
     const formData = new FormData();
 
-    formData.append("questionText", formModel.value.questionText);
-    formData.append("description", formModel.value.description);
-    formData.append("choices", JSON.stringify(formModel.value.choices));
+    for (const item in formModel.value) {
+      // @ts-ignore
+      formData.append(item, JSON.stringify(formModel.value[item]));
+    }
+
+    if (formModel.value.formFile) {
+      const blob = URL.createObjectURL(formModel.value?.formFile);
+      formData.append("formFile", blob);
+    }
 
     QuestionsService.PostQuestions(formData).then((res) => {
       notify({
@@ -81,6 +93,7 @@ const saveData = async (submit: SubmitEventPromise) => {
           <v-col cols="12">
             <FormInput
               required
+              type="textarea"
               :label="$t('questionText')"
               v-model:model-value="formModel.questionText"
             >
@@ -95,10 +108,35 @@ const saveData = async (submit: SubmitEventPromise) => {
             >
             </FormInput>
           </v-col>
+          <v-col lg="3" md="6" cols="12">
+            <v-label class="mb-2 font-weight-medium">
+              {{ $t("file") }}
+            </v-label>
+            <v-file-input
+              variant="outlined"
+              color="primary"
+              hide-details
+              label=""
+              accept="image/*"
+              v-model:model-value="formModel.formFile"
+            ></v-file-input>
+          </v-col>
+
+          <v-col lg="3" md="6" cols="12">
+            <FormSelect
+              :label="$t('category')"
+              v-model:model-value="formModel.categoryId"
+              :list="[]"
+            >
+            </FormSelect>
+          </v-col>
         </v-row>
       </UiParentCard>
 
       <UiParentCard class="mt-4">
+        <h2 class="mb-4 ml-4">
+          {{ $t("answers", { count: formModel.choices.length }) }}
+        </h2>
         <v-list
           class="pa-3"
           elevation="0 "
@@ -157,10 +195,10 @@ const saveData = async (submit: SubmitEventPromise) => {
       </UiParentCard>
 
       <v-row class="mt-4">
-        <v-col cols="6" >
+        <v-col cols="6">
           <v-btn color="error" @click="router.back()"> {{ $t("back") }} </v-btn>
         </v-col>
-        <v-col cols="6"  class="text-right">
+        <v-col cols="6" class="text-right">
           <v-btn type="submit" color="success"> {{ $t("save") }} </v-btn>
         </v-col>
       </v-row>

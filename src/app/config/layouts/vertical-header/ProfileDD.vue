@@ -31,27 +31,14 @@ function Logout() {
         </v-col>
       </v-row>
     </template>
-    <v-sheet
-      rounded="md"
-      class="sheet"
-      max-width="450"
-      elevation="10"
-      style="margin-top: 10px"
-    >
-      <v-col md="5" sm="12" class="pt-4 pb-3 px-4 text-center ml-auto">
+    <v-card style="margin-top: 0.625rem">
+      <v-card-text class="pa-0" >
         <v-btn color="primary" variant="flat" block @click="Logout">
-          <DoorExitIcon size="20" style="margin-right: 20px" />
+          <DoorExitIcon size="20" />
           {{ $t("Logout") }}
         </v-btn>
-      </v-col>
-    </v-sheet>
+      </v-card-text>
+    </v-card>
   </v-menu>
 </template>
-<style lang="scss" scoped>
-.sheet {
-  width: 28.125rem !important;
-  @media screen and (max-width: 600px) {
-    width: 100% !important;
-  }
-}
-</style>
+<style lang="scss" scoped></style>

@@ -11,6 +11,21 @@
   "fieldNotEmpty": "Maydon bo'sh",
   "logoTitle": "USMONOV AVTO TEST TEZLIK ZAVQI",
   "testPage": "Test bo'limlari",
-  "notFound":"Ma'lumot topilmadi",
-  "checkQuestion":"To'ldirilmagan polya mavjud"
+  "notFound": "Ma'lumot topilmadi",
+  "checkQuestion": "To'ldirilmagan polya mavjud",
+  "Logout": "Chiqish",
+  "back": "Orqaga",
+  "save": "Saqlash",
+  "createTest": "Test yaratish",
+  "questionText": "Savol matni",
+  "description": "Izoh",
+  "addChoice": "Javob qo'shish",
+  "choiceText": "Javob matni",
+  "isCorrect": "To'g'ri javob",
+  "questionSuccessCreate": "Test muvaffaqiyatli yaratildi",
+  "userName": "Foydalanuvchi nomi",
+  "isRemember": "Eslab qolish",
+  "signIn": "Kirish",
+  "answers": "Javoblar {count} ta",
+  "file": "Fayl"
 }
