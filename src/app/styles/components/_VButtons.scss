@@ -1,0 +1,40 @@
+.v-btn-group .v-btn {
+  height: inherit !important;
+}
+
+.v-btn-group {
+  border-color: rgb(var(--v-theme-borderColor)) !important;
+}
+.v-menu .v-btn {
+  min-height: calc(var(--v-btn-height) + 12px);
+}
+.v-btn {
+  // // --v-btn-size: 'auto';
+  // text-transform: capitalize;
+  // letter-spacing: 0;
+  // height: auto !important;
+  // // white-space: pre-wrap;
+  // min-height: calc(var(--v-btn-height) + 0px);
+  // // padding-top: 4px;
+  // // padding-bottom: 0.25rem;
+  // // font-size: 0.75rem;
+}
+.v-btn__content {
+  gap: 0.25rem;
+  svg {
+    flex-shrink: 0;
+    flex-grow: 0;
+  }
+}
+.v-btn-group--divided button {
+  border-color: rgb(var(--v-theme-borderColor)) !important;
+}
+.v-btn--elevated:hover {
+  box-shadow: none;
+}
+.v-btn--icon.v-btn--density-default {
+  height: calc(var(--v-btn-height) + 12px) !important;
+}
+.v-btn.v-btn--density-default {
+  white-space: nowrap !important;
+}

@@ -1,0 +1,16 @@
+{
+  "not_found_page": "sahifa topilmadi...",
+  "signInBannerTitle": "Hujjatlarini rasmiylashtirishda yordam kerkmi?",
+  "signInBannerDescription": "Hujjatlarini rasmiylashtirish va qayta tiklashda yordam berish",
+  "login": "Login",
+  "password": "Parol",
+  "enterText": "Matn kiriting",
+  "singIn": "Kirish",
+  "rememberMe": "Parolni eslab qol",
+  "forgotPassword": "Паролни есдан чиқардингизми?",
+  "fieldNotEmpty": "Maydon bo'sh",
+  "logoTitle": "USMONOV AVTO TEST TEZLIK ZAVQI",
+  "testPage": "Test bo'limlari",
+  "notFound":"Ma'lumot topilmadi",
+  "checkQuestion":"To'ldirilmagan polya mavjud"
+}
