@@ -22,10 +22,13 @@
   "addChoice": "Javob qo'shish",
   "choiceText": "Javob matni",
   "isCorrect": "To'g'ri javob",
-  "questionSuccessCreate": "Test muvaffaqiyatli yaratildi",
+  "questionSuccessCreated": "Test muvaffaqiyatli yaratildi",
+  "questionSuccessEdited": "Test muvaffaqiyatli o'zgartirildi",
   "userName": "Foydalanuvchi nomi",
   "isRemember": "Eslab qolish",
   "signIn": "Kirish",
   "answers": "Javoblar {count} ta",
-  "file": "Fayl"
+  "file": "Fayl",
+  "edit": "O'zgartirish",
+  "actions": "Amallar"
 }

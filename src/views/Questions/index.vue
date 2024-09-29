@@ -4,13 +4,14 @@ import { useRouter } from "vue-router";
 import { useQuestions } from "./store/useQuestions";
 import Banner from "@/components/Banner.vue";
 import UiParentCard from "@/components/UiParentCard.vue";
+import { DotsVerticalIcon, PencilIcon } from "vue-tabler-icons";
 
 const store = useQuestions();
 const { questions, questionsLoading } = storeToRefs(store);
 
 const router = useRouter();
 
-const fetchQuestion = (id: string | number) => {
+const fetchQuestionPage = (id: string | number) => {
   router.push({
     name: "EditQuestion",
     params: {
@@ -19,8 +20,7 @@ const fetchQuestion = (id: string | number) => {
   });
 };
 
-
-store.fetchQuestions()
+store.fetchQuestions();
 </script>
 
 <template>
@@ -35,7 +35,7 @@ store.fetchQuestions()
         <h1>{{ $t("testPage") }}</h1>
       </v-col>
       <v-col md="6" cols="12" class="text-lg-right">
-        <v-btn color="info" @click="fetchQuestion(0)">
+        <v-btn color="info" @click="fetchQuestionPage(0)">
           {{ $t("createTest") }}
         </v-btn>
       </v-col>
@@ -48,14 +48,58 @@ store.fetchQuestions()
     <UiParentCard class="text-center" v-if="questionsLoading">
       <v-progress-circular indeterminate></v-progress-circular>
     </UiParentCard>
-    <v-expansion-panels v-if="questions?.length && !questionsLoading">
+    <UiParentCard v-if="questions?.length && !questionsLoading">
+      <v-table>
+        <thead>
+          <tr>
+            <th>{{ $t("id") }}</th>
+            <th>{{ $t("questionText") }}</th>
+            <th>{{ $t("description") }}</th>
+            <th>{{ $t("actions") }}</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="item in questions">
+            <td>{{ item.id }}</td>
+            <td>{{ item.questionText }}</td>
+            <td>{{ item.description }}</td>
+            <td>
+              <v-menu>
+                <template #activator="{ props }">
+                  <DotsVerticalIcon
+                    class="cursor-pointer"
+                    v-bind="props"
+                  ></DotsVerticalIcon>
+                </template>
+
+                <v-card>
+                  <v-card-text class="pa-0">
+                    <v-list>
+                      <v-list-item value="edit" @click="fetchQuestionPage(item.id)" >
+                        <div class="d-flex align-center justify-center ga-2">
+                          <PencilIcon size="20" />
+                          <span class="text-13" > {{ $t("edit") }}</span>
+                        </div>
+                      </v-list-item>
+                    </v-list>
+                  </v-card-text>
+                </v-card>
+              </v-menu>
+            </td>
+          </tr>
+        </tbody>
+      </v-table>
+    </UiParentCard>
+    <!-- <v-expansion-panels v-if="questions?.length && !questionsLoading">
       <v-expansion-panel class="my-2" v-for="item in questions">
         <v-expansion-panel-title>
           {{ item?.questionText }}
         </v-expansion-panel-title>
-        <v-expansion-panel-text> </v-expansion-panel-text>
+        <v-expansion-panel-text>
+          <p>{{ item.description }}</p>
+        </v-expansion-panel-text>
       </v-expansion-panel>
-    </v-expansion-panels>
+    </v-expansion-panels> -->
   </div>
 </template>
 

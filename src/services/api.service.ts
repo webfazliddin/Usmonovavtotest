@@ -18,7 +18,9 @@ const ApiService = {
     axios.defaults.headers.common = {};
   },
   setHeader() {
-      axios.defaults.headers.common["Authorization"] = `Bearer ${localStorage.getItem("token")}`;
+    axios.defaults.headers.common[
+      "Authorization"
+    ] = `Bearer ${localStorage.getItem("token")}`;
   },
   get(resource: string, config?: AxiosRequestConfig) {
     return axios.get(resource, config);
@@ -37,7 +39,7 @@ const ApiService = {
     return axios
       .post(resource, innerData, {
         signal: controller.signal,
-        ...config
+        ...config,
       })
       .then((res) => {
         pendingForms.delete(innerData);
@@ -47,15 +49,15 @@ const ApiService = {
   formData(resource: string, data: object) {
     return axios.post(resource, data, {
       headers: {
-        "Content-Type": "multipart/form-data"
-      }
+        "Content-Type": "multipart/form-data",
+      },
     });
   },
   token(resource: string, data: object) {
     return axios.post(resource, data, {
       headers: {
-        "Content-Type": "application/json;charset=utf-8"
-      }
+        "Content-Type": "application/json;charset=utf-8",
+      },
     });
   },
   put(resource: string, data: object) {
@@ -68,26 +70,26 @@ const ApiService = {
   print(resourse: string, config?: AxiosRequestConfig) {
     return axios.get(resourse, {
       responseType: "blob",
-      ...config
+      ...config,
     });
   },
   printTemp(resourse: string, data?: any, config?: any) {
     return axios.post(resourse, data, {
       responseType: "blob",
-      ...config
+      ...config,
     });
   },
   postfile(resourse: string, data: object) {
     return axios.post(resourse, data, {
-      responseType: "blob"
+      responseType: "blob",
     });
   },
   blobandjson(resourse: string, data: object) {
     return axios.post(resourse, data, {
       headers: {
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
       },
-      responseType: "blob"
+      responseType: "blob",
     });
   },
   customRequest(data: any) {
@@ -101,6 +103,7 @@ const ApiService = {
       },
       async (error) => {
         if (error.request.status == 401) {
+          window.location.href = "/sign-in";
         }
 
         if (error.request.status == 403) {
@@ -111,7 +114,7 @@ const ApiService = {
           const text = removeWord(error.request.responseURL, API_URL.value);
           notify({
             title: "No content, status - 204",
-            text: `API ${text}`
+            text: `API ${text}`,
           });
         }
 
@@ -119,7 +122,7 @@ const ApiService = {
           notify({
             title: `status: ${error.request.status}`,
             text: `${error.request.responseText}`,
-            type: "error"
+            type: "error",
           });
           return;
         }
@@ -131,7 +134,7 @@ const ApiService = {
 
   unmount401Interceptor() {
     axios.interceptors.response.eject(this._401interceptor);
-  }
+  },
 };
 
 export default ApiService;

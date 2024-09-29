@@ -5,9 +5,10 @@ import FormSelect from "@/components/form/FormSelect.vue";
 import UiParentCard from "@/components/UiParentCard.vue";
 import { QuestionsService } from "@/services/services/Questions";
 import { notify } from "@kyvg/vue3-notification";
+import { onMounted } from "vue";
 import { ref } from "vue";
 import { useI18n } from "vue-i18n";
-import { useRouter } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 import { TrashIcon } from "vue-tabler-icons";
 import { SubmitEventPromise } from "vuetify/lib/framework.mjs";
 
@@ -28,6 +29,9 @@ interface IQuestionsChoices {
 
 const { t } = useI18n();
 const router = useRouter();
+const route = useRoute();
+const id = route.params.id as string;
+const loading = ref(false);
 
 const choiceModel = ref<IQuestionsChoices>({
   choiceText: "",
@@ -73,9 +77,13 @@ const saveData = async (submit: SubmitEventPromise) => {
       formData.append("formFile", blob);
     }
 
-    QuestionsService.PostQuestions(formData).then((res) => {
+    const api = +String(id) ? "PutQuestions" : "PostQuestions";
+    const text = +String(id) ? "Edited" : "Created";
+    const body = +String(id) ? formModel.value : formData;
+
+    QuestionsService[api](body, id).then((res) => {
       notify({
-        text: t("questionSuccessCreate"),
+        text: t(`questionSuccess${text}`),
         type: "success",
       });
 
@@ -83,11 +91,31 @@ const saveData = async (submit: SubmitEventPromise) => {
     });
   }
 };
+
+const fetchData = () => {
+  if (id) {
+    loading.value = true;
+    QuestionsService.GetById(+String(id))
+      .then((res) => {
+        formModel.value = res.data;
+      })
+      .finally(() => {
+        loading.value = false;
+      });
+  }
+};
+
+onMounted(() => {
+  fetchData();
+});
 </script>
 
 <template>
   <div>
-    <v-form @submit.prevent="saveData">
+    <UiParentCard v-if="loading" class="text-center">
+      <v-progress-circular indeterminate></v-progress-circular>
+    </UiParentCard>
+    <v-form @submit.prevent="saveData" v-if="!loading">
       <UiParentCard>
         <v-row>
           <v-col cols="12">

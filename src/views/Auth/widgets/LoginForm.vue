@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import FormInput from "@/components/form/FormInput.vue";
+import ApiService from "@/services/api.service";
 import { AuthService } from "@/services/services/Auth.service";
 import { useAdapter } from "@/utils/useAdapter";
 import { ref } from "vue";
@@ -23,7 +24,7 @@ const submit = async (submit: SubmitEventPromise) => {
   const { valid } = await submit;
   if (valid) {
     loading.value = true;
-    router.push({ name: "Questions" });
+    // router.push({ name: "Questions" });
 
     AuthService.SignIn(signModel.value)
       .then((res) => {
@@ -32,6 +33,8 @@ const submit = async (submit: SubmitEventPromise) => {
           res.data.token,
           isRemember.value ? "local" : "session"
         );
+
+        ApiService.setHeader();
 
         router.push({ name: "Questions" });
       })
