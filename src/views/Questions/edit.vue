@@ -79,9 +79,8 @@ const saveData = async (submit: SubmitEventPromise) => {
 
     const api = +String(id) ? "PutQuestions" : "PostQuestions";
     const text = +String(id) ? "Edited" : "Created";
-    const body = +String(id) ? formModel.value : formData;
 
-    QuestionsService[api](body, id).then((res) => {
+    QuestionsService[api](formData, id).then((res) => {
       notify({
         text: t(`questionSuccess${text}`),
         type: "success",
