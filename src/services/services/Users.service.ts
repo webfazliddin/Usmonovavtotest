@@ -1,10 +1,16 @@
 import ApiService from "../api.service";
 
 export const UsersService = {
-  Users() {
-    return ApiService.get("Users");
+  GetUsers(query: string) {
+    return ApiService.get(`Users?${query}`);
   },
-  Create(data: Object) {
+  GetById(id: string | number) {
+    return ApiService.get(`Users/${id}`);
+  },
+  PostUsers(data: Object, id?: string | number) {
     return ApiService.post("Users/Create", data);
+  },
+  PutUsers(data: Object, id: number | string) {
+    return ApiService.put(`Users/${id}`, data);
   },
 };

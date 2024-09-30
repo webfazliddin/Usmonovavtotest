@@ -8,7 +8,7 @@ export const useCheckPhoneNumber = () => {
   const phoneNumberRules = [
     (value: any) => {
       if (value) {
-        const newValue = String(value).split("+998");
+        const newValue = String(value).split("998");
         const phone = set(newValue[1]);
         if (phone?.length !== 9) {
           return i18n.global.t("invalidFormatPhoneNumber");
@@ -22,8 +22,8 @@ export const useCheckPhoneNumber = () => {
   const notRequiredPhoneNumberRules = [
     (value: any) => {
       if (value) {
-        if (String(value).length > 4) {
-          const newValue = String(value).split("+998");
+        if (String(value).length > 3) {
+          const newValue = String(value).split("998");
           const phone = set(newValue[1]);
           if (phone?.length !== 9) {
             return i18n.global.t("invalidFormatPhoneNumber");

@@ -24,8 +24,6 @@ const submit = async (submit: SubmitEventPromise) => {
   const { valid } = await submit;
   if (valid) {
     loading.value = true;
-    // router.push({ name: "Questions" });
-
     AuthService.SignIn(signModel.value)
       .then((res) => {
         setAdapter(
@@ -62,10 +60,10 @@ const submit = async (submit: SubmitEventPromise) => {
       </template>
     </FormInput>
     <v-checkbox v-model="isRemember" required hide-details color="primary">
-      <template v-slot:label class="">Remeber this Device</template>
+      <template v-slot:label class=""> {{ $t('isRemember') }} </template>
     </v-checkbox>
 
-    <v-btn type="submit" variant="flat" color="success" block>
+    <v-btn type="submit" variant="flat" color="success" block :loading="loading" >
       {{ $t("signIn") }}
     </v-btn>
   </v-form>

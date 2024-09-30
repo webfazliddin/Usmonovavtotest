@@ -1,13 +1,18 @@
-import { FileDescriptionIcon } from "vue-tabler-icons";
+import { FileDescriptionIcon, UsersIcon } from "vue-tabler-icons";
 
 export default [
   {
-    title: "Questions",
+    title: "Admin",
     children: [
       {
         title: "testPage",
-        to: "/questions",
+        to: "/admin/questions",
         icon: FileDescriptionIcon,
+      },
+      {
+        title: "users",
+        to: "/admin/users",
+        icon: UsersIcon,
       },
     ],
   },
