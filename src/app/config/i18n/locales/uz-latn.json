@@ -36,8 +36,9 @@
   "phoneNumber": "Telefon raqam",
   "isAdmin": "admin",
   "isActive": "Aktiv",
-  "successUserCreated":"Foydalanuvchi muvaffaqiyatli yaratildi",
-  "successUserEdited":"Foydalanuvchi muvaffaqiyatli o'zgartirildi",
-  "users":"Faydalanuvchilar",
-  "createUser":"Foydalanuvchi yaratish"
+  "successUserCreated": "Foydalanuvchi muvaffaqiyatli yaratildi",
+  "successUserEdited": "Foydalanuvchi muvaffaqiyatli o'zgartirildi",
+  "users": "Faydalanuvchilar",
+  "createUser": "Foydalanuvchi yaratish",
+  "RecordsFrom": "Qaydlar {current} dan {pageSize} gacha.  Jami {count} ta"
 }

@@ -1,36 +1,33 @@
-import { QuestionsService } from "@/services/services/Questions";
 import { UsersService } from "@/services/services/Users.service";
 import { setError } from "@/utils/helpers";
 import { defineStore } from "pinia";
 import { UserModel } from "../types";
 
+interface IFilter {
+  
+  page: number,
+  size: number,
+  total: number
+}
+
+
 export const useUsers = defineStore("users", {
   state: () => ({
     users: [] as UserModel[],
     usersLoading: false as boolean,
-    page: 1 as number,
-    size: 20 as number,
-    total: 0 as number,
+    filter: {
+      page: 1,
+      size: 20,
+      total: 0
+    } as IFilter
   }),
   actions: {
-    fetchQuestions() {
+    fetchUsers() {
       this.usersLoading = true;
-      UsersService.GetUsers(`Page=${this.page}&Size=${this.size}`)
+      UsersService.GetUsers(`Page=${this.filter.page}&Size=${this.filter.size}`)
         .then((res) => {
           this.users = res.data.data;
-          this.total = res.data.total;
-        })
-        .catch((e) => {
-          setError(e);
-        })
-        .finally(() => {
-          this.usersLoading = false;
-        });
-    },
-    PaginateQuestions() {
-      QuestionsService.GetQuestions(`Page=${this.page}&Size=${this.size}`)
-        .then((res) => {
-          this.users.push(...res.data.data);
+          this.filter.total = res.data.total;
         })
         .catch((e) => {
           setError(e);

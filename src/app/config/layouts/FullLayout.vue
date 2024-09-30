@@ -5,21 +5,16 @@ import VerticalHeaderVue from "./vertical-header/VerticalHeader.vue";
 import { useCustomizerStore } from "./store/customizer";
 import { useTheme } from "vuetify";
 
-
 const customizer = useCustomizerStore();
 const theme = useTheme();
 const route = useRoute();
-
 </script>
 
 <template>
   <v-locale-provider>
     <v-app :theme="theme.global.name.value">
       <VerticalSidebarVue />
-      <VerticalHeaderVue  />
-      <!-- <v-overlay persistent v-model="auth.authLoading" class="d-flex align-center justify-center">
-        <v-progress-circular indeterminate size="64" color="success" />
-      </v-overlay> -->
+      <VerticalHeaderVue />
       <v-main class="mt-5">
         <v-container fluid class="page-wrapper mt-6 pb-sm-15 pb-10">
           <div :class="customizer.boxed ? 'maxWidth' : ''">

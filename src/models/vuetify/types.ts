@@ -1,6 +1,11 @@
 import { Ref } from "vue";
 import { Density } from "./vuetifyTypes";
-import { VBtn, VCheckboxTypes, VFormInputTypes, VFormSelectTypes } from "./vuetify-components";
+import {
+  VBtn,
+  VCheckboxTypes,
+  VFormInputTypes,
+  VFormSelectTypes,
+} from "./vuetify-components";
 import { IFields } from "../basic";
 
 export interface IToggleIconButtons {
@@ -23,24 +28,15 @@ export interface FormBtn extends VBtn {
 export interface ITable {
   fields: IFields[];
   filter?: any;
-  customInterface?: unknown;
-  service?: any;
-  routerName?: string;
-  permission?: string;
-  hasPagination?: boolean;
-  manualRefresh?: boolean;
-  apiName?: string;
+  items: any[];
   tableHeight?: string;
-  resData?: string;
   density?: Density;
   fixedHeader?: boolean;
   fixedFooter?: boolean;
+  loading?: boolean;
   hover?: boolean;
   tableClass?: string;
   tableRef?: Ref;
-  params?: any;
-  removeKeys?: string[];
-  // isDanger?: boolean;
   identifier?: boolean;
   appendAction?: boolean;
   prependAction?: boolean;

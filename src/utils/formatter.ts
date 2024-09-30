@@ -3,6 +3,10 @@
 import i18n from "@/app/config/i18n/index";
 
 export function useFormatter() {
+  function formatPrice(data: any) {
+    let type: any = new Intl.NumberFormat("en-US").format(data);
+    return type?.replaceAll(",", " ");
+  }
   const isToday = (someDate: Date) => {
     const today = new Date();
     return (
@@ -48,7 +52,7 @@ export function useFormatter() {
       i18n.global.t("months.september"),
       i18n.global.t("months.october"),
       i18n.global.t("months.november"),
-      i18n.global.t("months.december")
+      i18n.global.t("months.december"),
     ];
     const short_months = [
       i18n.global.t("short_months.january"),
@@ -62,7 +66,7 @@ export function useFormatter() {
       i18n.global.t("short_months.september"),
       i18n.global.t("short_months.october"),
       i18n.global.t("short_months.november"),
-      i18n.global.t("short_months.december")
+      i18n.global.t("short_months.december"),
     ];
     switch (format) {
       case "dd":
@@ -141,7 +145,11 @@ export function useFormatter() {
     return arr;
   };
 
-  const removeItemFromArray = (arr: any[], value: number | any, byIndex = true) => {
+  const removeItemFromArray = (
+    arr: any[],
+    value: number | any,
+    byIndex = true
+  ) => {
     if (byIndex) {
       arr.splice(value, 1);
     } else {
@@ -202,6 +210,7 @@ export function useFormatter() {
     handleHms,
     removeItemFromArray,
     dateRange,
-    handleDateIso
+    handleDateIso,
+    formatPrice,
   };
 }

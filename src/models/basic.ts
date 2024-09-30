@@ -31,11 +31,8 @@ export interface IFields {
 
   thClass?: number | string;
   tdClass?: number | string;
-
-  children?: IFields[];
   isRow?: boolean;
   visible?: boolean;
-  removeChildParent?: boolean;
 }
 
 export interface innerFields {
