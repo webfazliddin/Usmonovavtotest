@@ -1,3 +1,4 @@
+import { CategoriesRoutes } from "@/views/Auth/Categories/Routes";
 import { QuestionRoutes } from "@/views/Questions/Routes";
 import { UserRoutes } from "@/views/User/Routes";
 import { RouteRecordRaw } from "vue-router";
@@ -20,6 +21,7 @@ const MainRoutes: RouteRecordRaw = {
     },
     ...QuestionRoutes,
     ...UserRoutes,
+    ...CategoriesRoutes,
   ],
 };
 

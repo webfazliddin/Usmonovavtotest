@@ -1,4 +1,4 @@
-import { FileDescriptionIcon, UsersIcon } from "vue-tabler-icons";
+import { CircleIcon, FileDescriptionIcon, UsersIcon } from "vue-tabler-icons";
 
   export default [
   {
@@ -13,6 +13,11 @@ import { FileDescriptionIcon, UsersIcon } from "vue-tabler-icons";
         title: "users",
         to: "/admin/users",
         icon: UsersIcon,
+      },
+      { 
+        title: "categories",
+        to: "/admin/categories",
+        icon: CircleIcon,
       },
     ],
   },

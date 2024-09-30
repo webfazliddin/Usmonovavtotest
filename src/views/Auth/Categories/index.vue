@@ -1,36 +1,33 @@
 <script setup lang="ts">
 import { storeToRefs } from "pinia";
 import { useRouter } from "vue-router";
-import { useQuestions } from "./store/useQuestions";
 import Banner from "@/components/Banner.vue";
 import UiParentCard from "@/components/UiParentCard.vue";
 import { DotsVerticalIcon, PencilIcon } from "vue-tabler-icons";
-import FormTable from "@/components/form/FormTable.vue";
+import { useUsers } from "./store/useCategories";
 import { IFields } from "@/models/basic";
-import DeleteAction from "@/components/Actions/DeleteAction.vue";
-import { QuestionsService } from "@/services/services/Questions";
+import FormTable from "@/components/form/FormTable.vue";
 
-const store = useQuestions();
-const { questions, questionsLoading, filter } = storeToRefs(store);
+const store = useUsers();
+const { users, usersLoading, filter } = storeToRefs(store);
 
 const router = useRouter();
 
 const fields: IFields[] = [
   { key: "id", label: "id" },
-  { key: "questionText", label: "questionText" },
-  { key: "description", label: "description" },
+  { key: "name", label: "name" },
 ];
 
-const fetchQuestionPage = (item: any) => {
+const fetchUserPage = (item: any) => {
   router.push({
-    name: "EditQuestion",
+    name: "EditUsers",
     params: {
       id: item?.id ? item?.id : 0,
     },
   });
 };
 
-store.fetchQuestions();
+store.fetchUsers();
 </script>
 
 <template>
@@ -42,20 +39,22 @@ store.fetchQuestions();
     </Banner>
     <v-row class="mb-4">
       <v-col md="6" cols="12">
-        <h1>{{ $t("testPage") }}</h1>
+        <h1>{{ $t("users") }}</h1>
       </v-col>
       <v-col md="6" cols="12" class="text-sm-right">
-        <v-btn color="info" @click="fetchQuestionPage(0)">
-          {{ $t("createTest") }}
+        <v-btn color="info" @click="fetchUserPage(0)">
+          {{ $t("createUser") }}
         </v-btn>
       </v-col>
     </v-row>
+
     <UiParentCard>
       <FormTable
         :fields="fields"
-        :items="questions"
-        :loading="questionsLoading"
+        :items="users"
+        :loading="usersLoading"
         :filter="filter"
+        @refresh="store.fetchUsers()"
         append-action
       >
         <template #actions="{ item }">
@@ -66,7 +65,7 @@ store.fetchQuestions();
             <v-menu activator="parent">
               <v-list>
                 <v-list-item
-                  @click="fetchQuestionPage(item)"
+                  @click="fetchUserPage(item)"
                   value="edit"
                   hide-details
                   min-height="38"
@@ -78,12 +77,6 @@ store.fetchQuestions();
                     {{ $t("edit") }}
                   </v-list-item-title>
                 </v-list-item>
-                <DeleteAction
-                  :item="item"
-                  :service="QuestionsService"
-                  @refresh="store.fetchQuestions()"
-                >
-                </DeleteAction>
               </v-list>
             </v-menu>
           </v-btn>
