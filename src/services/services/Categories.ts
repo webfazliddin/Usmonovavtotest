@@ -10,7 +10,7 @@ export const CategoriesService = {
   SelectList() {
     return ApiService.get(`Categories/selectlist`);
   },
-  PutCategories(data: FormData, id: number | string) {
+  PutCategories(data: Object, id: number | string) {
     return ApiService.put(`Categories/${id}`, data);
   },
   Delete(id: string | number) {

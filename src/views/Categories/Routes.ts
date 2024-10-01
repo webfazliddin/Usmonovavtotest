@@ -6,4 +6,9 @@ export const CategoriesRoutes: RouteRecordRaw[] = [
     name: "Categories",
     component: () => import("./index.vue"),
   },
+  {
+    path: "/admin/categories/edit/:id",
+    name: "EditCategories",
+    component: () => import("./edit.vue"),
+  },
 ];

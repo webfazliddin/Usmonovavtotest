@@ -8,7 +8,7 @@ interface IFilter {
   total: number;
 }
 
-export const useUsers = defineStore("users", {
+export const useCategories = defineStore("categories", {
   state: () => ({
     categories: [] as any[],
     categoriesLoading: false as boolean,
@@ -19,13 +19,14 @@ export const useUsers = defineStore("users", {
     } as IFilter,
   }),
   actions: {
-    fetchUsers() {
+    fetchCategories() {
       this.categoriesLoading = true;
       CategoriesService.GetCategories(
         `Page=${this.filter.page}&Size=${this.filter.size}`
       )
         .then((res) => {
-          this.categories = res.data.data;
+          this.categories = res.data.data
+
           this.filter.total = res.data.total;
         })
         .catch((e) => {

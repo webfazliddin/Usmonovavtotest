@@ -1,32 +1,33 @@
 <script setup lang="ts">
 import { storeToRefs } from "pinia";
+import { useRouter } from "vue-router";
 import Banner from "@/components/Banner.vue";
 import UiParentCard from "@/components/UiParentCard.vue";
 import { DotsVerticalIcon, PencilIcon } from "vue-tabler-icons";
-import { useUsers } from "./store/useCategories";
+import { useCategories } from "./store/useCategories";
 import { IFields } from "@/models/basic";
 import FormTable from "@/components/form/FormTable.vue";
 
-const store = useUsers();
+const store = useCategories();
 const { categories, categoriesLoading, filter } = storeToRefs(store);
 
-// const router = useRouter();
+const router = useRouter();
 
 const fields: IFields[] = [
   { key: "id", label: "id" },
   { key: "name", label: "name" },
 ];
 
-const fetchUserPage = (item: any) => {
-  // router.push({
-  //   name: "EditUsers",
-  //   params: {
-  //     id: item?.id ? item?.id : 0,
-  //   },
-  // });
+const fetchCategoriesPage = (item: any) => {
+  router.push({
+    name: "EditCategories",
+    params: {
+      id: item?.id ? item?.id : 0,
+    },
+  });
 };
 
-store.fetchUsers();
+store.fetchCategories();
 </script>
 
 <template>
@@ -38,10 +39,10 @@ store.fetchUsers();
     </Banner>
     <v-row class="mb-4">
       <v-col md="6" cols="12">
-        <h1>{{ $t("categories") }}</h1>
+        <h1>{{ $t("Categoties") }}</h1>
       </v-col>
       <v-col md="6" cols="12" class="text-sm-right">
-        <v-btn color="info" >
+        <v-btn color="info" @click="fetchCategoriesPage({id:0})">
           {{ $t("createCategory") }}
         </v-btn>
       </v-col>
@@ -53,7 +54,7 @@ store.fetchUsers();
         :items="categories"
         :loading="categoriesLoading"
         :filter="filter"
-        @refresh="store.fetchUsers()"
+        @refresh="store.fetchCategories()"
         append-action
       >
         <template #actions="{ item }">
@@ -64,7 +65,7 @@ store.fetchUsers();
             <v-menu activator="parent">
               <v-list>
                 <v-list-item
-                  @click="fetchUserPage(item)"
+                  @click="fetchCategoriesPage(item)"
                   value="edit"
                   hide-details
                   min-height="38"
