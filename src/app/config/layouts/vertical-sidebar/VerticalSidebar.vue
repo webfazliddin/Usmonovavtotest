@@ -30,6 +30,7 @@ const router = useRouter();
       @click="router.push('/')"
     >
       <img :src="LogoRu" width="50" alt="" />
+      <div style="line-height: 17px;">Usmonov <br> avto test</div>
       <v-btn
         class="hidden-md-and-down ml-auto"
         icon
