@@ -3,6 +3,8 @@ import FormCheckbox from "@/components/form/FormCheckbox.vue";
 import FormInput from "@/components/form/FormInput.vue";
 import FormSelect from "@/components/form/FormSelect.vue";
 import UiParentCard from "@/components/UiParentCard.vue";
+import { ISelectList } from "@/models/basic";
+import { CategoriesService } from "@/services/services/Categories";
 import { QuestionsService } from "@/services/services/Questions";
 import { notify } from "@kyvg/vue3-notification";
 import { onMounted } from "vue";
@@ -47,6 +49,8 @@ const formModel = ref<IQuestions>({
   categoryId: null,
   formFile: null,
 });
+
+const categories = ref<ISelectList[]>([]);
 
 const addChoice = () => {
   formModel.value.choices.push(JSON.parse(JSON.stringify(choiceModel.value)));
@@ -104,8 +108,15 @@ const fetchData = () => {
   }
 };
 
+const fetchQuestionsSelectList = () => {
+  CategoriesService.SelectList().then((res) => {
+    categories.value = res.data;
+  });
+};
+
 onMounted(() => {
   fetchData();
+  fetchQuestionsSelectList();
 });
 </script>
 
@@ -153,7 +164,9 @@ onMounted(() => {
             <FormSelect
               :label="$t('category')"
               v-model:model-value="formModel.categoryId"
-              :list="[]"
+              :list="categories"
+              itemValue="id"
+              itemTitle="name"
             >
             </FormSelect>
           </v-col>
