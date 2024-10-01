@@ -40,5 +40,5 @@
   "successUserEdited": "Foydalanuvchi muvaffaqiyatli o'zgartirildi",
   "users": "Faydalanuvchilar",
   "createUser": "Foydalanuvchi yaratish",
-  "RecordsFrom": "Qaydlar {current} dan {pageSize} gacha.  Jami {count} ta"
+  "RecordsFrom": "Qaydlar {current} dan {size} gacha.  Jami {count} ta"
 }
