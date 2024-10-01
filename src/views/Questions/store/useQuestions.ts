@@ -1,5 +1,4 @@
 import { ISelectList } from "@/models/basic";
-import { CategoriesService } from "@/services/services/Categories";
 import { QuestionsService } from "@/services/services/Questions";
 import { setError } from "@/utils/helpers";
 import { defineStore } from "pinia";
