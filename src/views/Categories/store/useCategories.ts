@@ -26,6 +26,7 @@ export const useCategories = defineStore("categories", {
       )
         .then((res) => {
           this.categories = res.data.data
+
           this.filter.total = res.data.total;
         })
         .catch((e) => {
