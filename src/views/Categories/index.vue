@@ -9,7 +9,7 @@ import { IFields } from "@/models/basic";
 import FormTable from "@/components/form/FormTable.vue";
 
 const store = useUsers();
-const { users, usersLoading, filter } = storeToRefs(store);
+const { categories, categoriesLoading, filter } = storeToRefs(store);
 
 const router = useRouter();
 
@@ -19,12 +19,12 @@ const fields: IFields[] = [
 ];
 
 const fetchUserPage = (item: any) => {
-  router.push({
-    name: "EditUsers",
-    params: {
-      id: item?.id ? item?.id : 0,
-    },
-  });
+  // router.push({
+  //   name: "EditUsers",
+  //   params: {
+  //     id: item?.id ? item?.id : 0,
+  //   },
+  // });
 };
 
 store.fetchUsers();
@@ -39,11 +39,11 @@ store.fetchUsers();
     </Banner>
     <v-row class="mb-4">
       <v-col md="6" cols="12">
-        <h1>{{ $t("users") }}</h1>
+        <h1>{{ $t("categories") }}</h1>
       </v-col>
       <v-col md="6" cols="12" class="text-sm-right">
-        <v-btn color="info" @click="fetchUserPage(0)">
-          {{ $t("createUser") }}
+        <v-btn color="info" >
+          {{ $t("createCategory") }}
         </v-btn>
       </v-col>
     </v-row>
