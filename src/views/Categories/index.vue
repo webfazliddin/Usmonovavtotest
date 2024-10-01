@@ -41,7 +41,7 @@ store.fetchCategories();
     </Banner>
     <v-row class="mb-4">
       <v-col md="6" cols="12">
-        <h1>{{ $t("categories") }}</h1>
+        <h2>{{ $t("categories") }}</h2>
       </v-col>
       <v-col md="6" cols="12" class="text-sm-right">
         <v-btn color="info" @click="fetchCategoriesPage({ id: 0 })">
