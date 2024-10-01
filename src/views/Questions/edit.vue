@@ -162,7 +162,7 @@ onMounted(() => {
 
       <UiParentCard class="mt-4">
         <h2 class="mb-4 ml-4">
-          {{ $t("answers", { count: formModel.choices.length }) }}
+          {{ $t("answers", { count: formModel.choices?.length }) }}
         </h2>
         <v-list
           class="pa-3"
