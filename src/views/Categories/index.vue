@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { storeToRefs } from "pinia";
-import { useRouter } from "vue-router";
 import Banner from "@/components/Banner.vue";
 import UiParentCard from "@/components/UiParentCard.vue";
 import { DotsVerticalIcon, PencilIcon } from "vue-tabler-icons";
@@ -11,7 +10,7 @@ import FormTable from "@/components/form/FormTable.vue";
 const store = useUsers();
 const { categories, categoriesLoading, filter } = storeToRefs(store);
 
-const router = useRouter();
+// const router = useRouter();
 
 const fields: IFields[] = [
   { key: "id", label: "id" },
@@ -51,8 +50,8 @@ store.fetchUsers();
     <UiParentCard>
       <FormTable
         :fields="fields"
-        :items="users"
-        :loading="usersLoading"
+        :items="categories"
+        :loading="categoriesLoading"
         :filter="filter"
         @refresh="store.fetchUsers()"
         append-action
