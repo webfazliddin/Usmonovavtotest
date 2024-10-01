@@ -27,7 +27,7 @@ export const useUsers = defineStore("users", {
       UsersService.GetUsers(`Page=${this.filter.page}&Size=${this.filter.size}`)
         .then((res) => {
           this.users = res.data.data;
-          this.filter.total = res.data.total;
+          this.filter.total = res.data.totalCount;
         })
         .catch((e) => {
           setError(e);
