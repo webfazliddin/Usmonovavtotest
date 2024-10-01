@@ -16,7 +16,7 @@ const { questions, questionsLoading, filter } = storeToRefs(store);
 const router = useRouter();
 
 const fields: IFields[] = [
-  { key: "id", label: "id" },
+  { key: "id", label: "ID" },
   { key: "questionText", label: "questionText" },
   { key: "description", label: "description" },
 ];
@@ -42,7 +42,7 @@ store.fetchQuestions();
     </Banner>
     <v-row class="mb-4">
       <v-col md="6" cols="12">
-        <h1>{{ $t("testPage") }}</h1>
+        <h2>{{ $t("testPage") }}</h2>
       </v-col>
       <v-col md="6" cols="12" class="text-sm-right">
         <v-btn color="info" @click="fetchQuestionPage(0)">

@@ -4,6 +4,7 @@ import { notify } from "@kyvg/vue3-notification";
 import { AxiosError } from "axios";
 import { ref, toRefs } from "vue";
 import { TrashIcon } from "vue-tabler-icons";
+import { useI18n } from "vue-i18n";
 
 interface IProps {
   item: any;
@@ -11,6 +12,7 @@ interface IProps {
 }
 const props = defineProps<IProps>();
 const emits = defineEmits(["refresh"]);
+const { t } = useI18n();
 
 const { item, service } = toRefs(props);
 
@@ -23,7 +25,7 @@ const deleteItem = () => {
     service.value["Delete"](item?.value?.id)
       .then(() => {
         notify({
-          text: "successDeleted",
+          text: t(`successDeleted`),
           type: "success",
         });
 

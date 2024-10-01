@@ -73,7 +73,7 @@ const saveData = async (submit: SubmitEventPromise) => {
 
     for (const item in formModel.value) {
       // @ts-ignore
-      formData.append(item, JSON.stringify(formModel.value[item]));
+      formData.append(item, (formModel.value[item]));
     }
 
     if (formModel.value.formFile) {

@@ -24,7 +24,7 @@ withDefaults(defineProps<IProps>(), {
 <style lang="scss" scoped>
 .banner {
   width: 100%;
-  padding: 2.25rem 1.875rem;
+  padding: 1.25rem 1.875rem;
   width: 100%;
   display: flex;
   align-items: center;

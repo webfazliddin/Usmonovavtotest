@@ -14,7 +14,7 @@ const { users, usersLoading, filter } = storeToRefs(store);
 const router = useRouter();
 
 const fields: IFields[] = [
-  { key: "id", label: "id" },
+  { key: "id", label: "ID" },
   { key: "firstName", label: "firstName" },
   { key: "lastName", label: "lastName" },
   { key: "userName", label: "userName" },
@@ -42,7 +42,7 @@ store.fetchUsers();
     </Banner>
     <v-row class="mb-4">
       <v-col md="6" cols="12">
-        <h1>{{ $t("users") }}</h1>
+        <h2>{{ $t("users") }}</h2>
       </v-col>
       <v-col md="6" cols="12" class="text-sm-right">
         <v-btn color="info" @click="fetchUserPage(0)">
