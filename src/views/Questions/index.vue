@@ -16,7 +16,7 @@ const { questions, questionsLoading, filter } = storeToRefs(store);
 const router = useRouter();
 
 const fields: IFields[] = [
-  { key: "id", label: "id" },
+  { key: "id", label: "ID" },
   { key: "questionText", label: "questionText" },
   { key: "description", label: "description" },
 ];
