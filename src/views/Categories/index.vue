@@ -7,6 +7,8 @@ import { DotsVerticalIcon, PencilIcon } from "vue-tabler-icons";
 import { useCategories } from "./store/useCategories";
 import { IFields } from "@/models/basic";
 import FormTable from "@/components/form/FormTable.vue";
+import DeleteAction from "@/components/Actions/DeleteAction.vue";
+import { CategoriesService } from "@/services/services/Categories";
 
 const store = useCategories();
 const { categories, categoriesLoading, filter } = storeToRefs(store);
@@ -39,10 +41,10 @@ store.fetchCategories();
     </Banner>
     <v-row class="mb-4">
       <v-col md="6" cols="12">
-        <h1>{{ $t("Categoties") }}</h1>
+        <h1>{{ $t("Categories") }}</h1>
       </v-col>
       <v-col md="6" cols="12" class="text-sm-right">
-        <v-btn color="info" @click="fetchCategoriesPage({id:0})">
+        <v-btn color="info" @click="fetchCategoriesPage({ id: 0 })">
           {{ $t("createCategory") }}
         </v-btn>
       </v-col>
@@ -77,6 +79,13 @@ store.fetchCategories();
                     {{ $t("edit") }}
                   </v-list-item-title>
                 </v-list-item>
+
+                <DeleteAction
+                  :item="item"
+                  :service="CategoriesService"
+                  @refresh="store.fetchCategories()"
+                >
+                </DeleteAction>
               </v-list>
             </v-menu>
           </v-btn>
