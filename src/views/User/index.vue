@@ -14,7 +14,7 @@ const { users, usersLoading, filter } = storeToRefs(store);
 const router = useRouter();
 
 const fields: IFields[] = [
-  { key: "id", label: "id" },
+  { key: "id", label: "ID" },
   { key: "firstName", label: "firstName" },
   { key: "lastName", label: "lastName" },
   { key: "userName", label: "userName" },

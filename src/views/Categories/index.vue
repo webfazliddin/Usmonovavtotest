@@ -16,8 +16,8 @@ const { categories, categoriesLoading, filter } = storeToRefs(store);
 const router = useRouter();
 
 const fields: IFields[] = [
-  { key: "id", label: "id" },
-  { key: "name", label: "name" },
+  { key: "id", label: "ID" },
+  { key: "name", label: "categoryName" },
 ];
 
 const fetchCategoriesPage = (item: any) => {
