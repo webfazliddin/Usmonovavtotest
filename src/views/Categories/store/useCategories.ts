@@ -8,10 +8,10 @@ interface IFilter {
   total: number;
 }
 
-export const useUsers = defineStore("users", {
+export const useCategories = defineStore("categories", {
   state: () => ({
-    users: [] as any[],
-    usersLoading: false as boolean,
+    categories: [] as any[],
+    categoriesLoading: false as boolean,
     filter: {
       page: 1,
       size: 20,
@@ -19,20 +19,20 @@ export const useUsers = defineStore("users", {
     } as IFilter,
   }),
   actions: {
-    fetchUsers() {
-      this.usersLoading = true;
+    fetchCategories() {
+      this.categoriesLoading = true;
       CategoriesService.GetCategories(
         `Page=${this.filter.page}&Size=${this.filter.size}`
       )
         .then((res) => {
-          this.users = res.data.data;
+          this.categories = res.data.data
           this.filter.total = res.data.total;
         })
         .catch((e) => {
           setError(e);
         })
         .finally(() => {
-          this.usersLoading = false;
+          this.categoriesLoading = false;
         });
     },
   },

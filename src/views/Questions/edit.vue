@@ -92,7 +92,7 @@ const saveData = async (submit: SubmitEventPromise) => {
 };
 
 const fetchData = () => {
-  if (id) {
+  if (+String(id)) {
     loading.value = true;
     QuestionsService.GetById(+String(id))
       .then((res) => {
