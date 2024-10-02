@@ -1,10 +1,12 @@
 <script setup lang="ts">
+import FileUpload from "@/components/form/FileUpload.vue";
 import FormCheckbox from "@/components/form/FormCheckbox.vue";
 import FormInput from "@/components/form/FormInput.vue";
 import FormSelect from "@/components/form/FormSelect.vue";
 import UiParentCard from "@/components/UiParentCard.vue";
 import { ISelectList } from "@/models/basic";
 import { CategoriesService } from "@/services/services/Categories";
+import { FilesService } from "@/services/services/Files.service";
 import { QuestionsService } from "@/services/services/Questions";
 import { notify } from "@kyvg/vue3-notification";
 import { onMounted } from "vue";
@@ -18,7 +20,7 @@ interface IQuestions {
   questionText: string;
   description: string;
   choices: IQuestionsChoices[];
-  formFile: File | null;
+  fileId: string;
   categoryId: number | null;
 }
 
@@ -35,6 +37,8 @@ const route = useRoute();
 const id = route.params.id as string;
 const loading = ref(false);
 
+const file = ref<File>();
+
 const choiceModel = ref<IQuestionsChoices>({
   choiceText: "",
   id: 0,
@@ -47,7 +51,7 @@ const formModel = ref<IQuestions>({
   choices: [],
   description: "",
   categoryId: null,
-  formFile: null,
+  fileId: "",
 });
 
 const categories = ref<ISelectList[]>([]);
@@ -69,22 +73,10 @@ const saveData = async (submit: SubmitEventPromise) => {
     });
   }
   if (valid) {
-    const formData = new FormData();
-
-    for (const item in formModel.value) {
-      // @ts-ignore
-      formData.append(item, JSON.stringify(formModel.value[item]));
-    }
-
-    if (formModel.value.formFile) {
-      const blob = URL.createObjectURL(formModel.value?.formFile);
-      formData.append("formFile", blob);
-    }
-
     const api = +String(id) ? "PutQuestions" : "PostQuestions";
     const text = +String(id) ? "Edited" : "Created";
 
-    QuestionsService[api](formData, id).then((res) => {
+    QuestionsService[api](formModel.value, id).then((res) => {
       notify({
         text: t(`questionSuccess${text}`),
         type: "success",
@@ -93,6 +85,12 @@ const saveData = async (submit: SubmitEventPromise) => {
       router.push({ name: "Questions" });
     });
   }
+};
+
+const fetchFile = (valeu: FormData) => {
+  FilesService.PostFiles(valeu).then((res) => {
+    formModel.value.fileId = res.data.fileName;
+  });
 };
 
 const fetchData = () => {
@@ -146,21 +144,20 @@ onMounted(() => {
             >
             </FormInput>
           </v-col>
-          <v-col lg="3" md="6" cols="12">
-            <v-label class="mb-2 font-weight-medium">
-              {{ $t("file") }}
-            </v-label>
-            <v-file-input
-              variant="outlined"
-              color="primary"
-              hide-details
-              label=""
+          <v-col md="6" cols="12">
+            <FileUpload
+              :title="$t('file')"
               accept="image/*"
-              v-model:model-value="formModel.formFile"
-            ></v-file-input>
+              form-data-key="file"
+              color="info"
+              :files="formModel.fileId"
+              @update-file="fetchFile"
+              @delete-file="formModel.fileId = ''"
+            >
+            </FileUpload>
           </v-col>
 
-          <v-col lg="3" md="6" cols="12">
+          <v-col md="6" cols="12">
             <FormSelect
               :label="$t('category')"
               v-model:model-value="formModel.categoryId"

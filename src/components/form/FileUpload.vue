@@ -24,7 +24,7 @@ interface IProps {
 const props = withDefaults(defineProps<IProps>(), {
   color: "success",
   canDelete: true,
-  id: "pic1"
+  id: "pic1",
 });
 
 const { t } = useI18n();
@@ -43,9 +43,9 @@ const checkFileSize = (event: Event) => {
     if (files[0].size > limitedSize) {
       notify({
         text: t("brokenLimitedSize", {
-          size: (limitedSize / 1024 / 1024).toFixed(2)
+          size: (limitedSize / 1024 / 1024).toFixed(2),
         }),
-        type: "warn"
+        type: "warn",
       });
 
       if (fileRef.value) {
@@ -86,20 +86,34 @@ const deleteFile = (event: Event, file: any, index: number) => {
 </script>
 
 <template>
-  <div class="w-100">
+  <div class="d-flex flex-column align-start">
     <v-btn :color="color" :size="size" :disabled="disabled" v-if="!view">
       <label :for="id" class="d-flex align-center">
         <slot name="icon">
           <PaperclipIcon class="mr-2" v-if="!progress" />
           <CheckIcon class="mr-2" v-if="progress == 100" />
-          <v-progress-circular indeterminate size="20" class="mr-2" v-if="progress && progress < 100 && progress > 0" />
+          <v-progress-circular
+            indeterminate
+            size="20"
+            class="mr-2"
+            v-if="progress && progress < 100 && progress > 0"
+          />
         </slot>
-        <span v-if="progress && progress !== 100"> {{ Math.ceil(progress) }}% </span>
+        <span v-if="progress && progress !== 100">
+          {{ Math.ceil(progress) }}%
+        </span>
         <span v-if="!progress || progress == 100">
           {{ title }}
           <span v-if="required" style="color: red">*</span>
         </span>
-        <input :size="limitedSize" :accept="accept" type="file" :id="id" ref="fileRef" @change="updateFile" />
+        <input
+          :size="limitedSize"
+          :accept="accept"
+          type="file"
+          :id="id"
+          ref="fileRef"
+          @change="updateFile"
+        />
       </label>
     </v-btn>
     <template v-if="Array.isArray(files)">
@@ -116,7 +130,14 @@ const deleteFile = (event: Event, file: any, index: number) => {
       </v-chip>
     </template>
     <template v-else-if="files && !Array.isArray(files)">
-      <v-chip class="mt-3" color="info" :disabled="disabled" @click="downLoadFile" :closable="canDelete" @click:close="deleteFile($event, files, 0)">
+      <v-chip
+        class="mt-3"
+        color="info"
+        :disabled="disabled"
+        @click="downLoadFile"
+        :closable="canDelete"
+        @click:close="deleteFile($event, files, 0)"
+      >
         <span class="chip-content">{{ files }}</span>
       </v-chip>
     </template>
