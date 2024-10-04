@@ -4,6 +4,11 @@ import { CircleIcon, FileDescriptionIcon, UsersIcon } from "vue-tabler-icons";
   {
     title: "Admin",
     children: [
+      { 
+        title: "categories",
+        to: "/admin/categories",
+        icon: CircleIcon,
+      },
       {
         title: "testPage",
         to: "/admin/questions",
@@ -14,11 +19,7 @@ import { CircleIcon, FileDescriptionIcon, UsersIcon } from "vue-tabler-icons";
         to: "/admin/users",
         icon: UsersIcon,
       },
-      { 
-        title: "categories",
-        to: "/admin/categories",
-        icon: CircleIcon,
-      },
+     
     ],
   },
 ];

@@ -47,6 +47,7 @@
   "yes": "Ha",
   "deleteItem": "O'chirish",
   "categoryName": "Bo'lim nomi",
-  "categories": "Bo'lim",
+  "categories": "Bo'lim", 
+  "category": "Bo'lim",
   "createCategory": "Bo'lim yaratish"
 }

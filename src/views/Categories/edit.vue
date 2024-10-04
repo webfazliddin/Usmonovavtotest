@@ -83,7 +83,7 @@ onMounted(() => {
           <v-col lg="3" md="6" cols="12">
             <FormInput
               v-model:model-value="formModel.name"
-              :label="$t('categotyName')"
+              :label="$t('categoryName')"
               required
             />
           </v-col>

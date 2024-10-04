@@ -68,7 +68,7 @@ const saveData = async (submit: SubmitEventPromise) => {
   const { valid, errors } = await submit;
   if (errors.length) {
     notify({
-      text: "checkQuestion",
+      text: t(`checkQuestion`),
       type: "warn",
     });
   }
