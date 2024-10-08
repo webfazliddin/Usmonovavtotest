@@ -1,12 +1,8 @@
 // @ts-check
 
-import i18n from "@/app/config/i18n/index";
+import i18n from "@/app/config/i18n";
 
 export function useFormatter() {
-  function formatPrice(data: any) {
-    let type: any = new Intl.NumberFormat("en-US").format(data);
-    return type?.replaceAll(",", " ");
-  }
   const isToday = (someDate: Date) => {
     const today = new Date();
     return (
@@ -36,8 +32,8 @@ export function useFormatter() {
 
     return fullYear;
   };
-
   const secondsToHms = (d: number) => {
+    
     const h = Math.floor(d / 3600);
     const m = Math.floor((d % 3600) / 60);
     const s = Math.floor((d % 3600) % 60);
@@ -54,36 +50,33 @@ export function useFormatter() {
     }
   };
 
-  const handleDate = (value: string | Date, format = "dd.mm.yyyy") => {
+  const isTomorrow = (someDate: Date) => {
+    const today = new Date();
+    let tomorrow = new Date();
+
+    tomorrow.setDate(today.getDate() + 1);
+    return (
+      someDate.getDate() == tomorrow.getDate() &&
+      someDate.getMonth() == tomorrow.getMonth() &&
+      someDate.getFullYear() == tomorrow.getFullYear()
+    );
+  };
+
+  const handleDate = (value: string, format = "dd.mm.yyyy") => {
     const dateObj = new Date(value);
     const months = [
-      // @ts-ignore
-      i18n.global.t("months.january"),
-      i18n.global.t("months.february"),
-      i18n.global.t("months.march"),
-      i18n.global.t("months.april"),
-      i18n.global.t("months.may"),
-      i18n.global.t("months.june"),
-      i18n.global.t("months.july"),
-      i18n.global.t("months.august"),
-      i18n.global.t("months.september"),
-      i18n.global.t("months.october"),
-      i18n.global.t("months.november"),
-      i18n.global.t("months.december"),
-    ];
-    const short_months = [
-      i18n.global.t("short_months.january"),
-      i18n.global.t("short_months.february"),
-      i18n.global.t("short_months.march"),
-      i18n.global.t("short_months.april"),
-      i18n.global.t("short_months.may"),
-      i18n.global.t("short_months.june"),
-      i18n.global.t("short_months.july"),
-      i18n.global.t("short_months.august"),
-      i18n.global.t("short_months.september"),
-      i18n.global.t("short_months.october"),
-      i18n.global.t("short_months.november"),
-      i18n.global.t("short_months.december"),
+      i18n.global.t("january"),
+      i18n.global.t("february"),
+      i18n.global.t("march"),
+      i18n.global.t("april"),
+      i18n.global.t("may"),
+      i18n.global.t("june"),
+      i18n.global.t("july"),
+      i18n.global.t("august"),
+      i18n.global.t("september"),
+      i18n.global.t("october"),
+      i18n.global.t("november"),
+      i18n.global.t("december"),
     ];
     switch (format) {
       case "dd":
@@ -94,16 +87,20 @@ export function useFormatter() {
         return `${("0" + dateObj.getDate()).substr(-2)} ${
           months[dateObj.getMonth()]
         }`;
-      case "d m y":
-        return `${("0" + dateObj.getDate()).substr(-2)} ${
-          short_months[dateObj.getMonth()]
-        },  ${dateObj.getFullYear()}`;
       case "dddd":
         return isToday(dateObj)
           ? i18n.global.t("days.today")
           : isYesterday(dateObj)
           ? i18n.global.t("days.yesterday")
           : i18n.global.t("days." + dateObj.getDay());
+      case "week":
+        return isToday(dateObj)
+          ? i18n.global.t("today")
+          : isYesterday(dateObj)
+          ? i18n.global.t("yesterday")
+          : isTomorrow(dateObj)
+          ? i18n.global.t("tomorrow")
+          : `${("0" + dateObj.getDate()).substr(-2)}.${("0" + (dateObj.getMonth() + 1)).substr(-2)}.${dateObj.getFullYear()}`
       default:
         return `${("0" + dateObj.getDate()).substr(-2)}.${(
           "0" +
@@ -124,21 +121,29 @@ export function useFormatter() {
     }
   };
 
-  const handleHms = (value: any, format = "hh:mm") => {
+  const handleHms = (value: any, format = "hh:mm:ss") => {
     const h = Math.floor(value / 3600);
     const m = Math.floor((value % 3600) / 60);
-    const s = Math.floor((value % 3600) % 60);
-    if (h !== 0) {
-      switch (format) {
-        default:
-          return ` ${h + i18n.global.t("hms.h")}. ${
-            m + i18n.global.t("hms.m")
-          }. `;
-      }
-    } else {
-      return `${m.toString().slice(-2) + i18n.global.t(`hms.m`)} ${
-        s.toString().slice(-2) + i18n.global.t("hms.s")
-      }`;
+    const s = Math.floor((value % 3600) % 60);   
+    switch (format) {
+      case "hh":
+        return ` ${h + i18n.global.t("hms.h")}.`;
+      case "mm":
+        return ` ${m + i18n.global.t("hms.m")}.`;
+
+      default:
+        if (h !== 0) {
+          switch (format) {
+            default:
+              return ` ${h + i18n.global.t("hms.h")}. ${
+                m + i18n.global.t("hms.m")
+              }. `;
+          }
+        } else {
+          return `${m.toString().slice(-2) + i18n.global.t(`hms.m`)} ${
+            s.toString().slice(-2) + i18n.global.t("hms.s")
+          }`;
+        }
     }
   };
 
@@ -162,11 +167,7 @@ export function useFormatter() {
     return arr;
   };
 
-  const removeItemFromArray = (
-    arr: any[],
-    value: number | any,
-    byIndex = true
-  ) => {
+  const removeItemFromArray = (arr: any[], value: any, byIndex = true) => {
     if (byIndex) {
       arr.splice(value, 1);
     } else {
@@ -191,6 +192,7 @@ export function useFormatter() {
       theDate.setDate(theDate.getDate() + 1);
     }
     dates = [...dates, endDate];
+
     return dates;
   };
 
@@ -228,7 +230,6 @@ export function useFormatter() {
     removeItemFromArray,
     dateRange,
     handleDateIso,
-    formatPrice,
     secondsToHms,
   };
 }

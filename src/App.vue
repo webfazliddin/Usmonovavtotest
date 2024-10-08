@@ -1,28 +1,28 @@
-<template>
-  <div>
-    <RouterView></RouterView>
-    <CustomNotification />
-  </div>
-</template>
-
 <script setup lang="ts">
-import CustomNotification from "./components/CustomNotification.vue";
-import ApiService from "./services/api.service";
 import { RouterView } from "vue-router";
-import { onMounted } from "vue";
+import { watch } from "vue";
+import ApiService from "./services/api.service";
+import { useGlobalStore } from "./stores/globalStore";
 
 ApiService.setHeader();
-onMounted(() => {
-});
+const store = useGlobalStore();
+// watch(
+//   () => store.theme,
+//   (newTheme) => {
+//     typeof document !== "undefined" &&
+//       document.querySelector("html")?.setAttribute("data-theme", newTheme);
+//     typeof localStorage !== "undefined" &&
+//       localStorage.setItem("theme", newTheme);
+//   },
+//   { immediate: true }
+// );
 </script>
-<style>
-a {
-  text-decoration: none;
-  outline: none;
-  color: inherit;
-}
 
-body{
-  background-color: rgb(var(--v-theme-background));
-}
+<template>
+  <RouterView></RouterView>
+  <!-- <CustomNotification /> -->
+</template>
+
+<style>
+/* @import "@/app/styles/index.scss"; */
 </style>
