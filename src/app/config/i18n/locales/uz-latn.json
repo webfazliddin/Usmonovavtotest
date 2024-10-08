@@ -47,7 +47,10 @@
   "yes": "Ha",
   "deleteItem": "O'chirish",
   "categoryName": "Bo'lim nomi",
-  "categories": "Bo'lim", 
+  "categories": "Bo'lim",
   "category": "Bo'lim",
-  "createCategory": "Bo'lim yaratish"
+  "createCategory": "Bo'lim yaratish",
+  "testCount": "Testlar soni {count} ta",
+  "allotedTime": "Ajratilgan vaqt {time}",
+  "startTest": "Testni boshlash"
 }

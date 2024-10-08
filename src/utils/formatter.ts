@@ -37,6 +37,23 @@ export function useFormatter() {
     return fullYear;
   };
 
+  const secondsToHms = (d: number) => {
+    const h = Math.floor(d / 3600);
+    const m = Math.floor((d % 3600) / 60);
+    const s = Math.floor((d % 3600) % 60);
+    if (h !== 0) {
+      return (
+        ("0" + h).slice(-2) +
+        ":" +
+        ("0" + m).slice(-2) +
+        ":" +
+        ("0" + s).slice(-2)
+      );
+    } else {
+      return ("0" + m).slice(-2) + ":" + ("0" + s).slice(-2);
+    }
+  };
+
   const handleDate = (value: string | Date, format = "dd.mm.yyyy") => {
     const dateObj = new Date(value);
     const months = [
@@ -212,5 +229,6 @@ export function useFormatter() {
     dateRange,
     handleDateIso,
     formatPrice,
+    secondsToHms,
   };
 }
