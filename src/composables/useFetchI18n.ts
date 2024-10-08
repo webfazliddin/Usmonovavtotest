@@ -1,7 +1,9 @@
 import i18n, { SUPPORT_LOCALES } from "@/app/config/i18n";
 import { ref } from "vue";
 
-const availableLocales = import.meta.glob("@/app/config/i18n/locales/*.json", { eager: true });
+const availableLocales = import.meta.glob("@/app/config/i18n/locales/*.json", {
+  eager: true,
+});
 
 export function useFetchI18n() {
   const loading = ref(false);
@@ -17,7 +19,7 @@ export function useFetchI18n() {
       const componentName: any = path.split("/").at(-1)?.split(".")[0];
       locales = {
         ...locales,
-        [componentName]: {}
+        [componentName]: {},
       };
     }
   };
@@ -32,7 +34,7 @@ export function useFetchI18n() {
           // @ts-ignore
           ...i18n.global.messages.value[key],
           // @ts-ignore
-          ...storageLocales[key]
+          ...storageLocales[key],
         });
       }
     }
@@ -48,12 +50,14 @@ export function useFetchI18n() {
           .then((res: any[]) => {
             res.forEach((item) => {
               for (const key in item) {
-                const langKey = key == "uz" ? "uz-cyrl" : key == "oz" ? "uz-latn" : key;
+                const langKey =
+                  key == "uz" ? "uz-cyrl" : key == "oz" ? "uz-latn" : key;
+
                 if (SUPPORT_LOCALES.includes(langKey)) {
                   const text = item[key] ? item[key] : item?.key;
                   locales[langKey] = {
                     ...locales[langKey],
-                    [item?.key]: text
+                    [item?.key]: text,
                   };
                 }
               }
@@ -62,7 +66,7 @@ export function useFetchI18n() {
               i18n.global.setLocaleMessage(key, {
                 // @ts-ignore
                 ...i18n.global.messages.value[key],
-                ...locales[key]
+                ...locales[key],
               });
             }
 
@@ -92,6 +96,6 @@ export function useFetchI18n() {
   return {
     fetchLang,
     getLocaleNames,
-    loading
+    loading,
   };
 }
