@@ -4,16 +4,16 @@ const BLUE_THEME: ThemeTypes = {
   name: "BLUE_THEME",
   dark: false,
   variables: {
-    "border-color": "#e5eaef"
+    "border-color": "#e5eaef",
   },
   colors: {
     primary: "#1e4db7",
     secondary: "#1a97f5",
     info: "#539BFF",
     success: "#05b187",
-    accent: "#FFAB91",
+    accent: "#e52e22",
     warning: "#FFAE1F",
-    error: "#FA896B",
+    error: "#e52e22",
     lightprimary: "#f5fcfd",
     lightsecondary: "#E8F7FF",
     lightsuccess: "#E6FFFA",
@@ -32,22 +32,22 @@ const BLUE_THEME: ThemeTypes = {
     grey200: "#EAEFF4",
     lightGrey: "#faf8f8",
     link: "#0000EE",
-    violet: "#7367f0"
-  }
+    violet: "#7367f0",
+  },
 };
 
 const RED_THEME: ThemeTypes = {
   name: "RED_THEME",
   dark: false,
   variables: {
-    "border-color": "#e5eaef"
+    "border-color": "#e5eaef",
   },
   colors: {
     primary: "#5e244d",
     secondary: "#ff5c8e",
     info: "#539BFF",
     success: "#05b187",
-    accent: "#FFAB91",
+    accent: "#e52e22",
     warning: "#FFAE1F",
     error: "#FA896B",
     lightprimary: "#fce6ed",
@@ -68,22 +68,22 @@ const RED_THEME: ThemeTypes = {
     grey200: "#EAEFF4",
     lightGrey: "#faf8f8",
     link: "#0000EE",
-    violet: "#7367f0"
-  }
+    violet: "#7367f0",
+  },
 };
 
 const PURPLE_THEME: ThemeTypes = {
   name: "PURPLE_THEME",
   dark: false,
   variables: {
-    "border-color": "#e5eaef"
+    "border-color": "#e5eaef",
   },
   colors: {
     primary: "#402e8d",
     secondary: "#7352ff",
     info: "#539BFF",
     success: "#05b187",
-    accent: "#FFAB91",
+    accent: "#e52e22",
     warning: "#FFAE1F",
     error: "#FA896B",
     lightprimary: "#F2ECF9",
@@ -104,22 +104,22 @@ const PURPLE_THEME: ThemeTypes = {
     grey200: "#EAEFF4",
     lightGrey: "#faf8f8",
     link: "#0000EE",
-    violet: "#7367f0"
-  }
+    violet: "#7367f0",
+  },
 };
 
 const GREEN_THEME: ThemeTypes = {
   name: "GREEN_THEME",
   dark: false,
   variables: {
-    "border-color": "#e5eaef"
+    "border-color": "#e5eaef",
   },
   colors: {
     primary: "#066a73",
     secondary: "#00cec3",
     info: "#539BFF",
     success: "#05b187",
-    accent: "#FFAB91",
+    accent: "#e52e22",
     warning: "#FFAE1F",
     error: "#FA896B",
     lightprimary: "#F4F9FB",
@@ -141,23 +141,23 @@ const GREEN_THEME: ThemeTypes = {
     grey200: "#EAEFF4",
     lightGrey: "#faf8f8",
     link: "#0000EE",
-    violet: "#7367f0"
-  }
+    violet: "#7367f0",
+  },
 };
 
 const INDIGO_THEME: ThemeTypes = {
   name: "INDIGO_THEME",
   dark: false,
   variables: {
-    "border-color": "#e5eaef"
+    "border-color": "#e5eaef",
   },
   colors: {
     primary: "#11397b",
     secondary: "#1e4db7",
     info: "#539BFF",
     success: "#05b187",
-    accent: "#FFAB91",
-    warning: "#FFAE1F",
+    accent: "#e52e22",
+    warning: "#e52e22",
     error: "#FA896B",
     lightprimary: "#EBF9FA",
     lightsecondary: "#FFF5F2",
@@ -178,22 +178,22 @@ const INDIGO_THEME: ThemeTypes = {
     grey200: "#919396",
     lightGrey: "#faf8f8",
     link: "#0000EE",
-    violet: "#7367f0"
-  }
+    violet: "#7367f0",
+  },
 };
 
 const ORANGE_THEME: ThemeTypes = {
   name: "ORANGE_THEME",
   dark: false,
   variables: {
-    "border-color": "#e5eaef"
+    "border-color": "#e5eaef",
   },
   colors: {
     primary: "#fb9678",
     secondary: "#669961",
     info: "#539BFF",
     success: "#05b187",
-    accent: "#FFAB91",
+    accent: "#e52e22",
     warning: "#fec90f",
     error: "#e52e22",
     light: "#ffffff",
@@ -216,8 +216,15 @@ const ORANGE_THEME: ThemeTypes = {
     lightGrey: "#faf8f8",
     link: "#0000EE",
     violet: "#7367f0",
-    oddTableColor: "#f6f6f6"
-  }
+    oddTableColor: "#f6f6f6",
+  },
 };
 
-export { BLUE_THEME, RED_THEME, ORANGE_THEME, PURPLE_THEME, GREEN_THEME, INDIGO_THEME };
+export {
+  BLUE_THEME,
+  RED_THEME,
+  ORANGE_THEME,
+  PURPLE_THEME,
+  GREEN_THEME,
+  INDIGO_THEME,
+};

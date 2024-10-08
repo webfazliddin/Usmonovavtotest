@@ -9,7 +9,7 @@ import TestProcess from "./widgets/TestProcess.vue";
 
 const myCategories = ref<MyCategories[]>([]);
 const loading = ref(false);
-const isDialog = ref<boolean>(true);
+const isDialog = ref<boolean>(false);
 const selectedCategory = ref<MyCategories | null>({
   answeredCount: 0,
   attemptId: 14,
@@ -68,14 +68,14 @@ getMyCategories();
         </v-expansion-panel>
       </v-expansion-panels>
     </UiParentCard>
-
+    <!-- 
     <v-dialog v-if="isDialog" v-model:model-value="isDialog" fullscreen>
       <TestProcess
         v-if="selectedCategory"
         :category="selectedCategory"
         :count="10"
       />
-    </v-dialog>
+    </v-dialog> -->
   </div>
 </template>
 

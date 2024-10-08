@@ -31,12 +31,20 @@ const refreshTimer = () => {
   }, 1000);
 };
 
+const fetchAttemp = () => {
+  // MyCategoriesService.GetMyCategory(category.value.id).then((res) => {});
+};
+
+const nextAttemp = () => {
+  // MyCategoriesService.GetMyCategoryAttemp(category.value.id).then((res) => {});
+};
+
 refreshTimer();
 </script>
 
 <template>
   <v-card class="bg-background">
-    <v-card-title class="pa-0 ma-8">
+    <v-card-title class="pa-0 mx-8">
       <v-toolbar color="info" class="px-8 py-4 bg-gradient rounded-lg">
         <div class="test-header">
           <div class="left-collar">
@@ -56,14 +64,16 @@ refreshTimer();
       </v-toolbar>
     </v-card-title>
 
-    <v-card-text class="bg-light">
+    <v-card-text class="bg-light mx-4">
       <v-slide-group show-arrows>
-        <v-slide-group-item v-for="n in 5" :key="n" icon>
+        <v-slide-group-item v-for="n in count" :key="n" icon>
           <div class="d-flex align-center">
-            <button class="btn">
-              <span>{{ n }}</span>
-            </button>
-            <div class="divider" v-if="i + 1 !== data?.questionCount"></div>
+            <div class="btn-outline">
+              <button class="btn">
+                <span>{{ n }}</span>
+              </button>
+            </div>
+            <div class="divider" v-if="n != count"></div>
           </div>
         </v-slide-group-item>
       </v-slide-group>
@@ -74,6 +84,10 @@ refreshTimer();
 <style lang="scss" scoped>
 .bg-gradient {
   background: linear-gradient(91.88deg, #0e449b 0%, #4284eb 100%);
+}
+.bg-light {
+  border-radius: 10px;
+  margin-top: 26px;
 }
 .test-header {
   display: flex;
@@ -122,6 +136,25 @@ refreshTimer();
   }
 }
 
+.btn-outline {
+  border: 0.0625rem solid;
+  border-radius: 50%;
+  flex: 0 0 2.5rem;
+  width: 2.5rem;
+  height: 2.5rem;
+  flex: 0 0 2.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.divider {
+  flex: 0 0 1.125rem;
+  width: 1.125rem;
+  height: 2px;
+  background: rgb(var(--v-theme-info));
+}
+
 .btn {
   flex: 0 0 2rem;
   width: 2rem;
@@ -129,70 +162,6 @@ refreshTimer();
   display: flex;
   justify-content: center;
   align-items: center;
-  background: rgb(var(--v-theme-background));
   border-radius: 50%;
-  border: 1px solid;
-  span {
-    padding: 4px;
-    width: 90%;
-    height: 90%;
-  }
 }
-.divider {
-  width: 11px;
-  height: 0.0625rem;
-  background: rgb(var(--v-theme-background));
-  margin: 32px 0;
-}
-
-// .counts {
-//   display: flex;
-//   text-align: center;
-//   .counts-inner {
-//     display: flex;
-//     margin: 0 auto;
-//     overflow-x: auto;
-//   }
-//   .item {
-//     display: flex;
-//     align-items: center;
-//     .divider {
-//       flex: 0 0 1.125rem;
-//       width: 1.125rem;
-//       padding: 0;
-//     }
-//     .btn-outline {
-//       border: 0.0625rem solid;
-//       border-radius: 50%;
-//       flex: 0 0 2.5rem;
-//       width: 2.5rem;
-//       height: 2.5rem;
-//       flex: 0 0 2.5rem;
-//       display: flex;
-//       align-items: center;
-//       justify-content: center;
-//     }
-//     :deep().btn {
-//       flex: 0 0 2rem;
-//       width: 2rem;
-//       height: 2rem;
-//       display: flex;
-//       justify-content: center;
-//       align-items: center;
-//       span {
-//         color: var(--secondary-light) !important;
-//       }
-
-//       &.active {
-//         background: var(--bar-card-active-bg-color) !important;
-//       }
-//       &.less {
-//         background: var(--success) !important;
-//       }
-//       &.pass {
-//         background: var(--error) !important;
-//       }
-//     }
-//   }
-// }
 </style>
