@@ -37,7 +37,7 @@ const route = useRoute();
 const id = route.params.id as string;
 const loading = ref(false);
 
-const file = ref<File>();
+// const file = ref<File>();
 
 const choiceModel = ref<IQuestionsChoices>({
   choiceText: "",
