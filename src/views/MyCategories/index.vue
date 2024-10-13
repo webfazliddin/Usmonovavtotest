@@ -68,14 +68,14 @@ getMyCategories();
         </v-expansion-panel>
       </v-expansion-panels>
     </UiParentCard>
-    <!-- 
+
     <v-dialog v-if="isDialog" v-model:model-value="isDialog" fullscreen>
       <TestProcess
         v-if="selectedCategory"
         :category="selectedCategory"
         :count="10"
       />
-    </v-dialog> -->
+    </v-dialog>
   </div>
 </template>
 

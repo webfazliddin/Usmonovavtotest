@@ -7,10 +7,4 @@ export const MyCategoriesService = {
   GetMyCategory(categoryId: number) {
     return ApiService.get(`/Mycategories/${categoryId}/attempts`);
   },
-  GetMyCategoryAttemp(categoryId: number, attemptId: number) {
-    return ApiService.get(`/Mycategories/${categoryId}/attempts/${attemptId}`);
-  },
-  PostMyCategoryAttemp(categoryId: number, attemptId: number) {
-    return ApiService.post(`/Mycategories/${categoryId}/attempts/${attemptId}`);
-  },
 };

@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import { ref, toRefs } from "vue";
-import { ICategoryAttemp, MyCategories } from "../types";
+import { ICategoryAttemp, ICategoryAttempData, MyCategories } from "../types";
 import { useFormatter } from "@/utils/formatter";
+import { AttemptService } from "@/services/services/Attempts.service";
 
 interface IProps {
   category: MyCategories;
@@ -11,7 +12,7 @@ const props = defineProps<IProps>();
 const { category } = toRefs(props);
 
 const { secondsToHms } = useFormatter();
-const attemp = ref<ICategoryAttemp | null>(null);
+const attemp = ref<ICategoryAttempData | null>(null);
 
 const timer_interval = ref<number | undefined>();
 const timer = ref(60);
@@ -32,6 +33,9 @@ const refreshTimer = () => {
 };
 
 const fetchAttemp = () => {
+  AttemptService.StartQuestion(`/${category.value.id}/attempts`).then((res) => {
+    attemp.value = res.data.data;
+  });
   // MyCategoriesService.GetMyCategory(category.value.id).then((res) => {});
 };
 
@@ -40,6 +44,7 @@ const nextAttemp = () => {
 };
 
 refreshTimer();
+fetchAttemp();
 </script>
 
 <template>
@@ -66,7 +71,7 @@ refreshTimer();
 
     <v-card-text class="bg-light mx-4">
       <v-slide-group show-arrows>
-        <v-slide-group-item v-for="n in count" :key="n" icon>
+        <v-slide-group-item v-for="n in attemp?.question" icon>
           <div class="d-flex align-center">
             <div class="btn-outline">
               <button class="btn">
