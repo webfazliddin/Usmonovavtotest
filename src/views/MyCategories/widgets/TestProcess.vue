@@ -60,6 +60,7 @@ const fetchAttemp = () => {
 
 const nextAttemp = () => {
   if (activeQuestion.value && !activeQuestion.value.choiceId) return;
+
   const result: IPostAttemp = {
     questionId: activeQuestion.value.question.id,
     choiceId: activeQuestion.value.choiceId,
@@ -106,14 +107,6 @@ const setActiveQuestionIndex = (index: number) => {
   if (attempt.value[index].choiceId) {
     activeQuestionIndex.value = index;
   }
-  // const lastAnswer = attempt.value.find((item) => !item.choiceId);
-
-  // if (!lastAnswer) {
-  //   return;
-  // }
-  // activeQuestionIndex.value = attempt.value.indexOf(lastAnswer);
-
-  // activeQuestionIndex.value = index;
 };
 
 refreshTimer();
