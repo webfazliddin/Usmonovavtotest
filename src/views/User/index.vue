@@ -57,7 +57,7 @@ store.fetchUsers();
         :items="users"
         :loading="usersLoading"
         :filter="filter"
-        @refresh="store.fetchUsers()"
+        @refresh="store.fetchUsers"
         append-action
       >
         <template #actions="{ item }">

@@ -56,7 +56,7 @@ store.fetchCategories();
         :items="categories"
         :loading="categoriesLoading"
         :filter="filter"
-        @refresh="store.fetchCategories()"
+        @refresh="store.fetchCategories"
         append-action
       >
         <template #actions="{ item }">

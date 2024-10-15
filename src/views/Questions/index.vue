@@ -57,6 +57,7 @@ store.fetchQuestions();
         :loading="questionsLoading"
         :filter="filter"
         append-action
+        @refresh="store.fetchQuestions"
       >
         <template #actions="{ item }">
           <v-btn size="30" icon variant="flat" class="grey100">

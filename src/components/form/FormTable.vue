@@ -36,6 +36,10 @@ const lastNumber = computed(() => {
   }
   return 0;
 });
+
+const refresh = (props: any) => {
+  emits("refresh", props);
+};
 </script>
 
 <template>
@@ -178,7 +182,7 @@ const lastNumber = computed(() => {
                 </slot>
               </template>
               <!-- ACTIONS -->
-              <td v-if="appendAction" class="text-center" >
+              <td v-if="appendAction" class="text-center">
                 <slot name="actions" :item="item"> </slot>
               </td>
             </tr>
@@ -222,6 +226,7 @@ const lastNumber = computed(() => {
             v-model="filter.page"
             :length="Math.ceil(filter.total / filter.size)"
             :total-visible="4"
+            @click="refresh"
           ></v-pagination>
         </v-col>
       </v-row>
