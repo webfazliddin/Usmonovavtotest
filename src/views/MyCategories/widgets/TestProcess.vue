@@ -1,21 +1,31 @@
 <script setup lang="ts">
-import { ref, toRefs } from "vue";
-import { ICategoryAttemp, ICategoryAttempData, MyCategories } from "../types";
+import { computed, ref, toRefs } from "vue";
+import { ICategoryAttempData, IPostAttemp, MyCategories } from "../types";
 import { useFormatter } from "@/utils/formatter";
 import { AttemptService } from "@/services/services/Attempts.service";
+import AnswerCard from "./AnswerCard.vue";
+import { setError } from "@/utils/helpers";
 
 interface IProps {
   category: MyCategories;
-  count: number;
+  modelValue: boolean;
 }
 const props = defineProps<IProps>();
 const { category } = toRefs(props);
 
+const emits = defineEmits(["update:modelValue"]);
+
 const { secondsToHms } = useFormatter();
-const attemp = ref<ICategoryAttempData | null>(null);
+const attempt = ref<ICategoryAttempData[]>([]);
 
 const timer_interval = ref<number | undefined>();
 const timer = ref(60);
+const activeQuestionIndex = ref(0);
+const saveLoading = ref(false);
+const activeQuestion = computed(
+  () => attempt.value && attempt.value[activeQuestionIndex.value]
+);
+const selected = ref<number | null>(null);
 
 const clearTimer = () => clearInterval(timer_interval.value);
 
@@ -33,14 +43,77 @@ const refreshTimer = () => {
 };
 
 const fetchAttemp = () => {
+  if (category.value && category.value.attemptId) {
+    AttemptService.StartQuestion(
+      `/${category.value.id}/attempts/${category.value.attemptId}`
+    ).then((res) => {
+      attempt.value = res.data.questions;
+      foundLastQuestion();
+    });
+
+    return;
+  }
   AttemptService.StartQuestion(`/${category.value.id}/attempts`).then((res) => {
-    attemp.value = res.data.data;
+    attempt.value = res.data.questions;
   });
-  // MyCategoriesService.GetMyCategory(category.value.id).then((res) => {});
 };
 
 const nextAttemp = () => {
-  // MyCategoriesService.GetMyCategoryAttemp(category.value.id).then((res) => {});
+  if (activeQuestion.value && !activeQuestion.value.choiceId) return;
+  const result: IPostAttemp = {
+    questionId: activeQuestion.value.question.id,
+    choiceId: activeQuestion.value.choiceId,
+  };
+
+  saveLoading.value = true;
+
+  AttemptService.SaveQuestion(
+    `/${category.value.id}/attempts/${category.value.attemptId}`,
+    result
+  )
+    .then(() => {
+      selected.value = null;
+
+      if (activeQuestionIndex.value < attempt.value.length) {
+        activeQuestionIndex.value = activeQuestionIndex.value + 1;
+      } else {
+      }
+    })
+    .catch((e) => {
+      setError(e);
+    })
+    .finally(() => {
+      saveLoading.value = false;
+    });
+};
+
+const foundLastQuestion = () => {
+  if (attempt.value) {
+    const lastAnswer = attempt.value.find((item) => !item.choiceId);
+
+    if (!lastAnswer) {
+      return;
+    }
+    activeQuestionIndex.value = attempt.value.indexOf(lastAnswer);
+  }
+};
+
+const handleAnswerClick = (answerId: number) => {
+  activeQuestion.value.choiceId = answerId;
+};
+
+const setActiveQuestionIndex = (index: number) => {
+  if (attempt.value[index].choiceId) {
+    activeQuestionIndex.value = index;
+  }
+  // const lastAnswer = attempt.value.find((item) => !item.choiceId);
+
+  // if (!lastAnswer) {
+  //   return;
+  // }
+  // activeQuestionIndex.value = attempt.value.indexOf(lastAnswer);
+
+  // activeQuestionIndex.value = index;
 };
 
 refreshTimer();
@@ -49,8 +122,8 @@ fetchAttemp();
 
 <template>
   <v-card class="bg-background">
-    <v-card-title class="pa-0 mx-8">
-      <v-toolbar color="info" class="px-8 py-4 bg-gradient rounded-lg">
+    <v-card-title class="pa-0 mx-4">
+      <v-toolbar color="info" class="px-8 mt-4 py-4 bg-gradient rounded-lg">
         <div class="test-header">
           <div class="left-collar">
             <div class="img">
@@ -68,20 +141,76 @@ fetchAttemp();
         </div>
       </v-toolbar>
     </v-card-title>
-
-    <v-card-text class="bg-light mx-4">
+    <v-card-text class="bg-light mx-4" v-if="attempt.length">
       <v-slide-group show-arrows>
-        <v-slide-group-item v-for="n in attemp?.question" icon>
+        <v-slide-group-item v-for="(n, i) in attempt.length" icon>
           <div class="d-flex align-center">
-            <div class="btn-outline">
+            <div
+              class="btn-outline"
+              @click="setActiveQuestionIndex(i)"
+              :class="[
+                {
+                  active: i == activeQuestionIndex,
+                  less: i < activeQuestionIndex,
+                },
+              ]"
+            >
               <button class="btn">
                 <span>{{ n }}</span>
               </button>
             </div>
-            <div class="divider" v-if="n != count"></div>
+            <div class="divider" v-if="n != attempt.length"></div>
           </div>
         </v-slide-group-item>
       </v-slide-group>
+
+      <v-card elevation="0" class="mt-4" v-if="activeQuestion">
+        <v-card-title class="rounded-lg">
+          <h3 class="text-center">
+            {{ activeQuestionIndex + 1 }}.
+            {{ activeQuestion.question.questionText }}
+          </h3>
+        </v-card-title>
+
+        <v-card-text>
+          <v-row>
+            <v-col
+              v-for="(answer, index) in activeQuestion.question.choices"
+              cols="12"
+              class="py-0 my-1"
+            >
+              <AnswerCard
+                :key="answer.id"
+                :item="answer"
+                :active-question="activeQuestion"
+                :index="index"
+                @click="handleAnswerClick(answer.id)"
+                :active="activeQuestion.choiceId == answer.id"
+              >
+              </AnswerCard>
+            </v-col>
+          </v-row>
+        </v-card-text>
+
+        <v-card-actions>
+          <v-btn
+            variant="flat"
+            color="error"
+            @click="emits('update:modelValue', false)"
+          >
+            {{ $t("back") }}
+          </v-btn>
+          <v-spacer />
+          <v-btn
+            variant="flat"
+            color="success"
+            @click="nextAttemp()"
+            v-if="activeQuestionIndex !== attempt.length - 1"
+          >
+            {{ $t("nextQuestion") }}
+          </v-btn>
+        </v-card-actions>
+      </v-card>
     </v-card-text>
   </v-card>
 </template>
@@ -151,6 +280,19 @@ fetchAttemp();
   display: flex;
   align-items: center;
   justify-content: center;
+
+  &.active {
+    background: rgb(var(--v-theme-primary)) !important;
+    color: rgb(var(--v-theme-light));
+  }
+  &.less {
+    background: rgb(var(--v-theme-success)) !important;
+    color: rgb(var(--v-theme-light));
+  }
+  &.pass {
+    background: rgb(var(--v-theme-error)) !important;
+    color: rgb(var(--v-theme-light));
+  }
 }
 
 .divider {

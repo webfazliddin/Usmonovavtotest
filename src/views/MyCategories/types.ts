@@ -20,7 +20,7 @@ export interface ICategoryAttempData {
   attemptId: number;
   question: ICategoryAttempDataQuestion;
   choiceId: number | null;
-  isCorrect: number | null;
+  isCorrect: boolean | null;
 }
 
 export interface ICategoryAttempDataQuestion {
@@ -36,4 +36,9 @@ export interface ICategoryAttempDataQuestionChoice {
   id: number;
   questionId: number;
   choiceText: string;
+}
+
+export interface IPostAttemp {
+  questionId: number | null;
+  choiceId: number | null;
 }

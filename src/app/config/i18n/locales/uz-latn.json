@@ -52,5 +52,7 @@
   "createCategory": "Bo'lim yaratish",
   "testCount": "Testlar soni {count} ta",
   "allotedTime": "Ajratilgan vaqt {time}",
-  "startTest": "Testni boshlash"
+  "startTest": "Testni boshlash",
+  "continueTest": "Testni davom ettirish",
+  "nextQuestion": "Keyingi savol"
 }

@@ -5,6 +5,6 @@ export const AttemptService = {
     return ApiService.get(`MyCategories${query}`);
   },
   SaveQuestion(query: string, data: any) {
-    return ApiService.get(`MyCategories${query}`, data);
+    return ApiService.post(`MyCategories${query}`, data);
   },
 };

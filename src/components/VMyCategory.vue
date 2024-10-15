@@ -32,14 +32,11 @@ const emits = defineEmits(["start"]);
 
     <div class="category-body mt-4">
       <li>
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. Fuga
-        repudiandae necessitatibus, accusantium quibusdam eligendi, eaque cum
-        beatae ex temporibus assumenda nihil tenetur praesentium modi ea non
-        natus sit ullam eveniet!
+        {{ item.description }}
       </li>
 
       <v-btn class="mt-4" color="light" @click="emits('start', item)">
-        {{ $t("startTest") }}
+        {{ item.attemptId ? $t("continueTest") : $t("startTest") }}
       </v-btn>
     </div>
   </div>

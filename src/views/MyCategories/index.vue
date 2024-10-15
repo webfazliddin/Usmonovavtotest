@@ -73,6 +73,7 @@ getMyCategories();
       <TestProcess
         v-if="selectedCategory"
         :category="selectedCategory"
+        v-model:model-value="isDialog"
         :count="10"
       />
     </v-dialog>
