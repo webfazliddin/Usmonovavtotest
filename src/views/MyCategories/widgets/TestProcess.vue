@@ -136,7 +136,7 @@ fetchAttemp();
     </v-card-title>
     <v-card-text class="bg-light mx-4" v-if="attempt.length">
       <v-slide-group show-arrows>
-        <v-slide-group-item v-for="(n, i) in attempt.length" icon>
+        <v-slide-group-item v-for="(n, i) in category.questionsCount" icon>
           <div class="d-flex align-center">
             <div
               class="btn-outline"
@@ -145,6 +145,8 @@ fetchAttemp();
                 {
                   active: i == activeQuestionIndex,
                   less: i < activeQuestionIndex,
+                  success: attempt[i].choiceId,
+                  error: attempt[i].choiceId && !attempt[i].isCorrect,
                 },
               ]"
             >
@@ -279,11 +281,16 @@ fetchAttemp();
     color: rgb(var(--v-theme-light));
   }
   &.less {
-    background: rgb(var(--v-theme-success)) !important;
+    background: rgb(var(--v-theme-primary));
     color: rgb(var(--v-theme-light));
   }
-  &.pass {
-    background: rgb(var(--v-theme-error)) !important;
+  &.success {
+    background: rgb(var(--v-theme-success));
+    color: rgb(var(--v-theme-light));
+  }
+
+  &.error {
+    background: rgb(var(--v-theme-error));
     color: rgb(var(--v-theme-light));
   }
 }

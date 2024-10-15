@@ -105,11 +105,11 @@ const isCorrect = computed(() => {
     }
   }
   &.error {
-    background-color: rgb(var(--v-theme-error)) !important;
+    background-color: rgb(var(--v-theme-error));
   }
 
   &.success {
-    background-color: rgb(var(--v-theme-success)) !important;
+    background-color: rgb(var(--v-theme-success));
   }
 }
 </style>
