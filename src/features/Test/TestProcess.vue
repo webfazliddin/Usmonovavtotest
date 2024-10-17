@@ -44,7 +44,6 @@ const fetchAttemp = () => {
             canChange: true,
           };
         });
-        console.log(attempt.value);
         foundLastQuestion();
       }
     );
@@ -97,6 +96,7 @@ const setChoice = () => {
 
 const nextAttemp = () => {
   if (activeQuestion.value && !activeQuestion.value.choiceId) return;
+
   activeQuestionIndex.value = activeQuestionIndex.value + 1;
 };
 
@@ -112,7 +112,6 @@ const foundLastQuestion = () => {
 };
 
 const handleAnswerClick = (answerId: number) => {
-  console.log(activeQuestion.value);
   if (!activeQuestion.value.canChange) {
     return;
   }

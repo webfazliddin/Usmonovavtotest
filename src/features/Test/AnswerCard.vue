@@ -46,8 +46,7 @@ const alphabet = [
 
 const isCorrect = computed(() => {
   if (
-    activeQuestion.value.choiceId === item.value.id &&
-    activeQuestion.value.isCorrect
+    activeQuestion.value.correctChoiceId === item.value.id 
   ) {
     return "success";
   }
