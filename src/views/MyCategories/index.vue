@@ -16,12 +16,15 @@ const continueTest = ref<boolean>(false);
 const selectedCategory = ref<MyCategories | null>(null);
 
 const getMyCategories = () => {
+  myCategories.value = [];
+  loading.value = true;
   MyCategoriesService.MyCategories().then(
     (
       res: AxiosResponse<{
         categories: MyCategories[];
       }>
     ) => {
+      loading.value = false;
       myCategories.value = res.data.categories.sort((a, b) => {
         if (a.attemptId) {
           return 1;
