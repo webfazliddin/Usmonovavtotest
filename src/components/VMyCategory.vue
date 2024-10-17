@@ -3,9 +3,12 @@ import { MyCategories } from "@/views/MyCategories/types";
 import { toRefs } from "vue";
 
 interface IProps {
-  item: MyCategories;
+  item?: MyCategories;
+  canContiniue?: boolean;
 }
-const props = defineProps<IProps>();
+const props = withDefaults(defineProps<IProps>(), {
+  canContiniue: false,
+});
 
 const { item } = toRefs(props);
 const emits = defineEmits(["start", "continue"]);
@@ -14,23 +17,23 @@ const emits = defineEmits(["start", "continue"]);
 <template>
   <div class="bg-info pa-3 rounded">
     <div class="category-header d-flex justify-content-between flex-wrap">
-      <div class="item">
+      <div class="item" v-if="item?.questionsCount" >
         <div class="icon">
           <img src="@/assets/images/testCount.png" alt="" />
         </div>
 
-        <span> {{ $t("testCount", { count: item.questionsCount }) }} </span>
+        <span> {{ $t("testCount", { count: item?.questionsCount }) }} </span>
       </div>
-      <div class="item">
+      <div class="item" v-if="item?.answeredCount" >
         <div class="icon">
           <img src="@/assets/images/testIcon.png" alt="" />
         </div>
 
         <span>
-          {{ $t("answeredCount", { count: item.answeredCount }) }}
+          {{ $t("answeredCount", { count: item?.answeredCount }) }}
         </span>
       </div>
-      <div class="item">
+      <div class="item" v-if="item?.correctAnswerCount" >
         <div class="icon">
           <img src="@/assets/images/testCount.png" alt="" />
         </div>
@@ -42,17 +45,13 @@ const emits = defineEmits(["start", "continue"]);
     </div>
 
     <div class="category-body mt-4">
-      <li>
+      <li v-if="item?.description" >
         {{ item.description }}
       </li>
-
-      <!-- <v-btn class="mt-4" color="light" @click="emits('start', item)">
-        {{ item.attemptId ? $t("continueTest") : $t("startTest") }}
-      </v-btn> -->
       <v-btn class="mt-4 mx-2" color="light" @click="emits('start', item)">
         {{ $t("startTest") }}
       </v-btn>
-      <v-btn class="mt-4" color="light" @click="emits('continue', item)">
+      <v-btn v-if="canContiniue" class="mt-4" color="light" @click="emits('continue', item)">
         {{ $t("continueTest") }}
       </v-btn>
     </div>

@@ -74,16 +74,30 @@ getMyCategories();
             />
           </v-expansion-panel-text>
         </v-expansion-panel>
+        <v-expansion-panel class="mt-4">
+          <v-expansion-panel-title>
+            {{ $t("finalTest") }}
+          </v-expansion-panel-title>
+          <v-expansion-panel-text>
+            <VMyCategory
+              :item="{
+                name: $t('finalTest'),
+                questionsCount: 0,
+                answeredCount: 0,
+                correctAnswerCount: 0,
+                attemptId: null,
+                description: '',
+                id: 0,
+              }"
+              @start="
+                () => {
+                  isCompleteTest = true;
+                }
+              "
+            />
+          </v-expansion-panel-text>
+        </v-expansion-panel>
       </v-expansion-panels>
-
-      <v-row class="mt-4">
-        <v-spacer />
-        <v-col cols="auto">
-          <v-btn color="success" @click="isCompleteTest = true">
-            {{ $t("startTestComplete") }}
-          </v-btn>
-        </v-col>
-      </v-row>
     </UiParentCard>
 
     <v-dialog v-if="isDialog" v-model:model-value="isDialog" fullscreen>
