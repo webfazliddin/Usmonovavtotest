@@ -7,7 +7,7 @@ interface IProps {
   canContiniue?: boolean;
 }
 const props = withDefaults(defineProps<IProps>(), {
-  canContiniue: false,
+  canContiniue: true,
 });
 
 const { item } = toRefs(props);
