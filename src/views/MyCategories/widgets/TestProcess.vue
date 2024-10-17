@@ -120,7 +120,7 @@ const setActiveQuestionIndex = (index: number) => {
   }
 };
 
-refreshTimer();
+// refreshTimer();
 fetchAttemp();
 </script>
 
@@ -136,12 +136,12 @@ fetchAttemp();
             <h5>{{ category.name }}</h5>
           </div>
 
-          <div class="right-collar">
+          <!-- <div class="right-collar">
             <div class="icon">
               <img src="@/assets/images/testTimer.png" alt="" />
             </div>
             {{ secondsToHms(timer) }}
-          </div>
+          </div> -->
         </div>
       </v-toolbar>
     </v-card-title>
