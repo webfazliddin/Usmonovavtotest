@@ -51,6 +51,8 @@
   "category": "Bo'lim",
   "createCategory": "Bo'lim yaratish",
   "testCount": "Testlar soni {count} ta",
+  "correctAnswerCount": "To'g'ri javoblar soni {count} ta",
+  "answeredCount": "Berilgan javoblar soni {count} ta",
   "allotedTime": "Ajratilgan vaqt {time}",
   "startTest": "Testni boshlash",
   "continueTest": "Testni davom ettirish",

@@ -13,7 +13,7 @@ const emits = defineEmits(["start"]);
 
 <template>
   <div class="bg-info pa-3 rounded">
-    <div class="category-header d-flex justify-content-between">
+    <div class="category-header d-flex justify-content-between flex-wrap">
       <div class="item">
         <div class="icon">
           <img src="@/assets/images/testCount.png" alt="" />
@@ -23,10 +23,21 @@ const emits = defineEmits(["start"]);
       </div>
       <div class="item">
         <div class="icon">
-          <img src="@/assets/images/testTimer.png" alt="" />
+          <img src="@/assets/images/testIcon.png" alt="" />
         </div>
 
-        <span> {{ $t("allotedTime", { time: `20 minut` }) }} </span>
+        <span>
+          {{ $t("answeredCount", { count: item.answeredCount }) }}
+        </span>
+      </div>
+      <div class="item">
+        <div class="icon">
+          <img src="@/assets/images/testCount.png" alt="" />
+        </div>
+
+        <span>
+          {{ $t("correctAnswerCount", { count: item.correctAnswerCount }) }}
+        </span>
       </div>
     </div>
 

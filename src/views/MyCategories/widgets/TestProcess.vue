@@ -5,6 +5,7 @@ import { useFormatter } from "@/utils/formatter";
 import { AttemptService } from "@/services/services/Attempts.service";
 import AnswerCard from "./AnswerCard.vue";
 import { setError } from "@/utils/helpers";
+import { notify } from "@kyvg/vue3-notification";
 
 interface IProps {
   category: MyCategories;
@@ -72,19 +73,29 @@ const nextAttemp = () => {
     `/${category.value.id}/attempts/${category.value.attemptId}`,
     result
   )
-    .then(() => {
+    .then((res) => {
       selected.value = null;
 
-      if (activeQuestionIndex.value < attempt.value.length) {
-        activeQuestionIndex.value = activeQuestionIndex.value + 1;
-      } else {
-      }
+
+      attempt.value.forEach((item) => {
+        if (item.question.id === res.data.question.id) {
+          item.choiceId = res.data.choiceId;
+          item.isCorrect = res.data.isCorrect;
+        }
+      });
     })
     .catch((e) => {
-      setError(e);
+      notify({
+        text: e.response.data.message,
+        type: "error",
+      })
     })
     .finally(() => {
       saveLoading.value = false;
+      
+      if (activeQuestionIndex.value < attempt.value.length) {
+        activeQuestionIndex.value = activeQuestionIndex.value + 1;
+      }
     });
 };
 

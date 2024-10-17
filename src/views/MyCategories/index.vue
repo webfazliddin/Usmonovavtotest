@@ -10,15 +10,7 @@ import TestProcess from "./widgets/TestProcess.vue";
 const myCategories = ref<MyCategories[]>([]);
 const loading = ref(false);
 const isDialog = ref<boolean>(false);
-const selectedCategory = ref<MyCategories | null>({
-  answeredCount: 0,
-  attemptId: 14,
-  correctAnswerCount: 0,
-  id: 1,
-  name: "Tibbiyot",
-  questionsCount: 3,
-  description: "",
-});
+const selectedCategory = ref<MyCategories | null>(null);
 
 const getMyCategories = () => {
   MyCategoriesService.MyCategories().then(
