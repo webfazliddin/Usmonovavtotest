@@ -66,7 +66,7 @@ getMyCategories();
         <v-spacer />
         <v-col cols="auto">
           <v-btn color="success" @click="isCompleteTest = true">
-            {{ $t("startCompleteTest") }}
+            {{ $t("startTestComplete") }}
           </v-btn>
         </v-col>
       </v-row>
