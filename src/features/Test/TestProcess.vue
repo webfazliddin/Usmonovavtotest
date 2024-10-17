@@ -4,6 +4,7 @@ import { ICategoryAttempData, IPostAttemp, MyCategories } from "./types";
 import { AttemptService } from "@/services/services/Attempts.service";
 import AnswerCard from "./AnswerCard.vue";
 import { notify } from "@kyvg/vue3-notification";
+import { AxiosResponse } from "axios";
 
 interface IProps {
   category: MyCategories;
@@ -31,21 +32,42 @@ const fetchAttemp = () => {
   if (category.value && category.value.attemptId && continueTest.value) {
     AttemptService.StartQuestion(
       `/${category.value.id}/attempts/${category.value.attemptId}`
-    ).then((res) => {
-      attempt.value = res.data.questions;
-      foundLastQuestion();
-    });
+    ).then(
+      (
+        res: AxiosResponse<{
+          questions: Array<ICategoryAttempData>;
+        }>
+      ) => {
+        attempt.value = res.data.questions.map((item: ICategoryAttempData) => {
+          return {
+            ...item,
+            canChange: true,
+          };
+        });
+        console.log(attempt.value);
+        foundLastQuestion();
+      }
+    );
 
     return;
   }
-  AttemptService.StartQuestion(`/${category.value.id}/attempts`).then((res) => {
-    attempt.value = res.data.questions;
-  });
+  AttemptService.StartQuestion(`/${category.value.id}/attempts`).then(
+    (
+      res: AxiosResponse<{
+        questions: Array<ICategoryAttempData>;
+      }>
+    ) => {
+      attempt.value = res.data.questions.map((item: ICategoryAttempData) => {
+        return {
+          ...item,
+          canChange: true,
+        };
+      });
+    }
+  );
 };
 
-const nextAttemp = () => {
-  if (activeQuestion.value && !activeQuestion.value.choiceId) return;
-
+const setChoice = () => {
   const result: IPostAttemp = {
     questionId: activeQuestion.value.question.id,
     choiceId: activeQuestion.value.choiceId,
@@ -59,13 +81,8 @@ const nextAttemp = () => {
   )
     .then((res) => {
       selected.value = null;
-
-      attempt.value.forEach((item) => {
-        if (item.question.id === res.data.question.id) {
-          item.choiceId = res.data.choiceId;
-          item.isCorrect = res.data.isCorrect;
-        }
-      });
+      activeQuestion.value.isCorrect = res.data.isCorrect;
+      activeQuestion.value.correctChoiceId = res.data.correctChoiceId;
     })
     .catch((e) => {
       notify({
@@ -75,11 +92,12 @@ const nextAttemp = () => {
     })
     .finally(() => {
       saveLoading.value = false;
-
-      if (activeQuestionIndex.value < attempt.value.length) {
-        activeQuestionIndex.value = activeQuestionIndex.value + 1;
-      }
     });
+};
+
+const nextAttemp = () => {
+  if (activeQuestion.value && !activeQuestion.value.choiceId) return;
+  activeQuestionIndex.value = activeQuestionIndex.value + 1;
 };
 
 const foundLastQuestion = () => {
@@ -94,7 +112,15 @@ const foundLastQuestion = () => {
 };
 
 const handleAnswerClick = (answerId: number) => {
+  console.log(activeQuestion.value);
+  if (!activeQuestion.value.canChange) {
+    return;
+  }
+
   activeQuestion.value.choiceId = answerId;
+  activeQuestion.value.canChange = false;
+
+  setChoice();
 };
 
 const setActiveQuestionIndex = (index: number) => {
@@ -120,7 +146,7 @@ fetchAttemp();
         </div>
       </v-toolbar>
     </v-card-title>
-    <v-card-text class="bg-light mx-4" v-if="attempt.length">
+    <v-card-text class="bg-light mx-4 mt-8" v-if="attempt.length">
       <v-slide-group show-arrows>
         <v-slide-group-item v-for="(n, i) in category.questionsCount" icon>
           <div class="d-flex align-center">

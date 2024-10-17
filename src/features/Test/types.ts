@@ -20,7 +20,9 @@ export interface ICategoryAttempData {
   attemptId: number;
   question: ICategoryAttempDataQuestion;
   choiceId: number | null;
+  correctChoiceId: number | null;
   isCorrect: boolean | null;
+  canChange: boolean;
 }
 
 export interface ICategoryAttempDataQuestion {

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, ref } from "vue";
+import { computed, ref, toRefs } from "vue";
 import { ICategoryAttempData, IPostAttemp } from "./types";
 import AnswerCard from "./AnswerCard.vue";
 import { notify } from "@kyvg/vue3-notification";
@@ -8,8 +8,10 @@ import { ExamService } from "@/services/services/Exams.service";
 
 interface IProps {
   modelValue: boolean;
+  view?: boolean;
 }
-defineProps<IProps>();
+const props = defineProps<IProps>();
+const { view } = toRefs(props);
 
 const emits = defineEmits(["update:modelValue"]);
 const { secondsToHms } = useFormatter();
@@ -47,6 +49,10 @@ const fetchAttemp = () => {
 };
 
 const nextAttemp = () => {
+  if (view.value) {
+    activeQuestionIndex.value = activeQuestionIndex.value + 1;
+    return
+  }
   if (activeQuestion.value && !activeQuestion.value.choiceId) return;
 
   const result: IPostAttemp = {
@@ -83,6 +89,7 @@ const nextAttemp = () => {
 };
 
 const handleAnswerClick = (answerId: number) => {
+  if (view.value) return;
   activeQuestion.value.choiceId = answerId;
 };
 

@@ -7,4 +7,7 @@ export const ExamService = {
   PostExmas(id: string, data: any) {
     return ApiService.post(`Exams${id}`, data);
   },
+  GetExmasResult() {
+    return ApiService.get(`Exams`);
+  },
 };

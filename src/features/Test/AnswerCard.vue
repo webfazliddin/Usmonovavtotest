@@ -11,7 +11,7 @@ interface IProps {
   activeQuestion: ICategoryAttempData;
   index: number;
   active?: boolean;
-  isCorrect?: boolean;
+  disabled?: boolean;
 }
 const props = defineProps<IProps>();
 const { activeQuestion, item } = toRefs(props);
@@ -75,6 +75,10 @@ const isCorrect = computed(() => {
         active: active,
       },
     ]"
+    :style="{
+      cursor: disabled ? 'not-allowed' : 'pointer',
+      opacity: disabled ? 0.5 : 1,
+    }"
   >
     <VIcon
       :bg="active ? 'var(--light)' : 'var(--oquv-kurslari-info-text-color)'"
@@ -105,11 +109,23 @@ const isCorrect = computed(() => {
     }
   }
   &.error {
-    background-color: rgb(var(--v-theme-error));
+    background-color: rgb(var(--v-theme-error)) !important;
+    .num {
+      color: rgb(var(--v-theme-light));
+    }
+    span {
+      color: rgb(var(--v-theme-light));
+    }
   }
 
   &.success {
-    background-color: rgb(var(--v-theme-success));
+    background-color: rgb(var(--v-theme-success)) !important;
+    .num {
+      color: rgb(var(--v-theme-light));
+    }
+    span {
+      color: rgb(var(--v-theme-light));
+    }
   }
 }
 </style>
