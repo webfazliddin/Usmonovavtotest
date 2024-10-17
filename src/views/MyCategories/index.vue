@@ -6,10 +6,12 @@ import UiParentCard from "@/components/UiParentCard.vue";
 import VMyCategory from "@/components/VMyCategory.vue";
 import { AxiosResponse } from "axios";
 import TestProcess from "./widgets/TestProcess.vue";
+import CompleteTest from "./widgets/CompleteTest.vue";
 
 const myCategories = ref<MyCategories[]>([]);
 const loading = ref(false);
 const isDialog = ref<boolean>(false);
+const isCompleteTest = ref<boolean>(false);
 const selectedCategory = ref<MyCategories | null>(null);
 
 const getMyCategories = () => {
@@ -59,6 +61,15 @@ getMyCategories();
           </v-expansion-panel-text>
         </v-expansion-panel>
       </v-expansion-panels>
+
+      <v-row class="mt-4">
+        <v-spacer />
+        <v-col cols="auto">
+          <v-btn color="success" @click="isCompleteTest = true">
+            {{ $t("startCompleteTest") }}
+          </v-btn>
+        </v-col>
+      </v-row>
     </UiParentCard>
 
     <v-dialog v-if="isDialog" v-model:model-value="isDialog" fullscreen>
@@ -66,8 +77,15 @@ getMyCategories();
         v-if="selectedCategory"
         :category="selectedCategory"
         v-model:model-value="isDialog"
-        :count="10"
       />
+    </v-dialog>
+
+    <v-dialog
+      v-if="isCompleteTest"
+      v-model:model-value="isCompleteTest"
+      fullscreen
+    >
+      <CompleteTest v-model:model-value="isCompleteTest" />
     </v-dialog>
   </div>
 </template>

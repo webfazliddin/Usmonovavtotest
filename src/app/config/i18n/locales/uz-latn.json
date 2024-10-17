@@ -56,5 +56,15 @@
   "allotedTime": "Ajratilgan vaqt {time}",
   "startTest": "Testni boshlash",
   "continueTest": "Testni davom ettirish",
-  "nextQuestion": "Keyingi savol"
+  "nextQuestion": "Keyingi savol",
+  "finalTest": "Yakuniy test",
+  "finishQuestion": "Yakuniy",
+  "testResult": "Test natijasi",
+  "correctAnswer": "To'g'ri javob",
+  "wrongAnswer": "Noto'g'ri javob",
+  "notAnswered": "Javob bermagan",
+  "testResultDescription": "Test natijasi",
+  "testResultDescriptionText": "Siz {count} ta savoldan {correctCount} tasiga to'g'ri javob berdingiz",
+  "testResultDescriptionText2": "Siz {count} ta savoldan {correctCount} tasiga to'g'ri javob berdingiz va {wrongCount} tasiga noto'g'ri javob berdingiz",
+  "startTestComplete": "Test boshlash"
 }
