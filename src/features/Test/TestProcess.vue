@@ -9,9 +9,10 @@ interface IProps {
   category: MyCategories;
   modelValue: boolean;
   view?: boolean;
+  continueTest?: boolean;
 }
 const props = defineProps<IProps>();
-const { category, view } = toRefs(props);
+const { category, view, continueTest } = toRefs(props);
 
 const emits = defineEmits(["update:modelValue"]);
 const attempt = ref<ICategoryAttempData[]>([]);
@@ -27,7 +28,7 @@ const fetchAttemp = () => {
   if (view.value) {
     return;
   }
-  if (category.value && category.value.attemptId) {
+  if (category.value && category.value.attemptId && continueTest.value) {
     AttemptService.StartQuestion(
       `/${category.value.id}/attempts/${category.value.attemptId}`
     ).then((res) => {
@@ -146,7 +147,7 @@ fetchAttemp();
 
       <v-card elevation="0" class="mt-4" v-if="activeQuestion">
         <v-card-title class="rounded-lg">
-          <h3 class="text-center">
+          <h3 class="text-center question-text">
             {{ activeQuestionIndex + 1 }}.
             {{ activeQuestion.question.questionText }}
           </h3>
@@ -285,6 +286,13 @@ fetchAttemp();
   width: 1.125rem;
   height: 2px;
   background: rgb(var(--v-theme-info));
+}
+
+.question-text {
+  font-size: 1.125rem;
+  font-weight: 500;
+  color: rgb(var(--v-theme-text));
+  white-space: pre-wrap;
 }
 
 .btn {

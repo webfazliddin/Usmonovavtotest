@@ -12,6 +12,7 @@ const myCategories = ref<MyCategories[]>([]);
 const loading = ref(false);
 const isDialog = ref<boolean>(false);
 const isCompleteTest = ref<boolean>(false);
+const continueTest = ref<boolean>(false);
 const selectedCategory = ref<MyCategories | null>(null);
 
 const getMyCategories = () => {
@@ -57,6 +58,13 @@ getMyCategories();
                   selectedCategory = item;
                 }
               "
+              @continue="
+                () => {
+                  isDialog = true;
+                  selectedCategory = item;
+                  continueTest = true;
+                }
+              "
             />
           </v-expansion-panel-text>
         </v-expansion-panel>
@@ -77,6 +85,13 @@ getMyCategories();
         v-if="selectedCategory"
         :category="selectedCategory"
         v-model:model-value="isDialog"
+        @update:model-value="
+          (val) => {
+            isDialog = val;
+            continueTest = false;
+          }
+        "
+        :continueTest="continueTest"
       />
     </v-dialog>
 

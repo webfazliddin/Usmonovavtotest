@@ -8,7 +8,7 @@ interface IProps {
 const props = defineProps<IProps>();
 
 const { item } = toRefs(props);
-const emits = defineEmits(["start"]);
+const emits = defineEmits(["start", "continue"]);
 </script>
 
 <template>
@@ -46,8 +46,14 @@ const emits = defineEmits(["start"]);
         {{ item.description }}
       </li>
 
-      <v-btn class="mt-4" color="light" @click="emits('start', item)">
+      <!-- <v-btn class="mt-4" color="light" @click="emits('start', item)">
         {{ item.attemptId ? $t("continueTest") : $t("startTest") }}
+      </v-btn> -->
+      <v-btn class="mt-4 mx-2" color="light" @click="emits('start', item)">
+        {{ $t("startTest") }}
+      </v-btn>
+      <v-btn class="mt-4" color="light" @click="emits('continue', item)">
+        {{ $t("continueTest") }}
       </v-btn>
     </div>
   </div>
