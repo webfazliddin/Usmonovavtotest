@@ -20,12 +20,13 @@ export const useCategories = defineStore("categories", {
   }),
   actions: {
     fetchCategories() {
+      if (this.categories.length) return;
       this.categoriesLoading = true;
       CategoriesService.GetCategories(
         `Page=${this.filter.page}&Size=${this.filter.size}`
       )
         .then((res) => {
-          this.categories = res.data.data
+          this.categories = res.data.data;
 
           this.filter.total = res.data.totalCount;
         })

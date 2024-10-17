@@ -5,8 +5,8 @@ import { MyCategoriesService } from "@/services/services/MyCategories";
 import UiParentCard from "@/components/UiParentCard.vue";
 import VMyCategory from "@/components/VMyCategory.vue";
 import { AxiosResponse } from "axios";
-import TestProcess from "./widgets/TestProcess.vue";
-import CompleteTest from "./widgets/CompleteTest.vue";
+import TestProcess from "@/features/Test/TestProcess.vue";
+import CompleteTest from "@/features/Test/CompleteTest.vue";
 
 const myCategories = ref<MyCategories[]>([]);
 const loading = ref(false);

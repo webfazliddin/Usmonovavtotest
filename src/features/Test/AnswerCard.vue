@@ -3,7 +3,7 @@ import UiParentCard from "@/components/UiParentCard.vue";
 import {
   ICategoryAttempData,
   ICategoryAttempDataQuestionChoice,
-} from "../types";
+} from "./types";
 import { computed, toRefs } from "vue";
 
 interface IProps {

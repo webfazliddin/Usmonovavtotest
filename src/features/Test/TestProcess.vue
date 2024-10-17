@@ -1,23 +1,21 @@
 <script setup lang="ts">
-import { computed, ref } from "vue";
-import { ICategoryAttempData, IPostAttemp } from "../types";
+import { computed, ref, toRefs } from "vue";
+import { ICategoryAttempData, IPostAttemp, MyCategories } from "./types";
+import { AttemptService } from "@/services/services/Attempts.service";
 import AnswerCard from "./AnswerCard.vue";
 import { notify } from "@kyvg/vue3-notification";
-import { useFormatter } from "@/utils/formatter";
-import { ExamService } from "@/services/services/Exams.service";
 
 interface IProps {
+  category: MyCategories;
   modelValue: boolean;
+  view?: boolean;
 }
-defineProps<IProps>();
+const props = defineProps<IProps>();
+const { category, view } = toRefs(props);
 
 const emits = defineEmits(["update:modelValue"]);
-const { secondsToHms } = useFormatter();
-
 const attempt = ref<ICategoryAttempData[]>([]);
 
-const timer_interval = ref<number | undefined>();
-const timer = ref(60);
 const activeQuestionIndex = ref(0);
 const saveLoading = ref(false);
 const activeQuestion = computed(
@@ -25,24 +23,22 @@ const activeQuestion = computed(
 );
 const selected = ref<number | null>(null);
 
-const clearTimer = () => clearInterval(timer_interval.value);
-
-const refreshTimer = () => {
-  clearTimer();
-
-  timer_interval.value = setInterval(() => {
-    if (timer.value === 0) {
-      clearTimer();
-      return;
-    }
-
-    timer.value--;
-  }, 1000);
-};
-
 const fetchAttemp = () => {
-  ExamService.Exmas().then((res) => {
-    attempt.value = res.data;
+  if (view.value) {
+    return;
+  }
+  if (category.value && category.value.attemptId) {
+    AttemptService.StartQuestion(
+      `/${category.value.id}/attempts/${category.value.attemptId}`
+    ).then((res) => {
+      attempt.value = res.data.questions;
+      foundLastQuestion();
+    });
+
+    return;
+  }
+  AttemptService.StartQuestion(`/${category.value.id}/attempts`).then((res) => {
+    attempt.value = res.data.questions;
   });
 };
 
@@ -56,7 +52,10 @@ const nextAttemp = () => {
 
   saveLoading.value = true;
 
-  ExamService.PostExmas(`/${activeQuestion.value.attemptId}`, result)
+  AttemptService.SaveQuestion(
+    `/${category.value.id}/attempts/${category.value.attemptId}`,
+    result
+  )
     .then((res) => {
       selected.value = null;
 
@@ -82,6 +81,17 @@ const nextAttemp = () => {
     });
 };
 
+const foundLastQuestion = () => {
+  if (attempt.value) {
+    const lastAnswer = attempt.value.find((item) => !item.choiceId);
+
+    if (!lastAnswer) {
+      return;
+    }
+    activeQuestionIndex.value = attempt.value.indexOf(lastAnswer);
+  }
+};
+
 const handleAnswerClick = (answerId: number) => {
   activeQuestion.value.choiceId = answerId;
 };
@@ -92,12 +102,11 @@ const setActiveQuestionIndex = (index: number) => {
   }
 };
 
-// refreshTimer();
 fetchAttemp();
 </script>
 
 <template>
-  <v-card class="bg-background">
+  <v-card class="bg-background" elevation="0">
     <v-card-title class="pa-0 mx-4">
       <v-toolbar color="info" class="px-8 mt-4 py-4 bg-gradient rounded-lg">
         <div class="test-header">
@@ -105,21 +114,14 @@ fetchAttemp();
             <div class="img">
               <img src="@/assets/images/testIcon.png" alt="" />
             </div>
-            <h5>{{ $t("finalTest") }}</h5>
-          </div>
-
-          <div class="right-collar">
-            <div class="icon">
-              <img src="@/assets/images/testTimer.png" alt="" />
-            </div>
-            {{ secondsToHms(timer) }}
+            <h5>{{ category.name }}</h5>
           </div>
         </div>
       </v-toolbar>
     </v-card-title>
     <v-card-text class="bg-light mx-4" v-if="attempt.length">
       <v-slide-group show-arrows>
-        <v-slide-group-item v-for="(n, i) in attempt.length" icon>
+        <v-slide-group-item v-for="(n, i) in category.questionsCount" icon>
           <div class="d-flex align-center">
             <div
               class="btn-outline"
@@ -150,7 +152,7 @@ fetchAttemp();
           </h3>
         </v-card-title>
 
-        <v-card-text class="mt-8">
+        <v-card-text>
           <v-row>
             <v-col
               v-for="(answer, index) in activeQuestion.question.choices"
@@ -183,13 +185,9 @@ fetchAttemp();
             variant="flat"
             color="success"
             @click="nextAttemp()"
-            v-if="activeQuestionIndex !== attempt.length"
+            v-if="activeQuestionIndex !== attempt.length - 1"
           >
-            {{
-              activeQuestionIndex === attempt.length - 1
-                ? $t("finishQuestion")
-                : $t("nextQuestion")
-            }}
+            {{ $t("nextQuestion") }}
           </v-btn>
         </v-card-actions>
       </v-card>
