@@ -1,10 +1,11 @@
 <script setup lang="ts">
-import { computed, ref, toRefs } from "vue";
+import { computed, ref, toRefs, watch } from "vue";
 import { ICategoryAttempData, IPostAttemp, MyCategories } from "./types";
 import { AttemptService } from "@/services/services/Attempts.service";
 import AnswerCard from "./AnswerCard.vue";
 import { notify } from "@kyvg/vue3-notification";
 import { AxiosResponse } from "axios";
+import { FilesService } from "@/services/services/Files.service";
 
 interface IProps {
   category: MyCategories;
@@ -24,6 +25,7 @@ const activeQuestion = computed(
   () => attempt.value && attempt.value[activeQuestionIndex.value]
 );
 const selected = ref<number | null>(null);
+const questionPhoto = ref<string | null>(null);
 
 const fetchAttemp = () => {
   if (view.value) {
@@ -62,6 +64,7 @@ const fetchAttemp = () => {
           canChange: true,
         };
       });
+      getPhoto();
     }
   );
 };
@@ -128,6 +131,23 @@ const setActiveQuestionIndex = (index: number) => {
   }
 };
 
+const getPhoto = () => {
+  if (!activeQuestion.value.question.fileId) return;
+
+  FilesService.GetFiles(`${activeQuestion.value.question.fileId}`).then(
+    (res) => {
+      questionPhoto.value = `data:image/png;base64,${res.data.file}`;
+    }
+  );
+};
+
+watch(
+  () => activeQuestionIndex.value,
+  () => {
+    getPhoto();
+  }
+);
+
 fetchAttemp();
 </script>
 
@@ -176,6 +196,14 @@ fetchAttemp();
             {{ activeQuestionIndex + 1 }}.
             {{ activeQuestion.question.questionText }}
           </h3>
+
+          <v-img
+            v-if="questionPhoto"
+            :src="questionPhoto"
+            class="mx-auto my-3"
+            max-height="300"
+            max-width="300"
+          ></v-img>
         </v-card-title>
 
         <v-card-text>
@@ -314,8 +342,8 @@ fetchAttemp();
 }
 
 .question-text {
-  font-size: 1.125rem;
-  font-weight: 500;
+  font-size: 1.75rem;
+  font-weight: 700;
   color: rgb(var(--v-theme-text));
   white-space: pre-wrap;
 }

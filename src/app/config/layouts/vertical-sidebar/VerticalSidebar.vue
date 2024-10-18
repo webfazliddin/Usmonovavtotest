@@ -30,7 +30,10 @@ const router = useRouter();
       @click="router.push('/')"
     >
       <img :src="LogoRu" width="50" alt="" />
-      <div style="line-height: 17px;">Usmonov <br> Avto test</div>
+      <div style="line-height: 17px">
+        Usmonov <br />
+        Avto test
+      </div>
       <v-btn
         class="hidden-md-and-down ml-auto"
         icon
@@ -52,8 +55,12 @@ const router = useRouter();
       <v-list class="py-6 px-4">
         <template v-for="(item, _) in navMenu">
           <NavGroup :item="item"></NavGroup>
-          <template v-for="child in item?.children" >
-            <NavItem :item="child" class="leftPadding"  v-if="child.visible == true" />
+          <template v-for="child in item?.children">
+            <NavItem
+              :item="child"
+              class="leftPadding"
+              v-if="Boolean(child.visible)"
+            />
           </template>
         </template>
       </v-list>

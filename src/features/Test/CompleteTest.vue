@@ -51,7 +51,7 @@ const fetchAttemp = () => {
 const nextAttemp = () => {
   if (view.value) {
     activeQuestionIndex.value = activeQuestionIndex.value + 1;
-    return
+    return;
   }
   if (activeQuestion.value && !activeQuestion.value.choiceId) return;
 
@@ -151,10 +151,10 @@ fetchAttemp();
 
       <v-card elevation="0" class="mt-4" v-if="activeQuestion">
         <v-card-title class="rounded-lg">
-          <h3 class="text-center">
+          <h2 class="text-center font-weight-bold">
             {{ activeQuestionIndex + 1 }}.
             {{ activeQuestion.question.questionText }}
-          </h3>
+          </h2>
         </v-card-title>
 
         <v-card-text class="mt-8">
