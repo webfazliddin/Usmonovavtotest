@@ -52,8 +52,8 @@ const router = useRouter();
       <v-list class="py-6 px-4">
         <template v-for="(item, _) in navMenu">
           <NavGroup :item="item"></NavGroup>
-          <template v-for="child in item?.children">
-            <NavItem :item="child" class="leftPadding" />
+          <template v-for="child in item?.children" >
+            <NavItem :item="child" class="leftPadding"  v-if="child.visible == true" />
           </template>
         </template>
       </v-list>

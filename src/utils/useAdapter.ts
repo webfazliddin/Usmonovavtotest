@@ -15,16 +15,16 @@ export function useAdapter() {
     }
   }
 
-  async function getAdapter(key: string | null) {
+   function getAdapter(key: string | null) {
     let result: any;
     if (key) {
       if (localStorage.getItem(key)) {
-        result = await localStorage.getItem(key);
+        result =  localStorage.getItem(key);
       } else {
-        result = await sessionStorage.getItem(key);
+        result =  sessionStorage.getItem(key);
       }
     }
-    return await result;
+    return  result;
   }
 
   async function killAdapter(key: string) {

@@ -1,10 +1,13 @@
 <script setup lang="ts">
+import { useAdapter } from "@/utils/useAdapter";
 import { useRouter } from "vue-router";
 import { DoorExitIcon } from "vue-tabler-icons";
 
 const router = useRouter();
-
+const {killAdapter} = useAdapter()
 function Logout() {
+  killAdapter('token')
+  killAdapter('isAdmin')
   router.push({ name: "SignIn" });
 }
 </script>

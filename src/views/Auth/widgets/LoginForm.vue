@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { useUserStore } from "@/app/config/layouts/store/user";
 import FormInput from "@/components/form/FormInput.vue";
 import ApiService from "@/services/api.service";
 import { AuthService } from "@/services/services/Auth.service";
@@ -10,7 +11,7 @@ import { SubmitEventPromise } from "vuetify/lib/framework.mjs";
 
 const { setAdapter } = useAdapter();
 const router = useRouter();
-
+const userStore = useUserStore()
 const isPassword = ref(false);
 const loading = ref<boolean>(false);
 const isRemember = ref<boolean>(false);
@@ -31,7 +32,12 @@ const submit = async (submit: SubmitEventPromise) => {
           res.data.token,
           isRemember.value ? "local" : "session"
         );
-
+        setAdapter(
+          "isAdmin",
+          res.data.isAdmin,
+          isRemember.value ? "local" : "session"
+        );
+        userStore.setIsAdmin(res.data?.isAdmin)
         ApiService.setHeader();
 
         router.push({ name: "Questions" });
