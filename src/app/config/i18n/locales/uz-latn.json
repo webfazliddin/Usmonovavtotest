@@ -67,5 +67,6 @@
   "testResultDescriptionText": "Siz {count} ta savoldan {correctCount} tasiga to'g'ri javob berdingiz",
   "testResultDescriptionText2": "Siz {count} ta savoldan {correctCount} tasiga to'g'ri javob berdingiz va {wrongCount} tasiga noto'g'ri javob berdingiz",
   "startTestComplete": "Test boshlash",
-  "selectedUserResult": "{users} foydalanuvchi natijasi {category} bo'limi"
+  "selectedUserResult": "{users} foydalanuvchi natijasi {category} bo'limi",
+  "myCategories ": "Avto test"
 }

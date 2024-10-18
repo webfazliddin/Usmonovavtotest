@@ -113,12 +113,12 @@ onMounted(() => {
               required
             />
           </v-col>
-          <v-col lg="3" md="6" cols="12">
+          <!-- <v-col lg="3" md="6" cols="12">
             <FormCheckbox
               v-model:model-value="formModel.isAdmin"
               :label="$t('isAdmin')"
             />
-          </v-col>
+          </v-col> -->
           <v-col lg="3" md="6" cols="12">
             <FormCheckbox
               v-model:model-value="formModel.isActive"
