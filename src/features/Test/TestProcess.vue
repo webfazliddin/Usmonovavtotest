@@ -198,6 +198,7 @@ fetchAttemp();
           </h3>
 
           <v-img
+          style="border-radius: 15px;"
             v-if="questionPhoto"
             :src="questionPhoto"
             class="mx-auto my-3"
