@@ -75,10 +75,12 @@ const setChoice = () => {
     choiceId: activeQuestion.value.choiceId,
   };
 
+  
+
   saveLoading.value = true;
 
   AttemptService.SaveQuestion(
-    `/${category.value.id}/attempts/${category.value.attemptId}`,
+    `/${category.value.id}/attempts/${activeQuestion.value.attemptId}`,
     result
   )
     .then((res) => {
