@@ -7,10 +7,13 @@ import VMyCategory from "@/components/VMyCategory.vue";
 import { AxiosResponse } from "axios";
 import TestProcess from "@/features/Test/TestProcess.vue";
 import CompleteTest from "@/features/Test/CompleteTest.vue";
+import ResultTest from "@/features/Test/ResultTest.vue";
 
 const myCategories = ref<MyCategories[]>([]);
 const loading = ref(false);
 const isDialog = ref<boolean>(false);
+const isCompleteTestResult = ref<boolean>(false);
+const testResultAttempId = ref<number | null>(null);
 const isCompleteTest = ref<boolean>(false);
 const continueTest = ref<boolean>(false);
 const selectedCategory = ref<MyCategories | null>(null);
@@ -39,6 +42,12 @@ const getMyCategories = () => {
     .finally(() => {
       loading.value = false;
     });
+};
+
+const showResult = (val: number) => {
+  testResultAttempId.value = val;
+  isCompleteTestResult.value = true;
+  console.log(val);
 };
 
 getMyCategories();
@@ -89,6 +98,7 @@ getMyCategories();
                 description: '',
                 id: 0,
               }"
+              :canContiniue="false"
               @start="
                 () => {
                   isCompleteTest = true;
@@ -120,7 +130,21 @@ getMyCategories();
       v-model:model-value="isCompleteTest"
       fullscreen
     >
-      <CompleteTest v-model:model-value="isCompleteTest" />
+      <CompleteTest
+        v-model:model-value="isCompleteTest"
+        @show-result="showResult"
+      />
+    </v-dialog>
+    <v-dialog
+      v-if="isCompleteTestResult && testResultAttempId"
+      v-model:model-value="isCompleteTestResult"
+      fullscreen
+    >
+      <ResultTest
+        v-if="testResultAttempId"
+        v-model:model-value="isCompleteTestResult"
+        :attempId="testResultAttempId"
+      />
     </v-dialog>
   </div>
 </template>

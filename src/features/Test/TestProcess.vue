@@ -219,6 +219,7 @@ fetchAttemp();
               <AnswerCard
                 :key="answer.id"
                 :item="answer"
+                :question="activeQuestion"
                 :active-question="activeQuestion"
                 :index="index"
                 @click="handleAnswerClick(answer.id)"

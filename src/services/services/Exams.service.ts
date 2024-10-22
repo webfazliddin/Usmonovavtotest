@@ -10,4 +10,7 @@ export const ExamService = {
   GetExmasResult() {
     return ApiService.get(`Exams`);
   },
+  GetExmasResultByAttemp(attempId: number | string) {
+    return ApiService.get(`Exams/${attempId}`);
+  },
 };

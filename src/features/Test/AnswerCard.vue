@@ -8,13 +8,14 @@ import { computed, toRefs } from "vue";
 
 interface IProps {
   item: ICategoryAttempDataQuestionChoice;
-  activeQuestion: ICategoryAttempData;
+  question: ICategoryAttempData;
   index: number;
   active?: boolean;
   disabled?: boolean;
 }
 const props = defineProps<IProps>();
-const { activeQuestion, item } = toRefs(props);
+const { item, question } = toRefs(props);
+
 const alphabet = [
   "A",
   "B",
@@ -46,15 +47,16 @@ const alphabet = [
 
 const isCorrect = computed(() => {
   if (
-    activeQuestion.value.correctChoiceId === item.value.id 
+    question.value.correctChoiceId === item.value.id &&
+    question.value.isCorrect
   ) {
     return "success";
   }
 
   if (
-    activeQuestion.value.choiceId === item.value.id &&
-    typeof activeQuestion.value.isCorrect !== "undefined" &&
-    activeQuestion.value.isCorrect == false
+    question.value.isCorrect !== null &&
+    question.value.choiceId === item.value.id &&
+    question.value.isCorrect == false
   ) {
     return "error";
   }
@@ -69,9 +71,13 @@ const isCorrect = computed(() => {
     :class="[
       'test-card px-2 py-2',
 
-      isCorrect,
       {
         active: active,
+        success: question.correctChoiceId === item.id,
+        error:
+          question.isCorrect !== null &&
+          question.choiceId === item.id &&
+          question.isCorrect == false,
       },
     ]"
     :style="{
