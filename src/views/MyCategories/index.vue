@@ -47,14 +47,13 @@ const getMyCategories = () => {
 const showResult = (val: number) => {
   testResultAttempId.value = val;
   isCompleteTestResult.value = true;
-  console.log(val);
 };
 
 getMyCategories();
 </script>
 <template>
   <div>
-    <UiParentCard v-if="loading">
+    <UiParentCard class="text-center" v-if="loading">
       <v-progress-circular indeterminate></v-progress-circular>
     </UiParentCard>
 
@@ -119,6 +118,7 @@ getMyCategories();
           (val) => {
             isDialog = val;
             continueTest = false;
+            getMyCategories();
           }
         "
         :continueTest="continueTest"
@@ -135,6 +135,7 @@ getMyCategories();
         @show-result="showResult"
       />
     </v-dialog>
+    
     <v-dialog
       v-if="isCompleteTestResult && testResultAttempId"
       v-model:model-value="isCompleteTestResult"
@@ -144,6 +145,7 @@ getMyCategories();
         v-if="testResultAttempId"
         v-model:model-value="isCompleteTestResult"
         :attempId="testResultAttempId"
+        @update:model-value="getMyCategories"
       />
     </v-dialog>
   </div>

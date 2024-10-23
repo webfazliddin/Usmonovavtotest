@@ -75,8 +75,6 @@ const setChoice = () => {
     choiceId: activeQuestion.value.choiceId,
   };
 
-  
-
   saveLoading.value = true;
 
   AttemptService.SaveQuestion(
@@ -167,8 +165,8 @@ fetchAttemp();
         </div>
       </v-toolbar>
     </v-card-title>
-    <v-card-text class="bg-light mx-4 mt-8" v-if="attempt.length">
-      <v-slide-group show-arrows>
+    <v-card-text class="bg-light mx-4 mt-8">
+      <v-slide-group show-arrows v-if="attempt.length">
         <v-slide-group-item v-for="(n, i) in category.questionsCount" icon>
           <div class="d-flex align-center">
             <div
@@ -192,15 +190,18 @@ fetchAttemp();
         </v-slide-group-item>
       </v-slide-group>
 
-      <v-card elevation="0" class="mt-4" v-if="activeQuestion">
-        <v-card-title class="rounded-lg">
+      <v-card elevation="0" class="mt-4">
+        <v-card-title
+          class="rounded-lg"
+          v-if="activeQuestion && attempt.length"
+        >
           <h3 class="text-center question-text">
             {{ activeQuestionIndex + 1 }}.
             {{ activeQuestion.question.questionText }}
           </h3>
 
           <v-img
-          style="border-radius: 15px;"
+            style="border-radius: 15px"
             v-if="questionPhoto"
             :src="questionPhoto"
             class="mx-auto my-3"
@@ -209,14 +210,11 @@ fetchAttemp();
           ></v-img>
         </v-card-title>
 
-        <v-card-text>
+        <v-card-text v-if="attempt.length && activeQuestion">
           <v-row>
-            <v-col
-              v-for="(answer, index) in activeQuestion.question.choices"
-              cols="12"
-              class="py-0 my-1"
-            >
+            <v-col lg="6" cols="12" class="py-0 my-1">
               <AnswerCard
+                v-for="(answer, index) in activeQuestion.question.choices"
                 :key="answer.id"
                 :item="answer"
                 :question="activeQuestion"
@@ -226,6 +224,16 @@ fetchAttemp();
                 :active="activeQuestion.choiceId == answer.id"
               >
               </AnswerCard>
+            </v-col>
+            <v-col lg="6" cols="12">
+              <v-img
+                style="border-radius: 15px"
+                v-if="questionPhoto"
+                :src="questionPhoto"
+                class="mx-auto my-3"
+                max-height="300"
+                max-width="300"
+              ></v-img>
             </v-col>
           </v-row>
         </v-card-text>
@@ -243,7 +251,7 @@ fetchAttemp();
             variant="flat"
             color="success"
             @click="nextAttemp()"
-            v-if="activeQuestionIndex !== attempt.length - 1"
+            v-if="activeQuestionIndex !== attempt.length - 1 && activeQuestion"
           >
             {{ $t("nextQuestion") }}
           </v-btn>

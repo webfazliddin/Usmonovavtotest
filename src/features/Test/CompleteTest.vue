@@ -76,7 +76,7 @@ const nextAttemp = () => {
         });
       });
 
-      console.log(attempt.value)
+      console.log(attempt.value);
     })
     .catch((e) => {
       notify({
@@ -159,10 +159,10 @@ fetchAttemp();
 
       <v-card elevation="0" class="mt-4" v-if="activeQuestion">
         <v-card-title class="rounded-lg">
-          <h2 class="text-center font-weight-bold">
+          <h3 class="text-center question-text">
             {{ activeQuestionIndex + 1 }}.
             {{ activeQuestion.question.questionText }}
-          </h2>
+          </h3>
         </v-card-title>
 
         <v-card-text class="mt-8">
@@ -268,6 +268,13 @@ fetchAttemp();
       background-color: rgb(var(--v-theme-background));
     }
   }
+}
+
+.question-text {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: rgb(var(--v-theme-text));
+  white-space: pre-wrap;
 }
 
 .btn-outline {
