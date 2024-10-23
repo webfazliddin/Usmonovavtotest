@@ -132,8 +132,10 @@ const setActiveQuestionIndex = (index: number) => {
 };
 
 const getPhoto = () => {
-  if (!activeQuestion.value.question.fileId) return;
-
+  if (!activeQuestion.value.question.fileId) {
+    questionPhoto.value = null;
+    return;
+  }
   FilesService.GetFiles(`${activeQuestion.value.question.fileId}`).then(
     (res) => {
       questionPhoto.value = `data:image/png;base64,${res.data.file}`;
@@ -201,17 +203,25 @@ fetchAttemp();
           </h3>
         </v-card-title>
 
-        <v-card-text v-if="attempt.length && activeQuestion" >
+        <v-card-text v-if="attempt.length && activeQuestion">
           <v-row class="align-center">
-            <v-col lg="4" cols="12" >
+            <v-col lg="4" cols="12">
               <v-img
-                style="border-radius: 15px"
-                v-if="questionPhoto"
                 :src="questionPhoto"
+                v-if="questionPhoto"
+                style="border-radius: 15px"
                 class="mx-auto my-3"
                 max-height="400"
                 max-width="400"
               ></v-img>
+              <img
+                v-else
+                style="border-radius: 15px"
+                class="mx-auto my-3 d-block"
+                height="400"
+                width="400"
+                src="../../assets/images/questionPhoto.jpg"
+              />
             </v-col>
             <v-col lg="8" cols="12" class="py-0 my-1">
               <AnswerCard
@@ -226,14 +236,13 @@ fetchAttemp();
               >
               </AnswerCard>
             </v-col>
-           
           </v-row>
           <span
             v-if="activeQuestion.question?.description"
             class="d-block mb-4 text-warning d-flex align-center justify-center text-13 quiz-description"
-          > 
-          <span><img src="../../assets/images/warning.svg" alt=""></span>
-           <span> {{ activeQuestion.question.description }}</span>
+          >
+            <span><img src="../../assets/images/warning.svg" alt="" /></span>
+            <span> {{ activeQuestion.question.description }}</span>
           </span>
         </v-card-text>
 
@@ -361,8 +370,8 @@ fetchAttemp();
 }
 .quiz-description {
   white-space: pre-wrap;
-  background: rgba(251, 187, 81, 0.10);
-  color: #E4981B;
+  background: rgba(251, 187, 81, 0.1);
+  color: #e4981b;
   padding: 1rem;
   border-radius: 8px;
   gap: 10px;
