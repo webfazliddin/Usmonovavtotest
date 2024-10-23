@@ -126,8 +126,8 @@ const handleAnswerClick = (answerId: number) => {
 };
 
 const setActiveQuestionIndex = (index: number) => {
+  activeQuestionIndex.value = index;
   if (attempt.value[index].choiceId) {
-    activeQuestionIndex.value = index;
   }
 };
 
@@ -201,7 +201,7 @@ fetchAttemp();
           </h3>
 
           <span
-          v-if="activeQuestion.question?.description"
+            v-if="activeQuestion.question?.description"
             class="d-block mb-4 text-warning d-flex align-center justify-center text-13"
           >
             {{ activeQuestion.question.description }}
@@ -356,6 +356,7 @@ fetchAttemp();
   font-weight: 700;
   color: rgb(var(--v-theme-text));
   white-space: pre-wrap;
+  line-height: 1.2 !important;
 }
 
 .btn {

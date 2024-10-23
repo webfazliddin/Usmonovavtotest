@@ -281,6 +281,7 @@ fetchAttemp();
   font-weight: 700;
   color: rgb(var(--v-theme-text));
   white-space: pre-wrap;
+  line-height: 1.2 !important;
 }
 
 .btn-outline {
