@@ -163,12 +163,6 @@ fetchAttemp();
             {{ activeQuestionIndex + 1 }}.
             {{ activeQuestion.question.questionText }}
           </h3>
-          <span
-            v-if="activeQuestion.question?.description"
-            class="d-block mb-4 text-warning d-flex align-center justify-center text-13"
-          >
-            {{ activeQuestion.question.description }}
-          </span>
         </v-card-title>
 
         <v-card-text class="mt-8">
@@ -190,6 +184,12 @@ fetchAttemp();
                 >
                 </AnswerCard>
               </v-col>
+              <span
+            v-if="activeQuestion.question?.description"
+            class="d-block mb-4 text-warning d-flex align-center justify-center text-13 quiz-description"
+          >
+            {{ activeQuestion.question.description }}
+          </span>
             </v-row>
           </template>
         </v-card-text>
@@ -282,6 +282,10 @@ fetchAttemp();
   color: rgb(var(--v-theme-text));
   white-space: pre-wrap;
   line-height: 1.2 !important;
+}
+
+.quiz-description {
+  white-space: pre-wrap;
 }
 
 .btn-outline {

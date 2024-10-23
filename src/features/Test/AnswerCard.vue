@@ -69,7 +69,7 @@ const alphabet = [
     <VIcon
       :bg="active ? 'var(--light)' : 'var(--oquv-kurslari-info-text-color)'"
     >
-      <div class="num font-weight-bold mr-4">
+      <div class="num font-weight-bold mr-8">
         {{ alphabet[index] }}
       </div>
     </VIcon>
@@ -85,6 +85,9 @@ const alphabet = [
   border-radius: 0.5rem;
   gap: 0.75rem;
   transition: all 0.4s;
+  border: 1px solid rgba(83, 83, 83,0.1);
+margin-bottom: 0.5rem;
+
   &.active {
     background: rgb(var(--v-theme-primary)) !important;
     .num {

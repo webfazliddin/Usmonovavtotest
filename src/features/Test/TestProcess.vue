@@ -199,18 +199,21 @@ fetchAttemp();
             {{ activeQuestionIndex + 1 }}.
             {{ activeQuestion.question.questionText }}
           </h3>
-
-          <span
-            v-if="activeQuestion.question?.description"
-            class="d-block mb-4 text-warning d-flex align-center justify-center text-13"
-          >
-            {{ activeQuestion.question.description }}
-          </span>
         </v-card-title>
 
-        <v-card-text v-if="attempt.length && activeQuestion">
-          <v-row>
-            <v-col lg="6" cols="12" class="py-0 my-1">
+        <v-card-text v-if="attempt.length && activeQuestion" >
+          <v-row class="align-center">
+            <v-col lg="4" cols="12" >
+              <v-img
+                style="border-radius: 15px"
+                v-if="questionPhoto"
+                :src="questionPhoto"
+                class="mx-auto my-3"
+                max-height="400"
+                max-width="400"
+              ></v-img>
+            </v-col>
+            <v-col lg="8" cols="12" class="py-0 my-1">
               <AnswerCard
                 v-for="(answer, index) in activeQuestion.question.choices"
                 :key="answer.id"
@@ -223,17 +226,14 @@ fetchAttemp();
               >
               </AnswerCard>
             </v-col>
-            <v-col lg="6" cols="12">
-              <v-img
-                style="border-radius: 15px"
-                v-if="questionPhoto"
-                :src="questionPhoto"
-                class="mx-auto my-3"
-                max-height="300"
-                max-width="300"
-              ></v-img>
-            </v-col>
+           
           </v-row>
+          <span
+            v-if="activeQuestion.question?.description"
+            class="d-block mb-4 text-warning d-flex align-center justify-center text-13 quiz-description"
+          >
+            {{ activeQuestion.question.description }}
+          </span>
         </v-card-text>
 
         <v-card-actions>
@@ -358,7 +358,9 @@ fetchAttemp();
   white-space: pre-wrap;
   line-height: 1.2 !important;
 }
-
+.quiz-description {
+  white-space: pre-wrap;
+}
 .btn {
   flex: 0 0 2rem;
   width: 2rem;
