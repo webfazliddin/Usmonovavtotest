@@ -38,9 +38,7 @@ const setActiveQuestionIndex = (index: number) => {
 fetchAttemp();
 </script>
 
-
 <template>
-
   <v-card class="bg-background">
     <v-card-title class="pa-0 mx-4">
       <v-toolbar color="info" class="px-8 mt-4 py-4 bg-gradient rounded-lg">
@@ -81,10 +79,17 @@ fetchAttemp();
 
       <v-card elevation="0" class="mt-4" v-if="activeQuestion">
         <v-card-title class="rounded-lg">
-          <h2 class="text-center font-weight-bold">
+          <h3 class="text-center question-text">
             {{ activeQuestionIndex + 1 }}.
             {{ activeQuestion.question.questionText }}
-          </h2>
+          </h3>
+
+          <span
+            v-if="activeQuestion.question?.description"
+            class="d-block mb-4 text-warning d-flex align-center justify-center text-13"
+          >
+            {{ activeQuestion.question.description }}
+          </span>
         </v-card-title>
 
         <v-card-text class="mt-8">
@@ -235,5 +240,12 @@ fetchAttemp();
   justify-content: center;
   align-items: center;
   border-radius: 50%;
+}
+
+.question-text {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: rgb(var(--v-theme-text));
+  white-space: pre-wrap;
 }
 </style>

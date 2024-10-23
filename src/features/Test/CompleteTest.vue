@@ -163,6 +163,12 @@ fetchAttemp();
             {{ activeQuestionIndex + 1 }}.
             {{ activeQuestion.question.questionText }}
           </h3>
+          <span
+            v-if="activeQuestion.question?.description"
+            class="d-block mb-4 text-warning d-flex align-center justify-center text-13"
+          >
+            {{ activeQuestion.question.description }}
+          </span>
         </v-card-title>
 
         <v-card-text class="mt-8">

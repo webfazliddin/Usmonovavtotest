@@ -14,7 +14,7 @@ const router = useRouter();
 const userStore = useUserStore()
 const isPassword = ref(false);
 const loading = ref<boolean>(false);
-const isRemember = ref<boolean>(false);
+const isRemember = ref<boolean>(true);
 
 const signModel = ref({
   userName: "",
@@ -65,9 +65,9 @@ const submit = async (submit: SubmitEventPromise) => {
         </div>
       </template>
     </FormInput>
-    <v-checkbox v-model="isRemember" required hide-details color="primary">
+    <!-- <v-checkbox v-model="isRemember" required hide-details color="primary">
       <template v-slot:label class=""> {{ $t('isRemember') }} </template>
-    </v-checkbox>
+    </v-checkbox> -->
 
     <v-btn type="submit" variant="flat" color="success" block :loading="loading" >
       {{ $t("signIn") }}

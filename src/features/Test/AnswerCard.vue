@@ -4,7 +4,7 @@ import {
   ICategoryAttempData,
   ICategoryAttempDataQuestionChoice,
 } from "./types";
-import { computed, toRefs } from "vue";
+import { toRefs } from "vue";
 
 interface IProps {
   item: ICategoryAttempDataQuestionChoice;
@@ -44,25 +44,6 @@ const alphabet = [
   "Y",
   "Z",
 ];
-
-const isCorrect = computed(() => {
-  if (
-    question.value.correctChoiceId === item.value.id &&
-    question.value.isCorrect
-  ) {
-    return "success";
-  }
-
-  if (
-    question.value.isCorrect !== null &&
-    question.value.choiceId === item.value.id &&
-    question.value.isCorrect == false
-  ) {
-    return "error";
-  }
-
-  return "";
-});
 </script>
 
 <template>

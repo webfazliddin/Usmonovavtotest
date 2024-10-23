@@ -200,14 +200,12 @@ fetchAttemp();
             {{ activeQuestion.question.questionText }}
           </h3>
 
-          <v-img
-            style="border-radius: 15px"
-            v-if="questionPhoto"
-            :src="questionPhoto"
-            class="mx-auto my-3"
-            max-height="300"
-            max-width="300"
-          ></v-img>
+          <span
+          v-if="activeQuestion.question?.description"
+            class="d-block mb-4 text-warning d-flex align-center justify-center text-13"
+          >
+            {{ activeQuestion.question.description }}
+          </span>
         </v-card-title>
 
         <v-card-text v-if="attempt.length && activeQuestion">
