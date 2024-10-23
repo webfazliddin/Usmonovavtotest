@@ -210,7 +210,7 @@ fetchAttemp();
                 :src="questionPhoto"
                 v-if="questionPhoto"
                 style="border-radius: 15px"
-                class="mx-auto my-3"
+                class="mx-auto my-3 "
                 max-height="400"
                 max-width="400"
               ></v-img>
@@ -223,7 +223,7 @@ fetchAttemp();
                 src="../../assets/images/questionPhoto.jpg"
               />
             </v-col>
-            <v-col lg="8" cols="12" class="py-0 my-1">
+            <v-col lg="8" cols="12" class="py-0 my-3">
               <AnswerCard
                 v-for="(answer, index) in activeQuestion.question.choices"
                 :key="answer.id"
