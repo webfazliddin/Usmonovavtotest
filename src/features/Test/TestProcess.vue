@@ -231,8 +231,9 @@ fetchAttemp();
           <span
             v-if="activeQuestion.question?.description"
             class="d-block mb-4 text-warning d-flex align-center justify-center text-13 quiz-description"
-          >
-            {{ activeQuestion.question.description }}
+          > 
+          <span><img src="../../assets/images/warning.svg" alt=""></span>
+           <span> {{ activeQuestion.question.description }}</span>
           </span>
         </v-card-text>
 
@@ -360,6 +361,11 @@ fetchAttemp();
 }
 .quiz-description {
   white-space: pre-wrap;
+  background: rgba(251, 187, 81, 0.10);
+  color: #E4981B;
+  padding: 1rem;
+  border-radius: 8px;
+  gap: 10px;
 }
 .btn {
   flex: 0 0 2rem;
