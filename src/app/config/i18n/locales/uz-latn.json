@@ -10,7 +10,7 @@
   "forgotPassword": "Паролни есдан чиқардингизми?",
   "fieldNotEmpty": "Maydon bo'sh",
   "logoTitle": "Usmonov avto test",
-  "testPage": "Test ",
+  "testPage": "Test ma'lumotlar",
   "notFound": "Ma'lumot topilmadi",
   "checkQuestion": "To'ldirilmagan polya mavjud",
   "Logout": "Chiqish",
@@ -68,5 +68,6 @@
   "testResultDescriptionText2": "Siz {count} ta savoldan {correctCount} tasiga to'g'ri javob berdingiz va {wrongCount} tasiga noto'g'ri javob berdingiz",
   "startTestComplete": "Test boshlash",
   "selectedUserResult": "{users} foydalanuvchi natijasi {category} bo'limi",
-  "myCategories ": "Avto test"
+  "myCategories": "Test",
+  "changeLang": "Tilni almashitirish"
 }
