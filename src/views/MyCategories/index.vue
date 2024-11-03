@@ -17,6 +17,7 @@ const testResultAttempId = ref<number | null>(null);
 const isCompleteTest = ref<boolean>(false);
 const continueTest = ref<boolean>(false);
 const selectedCategory = ref<MyCategories | null>(null);
+  const defaultOpenPanels = ref<number[]>([0]);
 
 const getMyCategories = () => {
   myCategories.value = [];
@@ -58,7 +59,7 @@ getMyCategories();
     </UiParentCard>
 
     <UiParentCard v-if="!loading && myCategories.length">
-      <v-expansion-panels>
+      <v-expansion-panels v-model="defaultOpenPanels">
         <v-expansion-panel class="mt-4" v-for="item in myCategories">
           <v-expansion-panel-title>
             {{ item.name }}
@@ -82,6 +83,7 @@ getMyCategories();
             />
           </v-expansion-panel-text>
         </v-expansion-panel>
+        <!--================finel test start=========-->
         <v-expansion-panel class="mt-4">
           <v-expansion-panel-title>
             {{ $t("finalTest") }}
@@ -106,6 +108,7 @@ getMyCategories();
             />
           </v-expansion-panel-text>
         </v-expansion-panel>
+                <!--================finel test start end=========-->
       </v-expansion-panels>
     </UiParentCard>
 

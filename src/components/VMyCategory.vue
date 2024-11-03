@@ -1,6 +1,10 @@
 <script setup lang="ts">
 import { MyCategories } from "@/views/MyCategories/types";
 import { toRefs } from "vue";
+import {
+  FileDescriptionIcon,
+  UserCheckIcon,
+} from "vue-tabler-icons";
 
 interface IProps {
   item?: MyCategories;
@@ -17,16 +21,16 @@ const emits = defineEmits(["start", "continue"]);
 <template>
   <div class="bg-info pa-3 rounded">
     <div class="category-header d-flex justify-content-between flex-wrap">
-      <div class="item" v-if="item?.questionsCount" >
+      <div class="item " v-if="item?.questionsCount" >
         <div class="icon">
-          <img src="@/assets/images/testCount.png" alt="" />
+           <FileDescriptionIcon color="black"  />
         </div>
 
-        <span> {{ $t("testCount", { count: item?.questionsCount }) }} </span>
+        <span > {{ $t("testCount", { count: item?.questionsCount }) }} </span>
       </div>
       <div class="item" v-if="item?.answeredCount" >
         <div class="icon">
-          <img src="@/assets/images/testIcon.png" alt="" />
+          <UserCheckIcon color="black" />
         </div>
 
         <span>
@@ -44,14 +48,14 @@ const emits = defineEmits(["start", "continue"]);
       </div>
     </div>
 
-    <div class="category-body mt-4">
+    <div class="category-body mt-4 mx-2">
       <li v-if="item?.description" >
         {{ item.description }}
       </li>
-      <v-btn class="mt-4 mx-2" color="light" @click="emits('start', item)">
+      <v-btn class="mt-4" color="light" @click="emits('start', item)">
         {{ $t("startTest") }}
       </v-btn>
-      <v-btn v-if="canContiniue" class="mt-4" color="light" @click="emits('continue', item)">
+      <v-btn v-if="canContiniue" class="mt-4 ml-10" style="background-color: #FFAB00;" @click="emits('continue', item)">
         {{ $t("continueTest") }}
       </v-btn>
     </div>

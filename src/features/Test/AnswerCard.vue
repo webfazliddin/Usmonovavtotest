@@ -17,13 +17,13 @@ const props = defineProps<IProps>();
 const { item, question } = toRefs(props);
 
 const alphabet = [
-  "A",
-  "B",
-  "C",
-  "D",
-  "E",
-  "F",
-  "G",
+  "F1",
+  "F2",
+  "F3",
+  "F4",
+  "F5",
+  "F6",
+  "F7",
   "H",
   "I",
   "J",
@@ -73,7 +73,7 @@ const alphabet = [
         {{ alphabet[index] }}
       </div>
     </VIcon>
-    <span>{{ item.choiceText }}</span>
+    <span style="font-size: 17px;">{{ item.choiceText }}</span>
   </UiParentCard>
 </template>
 
