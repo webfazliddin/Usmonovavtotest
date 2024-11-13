@@ -56,11 +56,7 @@ const router = useRouter();
         <template v-for="(item, _) in navMenu">
           <NavGroup :item="item"></NavGroup>
           <template v-for="child in item?.children">
-            <NavItem
-              :item="child"
-              class="leftPadding"
-              v-if="Boolean(child.visible)"
-            />
+            <NavItem :item="child" class="leftPadding" v-if="child.visible" />
           </template>
         </template>
       </v-list>

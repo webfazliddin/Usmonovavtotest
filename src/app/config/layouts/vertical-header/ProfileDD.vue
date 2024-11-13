@@ -2,12 +2,15 @@
 import { useAdapter } from "@/utils/useAdapter";
 import { useRouter } from "vue-router";
 import { DoorExitIcon } from "vue-tabler-icons";
+import { useUserStore } from "../store/user";
 
 const router = useRouter();
-const {killAdapter} = useAdapter()
+const { killAdapter } = useAdapter();
+const store = useUserStore();
 function Logout() {
-  killAdapter('token')
-  killAdapter('isAdmin')
+  killAdapter("token");
+  killAdapter("isAdmin");
+  store.$reset();
   router.push({ name: "SignIn" });
 }
 </script>
@@ -35,7 +38,7 @@ function Logout() {
       </v-row>
     </template>
     <v-card style="margin-top: 0.625rem">
-      <v-card-text class="pa-0" >
+      <v-card-text class="pa-0">
         <v-btn color="primary" variant="flat" block @click="Logout">
           <DoorExitIcon size="20" />
           {{ $t("Logout") }}

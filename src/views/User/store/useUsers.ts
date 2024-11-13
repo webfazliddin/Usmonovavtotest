@@ -4,12 +4,10 @@ import { defineStore } from "pinia";
 import { UserModel } from "../types";
 
 interface IFilter {
-  
-  page: number,
-  size: number,
-  total: number
+  page: number;
+  size: number;
+  total: number;
 }
-
 
 export const useUsers = defineStore("users", {
   state: () => ({
@@ -18,8 +16,8 @@ export const useUsers = defineStore("users", {
     filter: {
       page: 1,
       size: 20,
-      total: 0
-    } as IFilter
+      total: 0,
+    } as IFilter,
   }),
   actions: {
     fetchUsers() {

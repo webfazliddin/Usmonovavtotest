@@ -13,4 +13,7 @@ export const UsersService = {
   PutUsers(data: Object, id: number | string) {
     return ApiService.put(`Users/${id}`, data);
   },
+  Delete(id: string | number) {
+    return ApiService.delete(`Users/${id}`);
+  },
 };

@@ -8,6 +8,8 @@ import { useUsers } from "./store/useUsers";
 import { IFields } from "@/models/basic";
 import FormTable from "@/components/form/FormTable.vue";
 import { useCategories } from "../Categories/store/useCategories";
+import DeleteAction from "@/components/Actions/DeleteAction.vue";
+import { UsersService } from "@/services/services/Users.service";
 
 const store = useUsers();
 const categoriesStore = useCategories();
@@ -72,10 +74,10 @@ categoriesStore.fetchCategories();
             <v-menu activator="parent">
               <v-list>
                 <v-list-item
-                  @click="fetchUserPage(item)"
                   value="edit"
                   hide-details
                   min-height="38"
+                  @click="fetchUserPage(item)"
                 >
                   <v-list-item-title>
                     <v-avatar size="20" class="mr-2">
@@ -84,6 +86,12 @@ categoriesStore.fetchCategories();
                     {{ $t("edit") }}
                   </v-list-item-title>
                 </v-list-item>
+                <DeleteAction
+                  :item="item"
+                  :service="UsersService"
+                  @refresh="store.fetchUsers()"
+                >
+                </DeleteAction>
               </v-list>
             </v-menu>
           </v-btn>

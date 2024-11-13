@@ -1,15 +1,24 @@
-import { useAdapter } from "@/utils/useAdapter";
 import { defineStore } from "pinia";
-const {getAdapter} = useAdapter()
+
+interface IState {
+  isAdmin: boolean;
+}
 
 export const useUserStore = defineStore({
   id: "userData",
-  state: () => ({
-    isAdmin: getAdapter('isAdmin') as any
-  }), 
-  actions: {
-    setIsAdmin(payload:boolean) {
-      this.isAdmin = payload
+  state: (): IState => ({
+    isAdmin: localStorage.getItem("isAdmin")
+      ? JSON.parse(localStorage.getItem("isAdmin")!)
+      : false,
+  }),
+  getters: {
+    getIsAdmin(): boolean {
+      return this.isAdmin;
     },
-}
-}) 
+  },
+  actions: {
+    setIsAdmin(payload: boolean) {
+      this.isAdmin = payload;
+    },
+  },
+});

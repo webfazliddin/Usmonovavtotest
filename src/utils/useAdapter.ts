@@ -9,22 +9,22 @@ export function useAdapter() {
     if (adapterType === "local" && key) {
       localStorage.setItem(key, value);
     } else {
-      if (key == 'session') {
+      if (key == "session") {
         sessionStorage.setItem(key, value);
       }
     }
   }
 
-   function getAdapter(key: string | null) {
+  function getAdapter(key: string | null) {
     let result: any;
     if (key) {
       if (localStorage.getItem(key)) {
-        result =  localStorage.getItem(key);
+        result = localStorage.getItem(key);
       } else {
-        result =  sessionStorage.getItem(key);
+        result = sessionStorage.getItem(key);
       }
     }
-    return  result;
+    return result;
   }
 
   async function killAdapter(key: string) {

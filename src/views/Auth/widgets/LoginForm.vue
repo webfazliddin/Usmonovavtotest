@@ -11,7 +11,7 @@ import { SubmitEventPromise } from "vuetify/lib/framework.mjs";
 
 const { setAdapter } = useAdapter();
 const router = useRouter();
-const userStore = useUserStore()
+const userStore = useUserStore();
 const isPassword = ref(false);
 const loading = ref<boolean>(false);
 const isRemember = ref<boolean>(true);
@@ -37,10 +37,10 @@ const submit = async (submit: SubmitEventPromise) => {
           res.data.isAdmin,
           isRemember.value ? "local" : "session"
         );
-        userStore.setIsAdmin(res.data?.isAdmin)
+        userStore.setIsAdmin(res.data.isAdmin);
         ApiService.setHeader();
 
-        router.push({ name: "Questions" });
+        router.push({ name: "Dashboard" });
       })
       .finally(() => {
         loading.value = false;
@@ -69,7 +69,13 @@ const submit = async (submit: SubmitEventPromise) => {
       <template v-slot:label class=""> {{ $t('isRemember') }} </template>
     </v-checkbox> -->
 
-    <v-btn type="submit" variant="flat" color="success" block :loading="loading" >
+    <v-btn
+      type="submit"
+      variant="flat"
+      color="success"
+      block
+      :loading="loading"
+    >
       {{ $t("signIn") }}
     </v-btn>
   </v-form>

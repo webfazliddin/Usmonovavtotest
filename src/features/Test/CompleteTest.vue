@@ -75,8 +75,6 @@ const nextAttemp = () => {
           }
         });
       });
-
-      console.log(attempt.value);
     })
     .catch((e) => {
       notify({
@@ -185,11 +183,11 @@ fetchAttemp();
                 </AnswerCard>
               </v-col>
               <span
-            v-if="activeQuestion.question?.description"
-            class="d-block mb-4 text-warning d-flex align-center justify-center text-13 quiz-description"
-          >
-            {{ activeQuestion.question.description }}
-          </span>
+                v-if="activeQuestion.question?.description"
+                class="d-block mb-4 text-warning d-flex align-center justify-center text-13 quiz-description"
+              >
+                {{ activeQuestion.question.description }}
+              </span>
             </v-row>
           </template>
         </v-card-text>
