@@ -73,7 +73,7 @@ const alphabet = [
         {{ alphabet[index] }}
       </div>
     </VIcon>
-    <span style="font-size: 17px;">{{ item.choiceText }}</span>
+    <span class="textChose" style="font-size: 17px;">{{ item.choiceText }}</span>
   </UiParentCard>
 </template>
 
@@ -121,6 +121,16 @@ margin-bottom: 0.5rem;
     span {
       color: rgb(var(--v-theme-light));
     }
+  }
+}
+
+
+@media screen and (max-width: 767px) {
+  .textChose {
+    font-size: 12px !important;
+  }
+  .num {
+    font-size: 10px !important;
   }
 }
 </style>

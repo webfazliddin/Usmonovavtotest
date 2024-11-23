@@ -6,9 +6,7 @@ import AnswerCard from "./AnswerCard.vue";
 import { notify } from "@kyvg/vue3-notification";
 import { AxiosResponse } from "axios";
 import { FilesService } from "@/services/services/Files.service";
-import {
-  FileDescriptionIcon,
-} from "vue-tabler-icons";
+import { FileDescriptionIcon } from "vue-tabler-icons";
 
 interface IProps {
   category: MyCategories;
@@ -29,6 +27,8 @@ const activeQuestion = computed(
 );
 const selected = ref<number | null>(null);
 const questionPhoto = ref<string | null>(null);
+
+const isDescriptionVisible = ref(false);  // New reactive variable to control description visibility
 
 const fetchAttemp = () => {
   if (view.value) {
@@ -156,29 +156,13 @@ watch(
 fetchAttemp();
 </script>
 
+
 <template>
   <v-card class="bg-background" elevation="0">
-    <!-- <v-card-title class="pa-0 mx-4">
-      <v-toolbar color="info" class="px-8 mt-4  bg-gradient rounded-lg">
-        <div class="test-header">
-          <div class="left-collar">
-           
-            <div class="img">
-              <FileDescriptionIcon color="black" />
-            </div>
-            <h4>{{ category.name }}</h4>
-          </div>
-          <div></div>
-          <div class="d-flex align-center mt-1">
-            <div class="logo-img"><img src="../../assets/images/main-logo.png" alt=""></div>
-            <div class="logo-title">USMONOV AVTO TEST</div>
-          </div>
-        </div>
-      </v-toolbar>
-    </v-card-title> -->
+    <!-- Previous code -->
 
     <v-card-text class="bg-light mx-4">
-      <div style="display: flex; justify-content: space-between;">
+      <div style="display: flex; justify-content: space-between; align-items: center;">
         <div>
           <v-card-title class="rounded-lg d-flex" v-if="activeQuestion && attempt.length">
             <h3 class="text-start question-text">
@@ -188,25 +172,20 @@ fetchAttemp();
           </v-card-title>
         </div>
 
-        <div>
+        <div class="dNone">
           <v-btn variant="flat" color="error" @click="emits('update:modelValue', false)">
             {{ $t("back") }}
           </v-btn>
         </div>
       </div>
 
-
-      <v-card elevation="0" l>
-
-
+      <v-card elevation="0">
         <v-card-text v-if="attempt.length && activeQuestion">
           <v-row class="">
             <v-col lg="4" cols="12" class="py-0 my-3">
               <AnswerCard v-for="(answer, index) in activeQuestion.question.choices" :key="answer.id" :item="answer"
                 :question="activeQuestion" :active-question="activeQuestion" :index="index"
-                @click="handleAnswerClick(answer.id)" :active="activeQuestion.choiceId == answer.id">
-              </AnswerCard>
-
+                @click="handleAnswerClick(answer.id)" :active="activeQuestion.choiceId == answer.id" />
               <v-card-actions>
                 <v-btn variant="flat" color="success" class="w-100" @click="nextAttemp()"
                   v-if="activeQuestionIndex !== attempt.length - 1 && activeQuestion">
@@ -214,21 +193,24 @@ fetchAttemp();
                 </v-btn>
               </v-card-actions>
 
-              <span v-if="activeQuestion.question?.description"
+              <!-- Button to toggle description visibility -->
+              <div class="showHiddenBtn" @click="isDescriptionVisible = !isDescriptionVisible">
+                {{ isDescriptionVisible ? 'Berkitish' : 'Izoh' }}
+              </div>
+
+              <!-- Conditional rendering of the description -->
+              <span v-if="isDescriptionVisible && activeQuestion.question?.description"
                 class="d-block mt-4 text-warning d-flex align-center justify-center text-13 quiz-description">
                 <span><img src="../../assets/images/warning.svg" alt="" /></span>
                 <span> {{ activeQuestion.question.description }}</span>
               </span>
-
             </v-col>
 
-            <v-col lg="4" cols="12">
-              <img :src="questionPhoto" v-if="questionPhoto" class="mx-auto my-3" height="500px" width="200%" />
-              <img v-else style="background-size:auto;" class="mx-auto my-3 d-block logoimg" height="500px" width="200%"
-                src="../../assets/images/car.jpg" />
+            <v-col lg="6" cols="12">
+              <img :src="questionPhoto" v-if="questionPhoto" class="image1" />
+              <img v-else class=" d-block image2" src="../../assets/images/car.jpg" />
             </v-col>
           </v-row>
-
         </v-card-text>
 
         <v-slide-group show-arrows v-if="attempt.length">
@@ -251,11 +233,11 @@ fetchAttemp();
           </v-slide-group-item>
         </v-slide-group>
 
-
       </v-card>
     </v-card-text>
   </v-card>
 </template>
+
 
 <style lang="scss" scoped>
 // .bg-background {
@@ -320,9 +302,19 @@ fetchAttemp();
   }
 }
 
+.image1 {
+  height: 450px;
+  width: 100%;
+}
+
+.image2 {
+  height: 450px;
+  width: 150%;
+}
+
 .btn-outline {
   border: 0.0625rem solid;
-  border-radius: 50%;
+  // border-radius: 10%;
   flex: 0 0 2.5rem;
   width: 2.5rem;
   height: 2.5rem;
@@ -354,12 +346,16 @@ fetchAttemp();
 
 .divider {
   flex: 0 0 1.125rem;
-  width: 1.125rem;
-  height: 2px;
+  width: 2px;
+  // height: 2px;
   background: rgb(var(--v-theme-info));
 }
 
 .question-text {
+  border: 1px solid rgb(232, 229, 229);
+  border-radius: 1px;
+  padding: 10px;
+  background-color: rgba(8, 58, 150, 0.16);
   font-size: 1.2rem;
   font-weight: 700;
   color: rgb(var(--v-theme-text));
@@ -392,13 +388,6 @@ fetchAttemp();
   font-size: 30px;
   font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
 }
-
-// .logo-img img {
-//   height: 50px;
-// }
-.logoimg img {
-  border: 1px solid black;
-}
 </style>
 <style>
 .v-card-actions {
@@ -408,5 +397,44 @@ fetchAttemp();
 
 .v-btn {
   height: 50px !important;
+}
+
+.showHiddenBtn {
+  border: 1px solid rgb(209, 206, 206);
+  width: 80px;
+  text-align: center;
+  /* border-radius: 5px; */
+  margin-top: 10px;
+  padding: 2px 10px;
+}
+
+@media screen and (max-width: 767px) {
+  .dNone {
+    display: none;
+  }
+
+  .question-text {
+    font-size: 12px !important;
+    /* padding: 0; */
+  }
+
+  .v-card-text {
+    padding: 0 0 0 10px !important;
+    margin: 5px !important;
+  }
+
+  .v-btn {
+    height: 30px !important;
+  }
+
+  .image1 {
+    height: 180px !important;
+    width: 100%;
+  }
+
+  .image2 {
+    height: 180px !important;
+    width: 100%;
+  }
 }
 </style>
