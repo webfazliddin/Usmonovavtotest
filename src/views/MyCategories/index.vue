@@ -112,7 +112,7 @@ getMyCategories();
       </v-expansion-panels>
     </UiParentCard>
 
-    <v-dialog v-if="isDialog" v-model:model-value="isDialog" fullscreen>
+    <v-dialog class="v-dialogs" v-if="isDialog" v-model:model-value="isDialog" fullscreen>
       <TestProcess
         v-if="selectedCategory"
         :category="selectedCategory"

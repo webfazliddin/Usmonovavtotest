@@ -50,7 +50,7 @@ const alphabet = [
   <UiParentCard
     elevation="0"
     :class="[
-      'test-card px-2 py-2',
+      'test-card px-1',
 
       {
         active: active,
@@ -77,23 +77,29 @@ const alphabet = [
   </UiParentCard>
 </template>
 
+<style>
+.v-card-text {
+  padding: 15px 20px !important;
+}
+</style>
 <style lang="scss" scoped>
+
 .test-card {
-  padding: 0.75rem 1.25rem;
+  // padding: 0.75rem 1.25rem;
   display: flex;
   align-items: center;
-  border-radius: 0.5rem;
+  // border-radius: 0.5rem;
   gap: 0.75rem;
   transition: all 0.4s;
-  border: 1px solid rgba(83, 83, 83,0.1);
+  border: 1px solid rgba(8, 7, 7, 0.1);
 margin-bottom: 0.5rem;
 
   &.active {
     background: rgb(var(--v-theme-primary)) !important;
     .num {
       color: rgb(var(--v-theme-light));
-    }
-    span {
+      }
+    span {  
       color: rgb(var(--v-theme-light));
     }
   }

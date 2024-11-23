@@ -158,7 +158,7 @@ fetchAttemp();
 
 <template>
   <v-card class="bg-background" elevation="0">
-    <v-card-title class="pa-0 mx-4">
+    <!-- <v-card-title class="pa-0 mx-4">
       <v-toolbar color="info" class="px-8 mt-4  bg-gradient rounded-lg">
         <div class="test-header">
           <div class="left-collar">
@@ -175,85 +175,99 @@ fetchAttemp();
           </div>
         </div>
       </v-toolbar>
-    </v-card-title>
+    </v-card-title> -->
 
-    <v-card-text class="bg-light mx-4 mt-8">
+    <v-card-text class="bg-light mx-4">
+      <div style="display: flex; justify-content: space-between;">
+        <div>
+          <v-card-title class="rounded-lg d-flex" v-if="activeQuestion && attempt.length">
+            <h3 class="text-start question-text">
+              {{ activeQuestionIndex + 1 }}.
+              {{ activeQuestion.question.questionText }}
+            </h3>
+          </v-card-title>
+        </div>
 
-    
-        
-      <v-slide-group show-arrows v-if="attempt.length">
-        <v-slide-group-item v-for="(n, i) in category.questionsCount" icon>
-          <div class="d-flex align-center">
-            <div class="btn-outline" @click="setActiveQuestionIndex(i)" :class="[
-              {
-                active: i == activeQuestionIndex,
-                less: i < activeQuestionIndex,
-                success: attempt[i].choiceId,
-                error: attempt[i].choiceId && !attempt[i].isCorrect,
-              },
-            ]">
-              <button class="btn">
-                <span>{{ n }}</span>
-              </button>
-            </div>
-            <div class="divider" v-if="n != attempt.length"></div>
-          </div>
-        </v-slide-group-item>
-      </v-slide-group>
-
-      <v-card-actions>
-          <v-btn variant="flat" color="success" class="w-100" @click="nextAttemp()"
-            v-if="activeQuestionIndex !== attempt.length - 1 && activeQuestion">
-            {{ $t("nextQuestion") }}
+        <div>
+          <v-btn variant="flat" color="error" @click="emits('update:modelValue', false)">
+            {{ $t("back") }}
           </v-btn>
-        </v-card-actions>
+        </div>
+      </div>
 
-      <v-card elevation="0">
-        <v-card-title class="rounded-lg" v-if="activeQuestion && attempt.length">
-          <h3 class="text-center question-text">
-            {{ activeQuestionIndex + 1 }}.
-            {{ activeQuestion.question.questionText }}
-          </h3>
-        </v-card-title>
+
+      <v-card elevation="0" l>
+
 
         <v-card-text v-if="attempt.length && activeQuestion">
-          <v-row class="align-center">
-            <v-col lg="4" cols="12">
-              <v-img :src="questionPhoto" v-if="questionPhoto" style="border-radius: 15px" class="mx-auto my-3 "
-                max-height="400" max-width="400"></v-img>
-              <img v-else style="border-radius: 15px" class="mx-auto my-3 d-block" height="350" width="auto"
-                src="../../assets/images/questionPhoto.jpg" />
-            </v-col>
-            <v-col lg="8" cols="12" class="py-0 my-3">
+          <v-row class="">
+            <v-col lg="4" cols="12" class="py-0 my-3">
               <AnswerCard v-for="(answer, index) in activeQuestion.question.choices" :key="answer.id" :item="answer"
                 :question="activeQuestion" :active-question="activeQuestion" :index="index"
                 @click="handleAnswerClick(answer.id)" :active="activeQuestion.choiceId == answer.id">
               </AnswerCard>
+
+              <v-card-actions>
+                <v-btn variant="flat" color="success" class="w-100" @click="nextAttemp()"
+                  v-if="activeQuestionIndex !== attempt.length - 1 && activeQuestion">
+                  {{ $t("nextQuestion") }}
+                </v-btn>
+              </v-card-actions>
+
+              <span v-if="activeQuestion.question?.description"
+                class="d-block mt-4 text-warning d-flex align-center justify-center text-13 quiz-description">
+                <span><img src="../../assets/images/warning.svg" alt="" /></span>
+                <span> {{ activeQuestion.question.description }}</span>
+              </span>
+
+            </v-col>
+
+            <v-col lg="4" cols="12">
+              <img :src="questionPhoto" v-if="questionPhoto" class="mx-auto my-3" height="500px" width="200%" />
+              <img v-else style="background-size:auto;" class="mx-auto my-3 d-block logoimg" height="500px" width="200%"
+                src="../../assets/images/car.jpg" />
             </v-col>
           </v-row>
-          <span v-if="activeQuestion.question?.description"
-            class="d-block mb-4 text-warning d-flex align-center justify-center text-13 quiz-description">
-            <span><img src="../../assets/images/warning.svg" alt="" /></span>
-            <span> {{ activeQuestion.question.description }}</span>
-          </span>
+
         </v-card-text>
 
-        <v-btn variant="flat" color="error" @click="emits('update:modelValue', false)">
-            {{ $t("back") }}
-          </v-btn>
+        <v-slide-group show-arrows v-if="attempt.length">
+          <v-slide-group-item v-for="(n, i) in category.questionsCount" icon>
+            <div class="d-flex align-center">
+              <div class="btn-outline" @click="setActiveQuestionIndex(i)" :class="[
+                {
+                  active: i == activeQuestionIndex,
+                  less: i < activeQuestionIndex,
+                  success: attempt[i].choiceId,
+                  error: attempt[i].choiceId && !attempt[i].isCorrect,
+                },
+              ]">
+                <button class="btn">
+                  <span>{{ n }}</span>
+                </button>
+              </div>
+              <div class="divider" v-if="n != attempt.length"></div>
+            </div>
+          </v-slide-group-item>
+        </v-slide-group>
+
+
       </v-card>
     </v-card-text>
   </v-card>
 </template>
 
 <style lang="scss" scoped>
+// .bg-background {
+//   background: #2a2b2e !important;
+// }
 .bg-gradient {
   background: linear-gradient(91.88deg, #0e449b 0%, #4284eb 100%);
 }
 
 .bg-light {
   border-radius: 10px;
-  margin-top: 26px;
+  margin-top: 6px;
 }
 
 .test-header {
@@ -355,11 +369,13 @@ fetchAttemp();
 
 .quiz-description {
   white-space: pre-wrap;
-  background: rgba(251, 187, 81, 0.1);
-  color: #e4981b;
+  background: rgba(247, 182, 19, 0.105);
+  color: #dea303 !important;
   padding: 1rem;
   border-radius: 8px;
   gap: 10px;
+  font-weight: 500;
+  font-size: 15px;
 }
 
 .btn {
@@ -377,7 +393,20 @@ fetchAttemp();
   font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
 }
 
-.logo-img img {
-  height: 50px;
+// .logo-img img {
+//   height: 50px;
+// }
+.logoimg img {
+  border: 1px solid black;
+}
+</style>
+<style>
+.v-card-actions {
+  padding: 0 !important;
+  height: 50px !important;
+}
+
+.v-btn {
+  height: 50px !important;
 }
 </style>
