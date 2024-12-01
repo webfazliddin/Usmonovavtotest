@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import LogoRu from "@/assets/images/logo.svg";
+import LogoRu from "@/assets/images/logoMain.png";
 import navMenu from "@/app/config/permissions/index";
 import { CircleDotIcon, CircleIcon } from "vue-tabler-icons";
 import NavItem from "./NavItem/index.vue";
@@ -30,10 +30,10 @@ const router = useRouter();
       @click="router.push('/')"
     >
       <img :src="LogoRu" width="50" alt="" />
-      <div style="line-height: 17px">
+      <!-- <div style="line-height: 17px">
         Usmonov <br />
         Avto test
-      </div>
+      </div> -->
       <v-btn
         class="hidden-md-and-down ml-auto"
         icon

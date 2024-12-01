@@ -10,7 +10,7 @@ import { useI18n } from "vue-i18n";
 import { setError } from "@/utils/helpers";
 import FormInput from "@/components/form/FormInput.vue";
 import FormPhoneNumber from "@/components/form/FormPhoneNumber.vue";
-import FormCheckbox from "@/components/form/FormCheckbox.vue";
+// import FormCheckbox from "@/components/form/FormCheckbox.vue";
 
 const router = useRouter();
 const route = useRoute();
@@ -119,12 +119,12 @@ onMounted(() => {
               :label="$t('isAdmin')"
             />
           </v-col> -->
-          <v-col lg="3" md="6" cols="12">
+          <!-- <v-col lg="3" md="6" cols="12">
             <FormCheckbox
               v-model:model-value="formModel.isActive"
               :label="$t('isActive')"
             />
-          </v-col>
+          </v-col> -->
         </v-row>
       </UiParentCard>
       <v-row class="mt-4">
