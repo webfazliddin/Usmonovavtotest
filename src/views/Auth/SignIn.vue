@@ -15,9 +15,8 @@ import LoginForm from "./widgets/LoginForm.vue";
             max-width="450"
           >
             <v-card-item class="pa-sm-8">
-              <div class="d-flex justify-center mb-5 align-center">
-                <img src="@/assets/images/logo.svg" alt="" />
-                <h2>Usmonov avto test</h2>
+              <div class="logoImg">
+                <img src="@/assets/images/logoMain.png" alt="" />
               </div>
               <LoginForm />
             </v-card-item>
@@ -27,3 +26,15 @@ import LoginForm from "./widgets/LoginForm.vue";
     </v-container>
   </div>
 </template>
+
+<style lang="scss">
+.logoImg{
+  display: flex;
+  justify-content:center;
+}
+
+img {
+ 
+  width: 100px;
+}
+</style>

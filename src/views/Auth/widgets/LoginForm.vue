@@ -80,3 +80,10 @@ const submit = async (submit: SubmitEventPromise) => {
     </v-btn>
   </v-form>
 </template>
+
+
+<style>
+  .v-btn {
+    height: 50px !important;
+  }
+</style>
