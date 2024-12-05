@@ -6,7 +6,7 @@ import { RouteRecordRaw } from "vue-router";
 const MainRoutes: RouteRecordRaw = {
   path: "/main",
   meta: {
-    requiresAuth: false,
+    requiresAuth: true,
   },
   redirect: "/main",
   component: () => import("@/app/config/layouts/FullLayout.vue"),
