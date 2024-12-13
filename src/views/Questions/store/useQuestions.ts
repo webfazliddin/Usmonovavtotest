@@ -1,4 +1,5 @@
 import { ISelectList } from "@/models/basic";
+import { CategoriesService } from "@/services/services/Categories";
 import { QuestionsService } from "@/services/services/Questions";
 import { setError } from "@/utils/helpers";
 import { defineStore } from "pinia";
@@ -7,6 +8,8 @@ interface IFilter {
   page: number;
   size: number;
   total: number;
+  Search: string;
+  CategoryId: number | null;
 }
 
 export const useQuestions = defineStore("questions", {
@@ -18,13 +21,17 @@ export const useQuestions = defineStore("questions", {
       page: 1,
       size: 20,
       total: 0,
+      Search: "",
+      CategoryId: null,
     } as IFilter,
   }),
   actions: {
     fetchQuestions() {
       this.questionsLoading = true;
       QuestionsService.GetQuestions(
-        `Page=${this.filter.page}&Size=${this.filter.size}`
+        `Page=${this.filter.page}&Size=${this.filter.size}&Search=${
+          this.filter.Search
+        }&CategoryId=${this.filter.CategoryId ?? ""}`
       )
         .then((res) => {
           this.questions = res.data.data;
@@ -37,6 +44,10 @@ export const useQuestions = defineStore("questions", {
           this.questionsLoading = false;
         });
     },
-
+    fetchCategories() {
+      CategoriesService.SelectList().then((res) => {
+        this.categories = res.data;
+      });
+    },
   },
 });
