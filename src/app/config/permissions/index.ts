@@ -26,6 +26,18 @@ const result = computed(() => {
           visible: userStore.getIsAdmin,
         },
         {
+          title: "markCategory",
+          to: "/admin/mark-category",
+          icon: FileDescriptionIcon,
+          visible: userStore.getIsAdmin,
+        },
+        {
+          title: "markData",
+          to: "/admin/mark-data",
+          icon: FileDescriptionIcon,
+          visible: userStore.getIsAdmin,
+        },
+        {
           title: "users",
           to: "/admin/users",
           icon: UsersIcon,
