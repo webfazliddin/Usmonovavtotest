@@ -11,7 +11,7 @@ import DeleteAction from "@/components/Actions/DeleteAction.vue";
 import { QuestionsService } from "@/services/services/Questions";
 
 const store = useQuestions();
-const { questions, questionsLoading, filter } = storeToRefs(store);
+const { questions, questionsLoading, filter, categories } = storeToRefs(store);
 
 const router = useRouter();
 
@@ -30,6 +30,7 @@ const fetchQuestionPage = (item: any) => {
   });
 };
 
+store.fetchCategories();
 store.fetchQuestions();
 </script>
 
@@ -41,10 +42,29 @@ store.fetchQuestions();
       </template>
     </Banner>
     <v-row class="mb-4">
-      <v-col md="6" cols="12">
+      <v-col md="3" cols="12">
         <h2>{{ $t("testPage") }}</h2>
       </v-col>
-      <v-col md="6" cols="12" class="text-sm-right">
+      <v-col md="3" cols="12" class="text-sm-right">
+        <FormInput
+          :placeholder="$t('search')"
+          v-model:model-value="filter.Search"
+          @appendInner="store.fetchQuestions"
+          :clearIcon="false"
+        >
+        </FormInput>
+      </v-col>
+      <v-col md="3" cols="12">
+        <FormSelect
+          v-model:model-value="filter.CategoryId"
+          :list="categories"
+          itemValue="id"
+          itemTitle="name"
+          @update:model-value="store.fetchQuestions"
+        >
+        </FormSelect>
+      </v-col>
+      <v-col md="3" cols="12" class="text-sm-right">
         <v-btn color="info" @click="fetchQuestionPage(0)">
           {{ $t("createTest") }}
         </v-btn>
