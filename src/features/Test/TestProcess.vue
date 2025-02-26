@@ -1,11 +1,10 @@
 <script setup lang="ts">
-import { computed, ref, toRefs, watch } from "vue";
+import { computed, ref, toRefs } from "vue";
 import { ICategoryAttempData, IPostAttemp, MyCategories } from "./types";
 import { AttemptService } from "@/services/services/Attempts.service";
 import AnswerCard from "./AnswerCard.vue";
 import { notify } from "@kyvg/vue3-notification";
 import { AxiosResponse } from "axios";
-import { FilesService } from "@/services/services/Files.service";
 
 interface IProps {
   category: MyCategories;
@@ -25,9 +24,8 @@ const activeQuestion = computed(
   () => attempt.value && attempt.value[activeQuestionIndex.value]
 );
 const selected = ref<number | null>(null);
-const questionPhoto = ref<string | null>(null);
 
-const isDescriptionVisible = ref(false);  // New reactive variable to control description visibility
+const isDescriptionVisible = ref(false); // New reactive variable to control description visibility
 
 const fetchAttemp = () => {
   if (view.value) {
@@ -66,7 +64,6 @@ const fetchAttemp = () => {
           canChange: true,
         };
       });
-      getPhoto();
     }
   );
 };
@@ -129,39 +126,26 @@ const handleAnswerClick = (answerId: number) => {
 
 const setActiveQuestionIndex = (index: number) => {
   activeQuestionIndex.value = index;
-  if (attempt.value[index].choiceId) {
-  }
 };
-
-const getPhoto = () => {
-  if (!activeQuestion.value.question.fileId) {
-    questionPhoto.value = null;
-    return;
-  }
-  FilesService.GetFiles(`${activeQuestion.value.question.fileId}`).then(
-    (res) => {
-      questionPhoto.value = `data:image/png;base64,${res.data.file}`;
-    }
-  );
-};
-
-watch(
-  () => activeQuestionIndex.value,
-  () => {
-    getPhoto();
-  }
-);
 
 fetchAttemp();
 </script>
 
-
 <template>
   <v-card class="bg-background" elevation="0">
     <v-card-text class="bg-light mx-4">
-      <div style="display: flex; justify-content: space-between; align-items: center;">
+      <div
+        style="
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+        "
+      >
         <div>
-          <v-card-title class="rounded-lg d-flex" v-if="activeQuestion && attempt.length">
+          <v-card-title
+            class="rounded-lg d-flex"
+            v-if="activeQuestion && attempt.length"
+          >
             <h3 class="text-start question-text">
               {{ activeQuestionIndex + 1 }}.
               {{ activeQuestion.question.questionText }}
@@ -169,7 +153,11 @@ fetchAttemp();
           </v-card-title>
         </div>
         <div class="dNone">
-          <v-btn variant="flat" color="error" @click="emits('update:modelValue', false)">
+          <v-btn
+            variant="flat"
+            color="error"
+            @click="emits('update:modelValue', false)"
+          >
             {{ $t("back") }}
           </v-btn>
         </div>
@@ -178,41 +166,76 @@ fetchAttemp();
         <v-card-text v-if="attempt.length && activeQuestion">
           <v-row class="">
             <v-col lg="4" cols="12" class="py-0 my-3">
-              <AnswerCard v-for="(answer, index) in activeQuestion.question.choices" :key="answer.id" :item="answer"
-                :question="activeQuestion" :active-question="activeQuestion" :index="index"
-                @click="handleAnswerClick(answer.id)" :active="activeQuestion.choiceId == answer.id" />
+              <AnswerCard
+                v-for="(answer, index) in activeQuestion.question.choices"
+                :key="answer.id"
+                :item="answer"
+                :question="activeQuestion"
+                :active-question="activeQuestion"
+                :index="index"
+                @click="handleAnswerClick(answer.id)"
+                :active="activeQuestion.choiceId == answer.id"
+              />
               <v-card-actions>
-                <v-btn variant="flat" color="success" class="w-100" @click="nextAttemp()"
-                  v-if="activeQuestionIndex !== attempt.length - 1 && activeQuestion">
+                <v-btn
+                  variant="flat"
+                  color="success"
+                  class="w-100"
+                  @click="nextAttemp()"
+                  v-if="
+                    activeQuestionIndex !== attempt.length - 1 && activeQuestion
+                  "
+                >
                   {{ $t("nextQuestion") }}
                 </v-btn>
               </v-card-actions>
-              <div class="showHiddenBtn" @click="isDescriptionVisible = !isDescriptionVisible">
-                {{ isDescriptionVisible ? 'Berkitish' : 'Izoh' }}
+              <div
+                class="showHiddenBtn"
+                @click="isDescriptionVisible = !isDescriptionVisible"
+              >
+                {{ isDescriptionVisible ? "Berkitish" : "Izoh" }}
               </div>
-              <span v-if="isDescriptionVisible && activeQuestion.question?.description"
-                class="d-block mt-4 text-warning d-flex align-center justify-center text-13 quiz-description">
-                <span><img src="../../assets/images/warning.svg" alt="" /></span>
+              <span
+                v-if="
+                  isDescriptionVisible && activeQuestion.question?.description
+                "
+                class="d-block mt-4 text-warning d-flex align-center justify-center text-13 quiz-description"
+              >
+                <span
+                  ><img src="../../assets/images/warning.svg" alt=""
+                /></span>
                 <span> {{ activeQuestion.question.description }}</span>
               </span>
             </v-col>
             <v-col lg="6" cols="12">
-              <img :src="questionPhoto" v-if="questionPhoto" class="image1" />
-              <img v-else class=" d-block image2" src="../../assets/images/car.jpg" />
+              <img
+                :src="`https://api.usmonovavtotest.uz/api/Files?fileName=${activeQuestion.question.fileId}`"
+                v-if="activeQuestion?.question?.fileId"
+                class="image1"
+              />
+              <img
+                v-else
+                class="d-block image2"
+                src="../../assets/images/car.jpg"
+              />
             </v-col>
           </v-row>
         </v-card-text>
         <v-slide-group show-arrows v-if="attempt.length">
           <v-slide-group-item v-for="(n, i) in category.questionsCount" icon>
             <div class="d-flex align-center">
-              <div class="btn-outline" @click="setActiveQuestionIndex(i)" :class="[
-                {
-                  active: i == activeQuestionIndex,
-                  less: i < activeQuestionIndex,
-                  success: attempt[i].choiceId,
-                  error: attempt[i].choiceId && !attempt[i].isCorrect,
-                },
-              ]">
+              <div
+                class="btn-outline"
+                @click="setActiveQuestionIndex(i)"
+                :class="[
+                  {
+                    active: i == activeQuestionIndex,
+                    less: i < activeQuestionIndex,
+                    success: attempt[i].choiceId,
+                    error: attempt[i].choiceId && !attempt[i].isCorrect,
+                  },
+                ]"
+              >
                 <button class="btn">
                   <span>{{ n }}</span>
                 </button>
@@ -225,7 +248,6 @@ fetchAttemp();
     </v-card-text>
   </v-card>
 </template>
-
 
 <style lang="scss" scoped>
 .bg-gradient {
@@ -369,7 +391,8 @@ fetchAttemp();
 
 .logo-title {
   font-size: 30px;
-  font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+  font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande",
+    "Lucida Sans", Arial, sans-serif;
 }
 </style>
 <style>
