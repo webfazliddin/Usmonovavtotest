@@ -1,7 +1,7 @@
 {
   "not_found_page": "саҳифа топилмади...",
   "signInBannerTitle": "Ҳужжатларини расмийлаштиришда ёрдам керкми?",
-  "signInBannerDescription": "Ҳужжатларини расмийлаштириш ва қайта тиклашда ёрдам бериш",
+  "signInBannerDescription": "Ҳужжатларини расмийлаштириш ва қайта тиклашда ёрдам бериш!",
   "login": "Логин",
   "password": "Парол",
   "enterText": "Матн киритинг",
@@ -10,13 +10,13 @@
   "forgotPassword": "Паролни есдан чиқардингизми?",
   "fieldNotEmpty": "Майдон бўш",
   "logoTitle": "Усмонов авто тест",
-  "testPage": "Тест маълумотлар",
+  "testPage": "Саволлар",
   "notFound": "Маълумот топилмади",
   "checkQuestion": "Тўлдирилмаган поля мавжуд",
   "Logout": "Чиқиш",
   "back": "Орқага",
   "save": "Сақлаш",
-  "createTest": "Тест яратиш",
+  "createTest": "яратиш",
   "questionText": "Савол матни",
   "description": "Изоҳ",
   "addChoice": "Жавоб қўшиш",
@@ -69,5 +69,8 @@
   "startTestComplete": "Тест бошлаш",
   "selectedUserResult": "{users} фойдаланувчи натижаси {category} бўлими",
   "myCategories": "Тест",
-  "changeLang": "Тилни алмашитириш"
+  "changeLang": "Тилни алмашитириш",
+  "changeProfile": "Чиқиш",
+      "search": "Қидириш",
+    "ChooseBelow": "Танланг"
 }

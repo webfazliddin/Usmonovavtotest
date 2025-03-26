@@ -30,8 +30,8 @@ watch(
           <Menu2Icon size="25" />
         </v-btn>
         <div class="title-organization">
-          <h4 class="font-weight-bold text-grey200">
-            {{  $t("logoTitle") }}
+          <h4 class="nunito">
+            {{  $t("signInBannerDescription") }}
           </h4>
         </div>
       </div>
@@ -50,6 +50,13 @@ watch(
   </v-app-bar>
 </template>
 <style scoped lang="scss">
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap');
+.nunito{
+  font-family: "Montserrat", sans-serif;
+  color: #373737;
+  font-weight: 500;
+  font-size: 16px;
+}
 .header {
   background-color: rgb(var(--v-theme-light));
   width: 100%;

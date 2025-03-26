@@ -34,11 +34,6 @@ store.fetchCategories();
 
 <template>
   <div>
-    <Banner :text="$t('signInBannerDescription')">
-      <template #icon>
-        <img class="banner-icon" src="@/assets/images/learn.png" alt="" />
-      </template>
-    </Banner>
     <v-row class="mb-4">
       <v-col md="6" cols="12">
         <h2>{{ $t("categories") }}</h2>

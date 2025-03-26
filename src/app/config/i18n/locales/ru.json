@@ -1,7 +1,7 @@
 {
   "not_found_page": "страница не найдена...",
   "signInBannerTitle": "Вам нужна помощь в оформлении документов?",
-  "signInBannerDescription": "Помощь в оформлении и восстановлении документов",
+  "signInBannerDescription": "Помощь в оформлении и восстановлении документов!",
   "login": "Авторизоваться",
   "password": "Пароль",
   "enterText": "Введите текст",
@@ -10,13 +10,13 @@
   "forgotPassword": "Забыли пароль?",
   "fieldNotEmpty": "Поле пусто",
   "logoTitle": "Автотест Усманова",
-  "testPage": "Тестовые данные",
+  "testPage": "Вопросы",
   "notFound": "Данные не найдены",
   "checkQuestion":"Существует незаполненное поле",
   "Logout": "Выход",
   "back": "назад",
   "save": "Сохранять",
-  "createTest": "Создать тест",
+  "createTest": "Создать",
   "questionText": "Текст вопроса",
   "description": "Комментарий",
   "addChoice": "Добавить ответ",
@@ -69,5 +69,7 @@
   "startTestComplete": "Начать тест",
   "selectedUserResult": "Результат пользователя {users} {категория}",
   "myCategories": "Тест",
-  "changeLang": "Переключение языка"
+  "changeLang": "Переключение языка",
+     "search": "Қидириш",
+    "ChooseBelow": "Танланг"
   }

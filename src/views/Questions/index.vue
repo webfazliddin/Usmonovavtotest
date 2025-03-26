@@ -9,6 +9,7 @@ import FormTable from "@/components/form/FormTable.vue";
 import { IFields } from "@/models/basic";
 import DeleteAction from "@/components/Actions/DeleteAction.vue";
 import { QuestionsService } from "@/services/services/Questions";
+import BackBtn from "@/components/form/BackBtn.vue";
 
 const store = useQuestions();
 const { questions, questionsLoading, filter, categories } = storeToRefs(store);
@@ -36,16 +37,11 @@ store.fetchQuestions();
 
 <template>
   <div>
-    <Banner :text="$t('signInBannerDescription')">
-      <template #icon>
-        <img class="banner-icon" src="@/assets/images/learn.png" alt="" />
-      </template>
-    </Banner>
     <v-row class="mb-4">
-      <v-col md="3" cols="12">
-        <h2>{{ $t("testPage") }}</h2>
+      <v-col md="1" cols="12">
+        <h2 style="">{{ $t("testPage") }}</h2>
       </v-col>
-      <v-col md="3" cols="12" class="text-sm-right">
+      <v-col md="8" cols="12" class="text-sm-right">
         <FormInput
           :placeholder="$t('search')"
           v-model:model-value="filter.Search"
@@ -54,7 +50,7 @@ store.fetchQuestions();
         >
         </FormInput>
       </v-col>
-      <v-col md="3" cols="12">
+      <v-col md="2" cols="12">
         <FormSelect
           v-model:model-value="filter.CategoryId"
           :list="categories"
@@ -64,7 +60,7 @@ store.fetchQuestions();
         >
         </FormSelect>
       </v-col>
-      <v-col md="3" cols="12" class="text-sm-right">
+      <v-col md="1" cols="12" class="text-sm-right">
         <v-btn color="info" @click="fetchQuestionPage(0)">
           {{ $t("createTest") }}
         </v-btn>

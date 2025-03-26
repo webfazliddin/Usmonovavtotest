@@ -1,7 +1,7 @@
 {
   "not_found_page": "sahifa topilmadi...",
-  "signInBannerTitle": "Hujjatlarini rasmiylashtirishda yordam kerkmi?",
-  "signInBannerDescription": "Hujjatlarini rasmiylashtirish va qayta tiklashda yordam berish",
+  "signInBannerTitle": "Hujjatlarini rasmiylashtirishda yordam kerakmi?",
+  "signInBannerDescription": "Hujjatlarini rasmiylashtirish va qayta tiklashda yordam berish!",
   "login": "Login",
   "password": "Parol",
   "enterText": "Matn kiriting",
@@ -9,14 +9,14 @@
   "rememberMe": "Parolni eslab qol",
   "forgotPassword": "Parolni esdan chiqardingizmi?",
   "fieldNotEmpty": "Maydon bo'sh",
-  "logoTitle": "Usmonov avto test",
-  "testPage": "Test ma'lumotlar",
+  "logoTitle": "",
+  "testPage": "Savollar",
   "notFound": "Ma'lumot topilmadi",
   "checkQuestion": "To'ldirilmagan polya mavjud",
   "Logout": "Chiqish",
   "back": "Orqaga",
   "save": "Saqlash",
-  "createTest": "Test yaratish",
+  "createTest": "Yaratish",
   "questionText": "Savol matni",
   "description": "Izoh",
   "addChoice": "Javob qo'shish",
@@ -69,5 +69,8 @@
   "startTestComplete": "Test boshlash",
   "selectedUserResult": "{users} foydalanuvchi natijasi {category} bo'limi",
   "myCategories": "Test",
-  "changeLang": "Tilni almashitirish"
+  "changeLang": "Tilni almashitirish",
+    "changeProfile": "Chiqish",
+    "search": "Qidirish",
+    "ChooseBelow": "Tanlang"
 }

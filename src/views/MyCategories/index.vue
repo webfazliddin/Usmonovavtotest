@@ -6,7 +6,7 @@ import UiParentCard from "@/components/UiParentCard.vue";
 import VMyCategory from "@/components/VMyCategory.vue";
 import { AxiosResponse } from "axios";
 import TestProcess from "@/features/Test/TestProcess.vue";
-// import CompleteTest from "@/features/Test/CompleteTest.vue";
+import CompleteTest from "@/features/Test/CompleteTest.vue";
 import ResultTest from "@/features/Test/ResultTest.vue";
 
 const myCategories = ref<MyCategories[]>([]);
@@ -14,10 +14,10 @@ const loading = ref(false);
 const isDialog = ref<boolean>(false);
 const isCompleteTestResult = ref<boolean>(false);
 const testResultAttempId = ref<number | null>(null);
-// const isCompleteTest = ref<boolean>(false);
+const isCompleteTest = ref<boolean>(false);
 const continueTest = ref<boolean>(false);
 const selectedCategory = ref<MyCategories | null>(null);
-  const defaultOpenPanels = ref<number[]>([0]);
+  const defaultOpenPanels = ref<number[]>([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]);
 
 const getMyCategories = () => {
   myCategories.value = [];
@@ -45,10 +45,10 @@ const getMyCategories = () => {
     });
 };
 
-// const showResult = (val: number) => {
-//   testResultAttempId.value = val;
-//   isCompleteTestResult.value = true;
-// };
+const showResult = (val: number) => {
+  testResultAttempId.value = val;
+  isCompleteTestResult.value = true;
+};
 
 getMyCategories();
 </script>
@@ -84,7 +84,7 @@ getMyCategories();
           </v-expansion-panel-text>
         </v-expansion-panel>
         <!--================finel test start=========-->
-        <!-- <v-expansion-panel class="mt-4">
+        <v-expansion-panel class="mt-4">
           <v-expansion-panel-title>
             {{ $t("finalTest") }}
           </v-expansion-panel-title>
@@ -107,7 +107,7 @@ getMyCategories();
               "
             />
           </v-expansion-panel-text>
-        </v-expansion-panel> -->
+        </v-expansion-panel>
                 <!--================finel test start end=========-->
       </v-expansion-panels>
     </UiParentCard>
@@ -128,7 +128,7 @@ getMyCategories();
       />
     </v-dialog>
 
-    <!-- <v-dialog
+    <v-dialog
       v-if="isCompleteTest"
       v-model:model-value="isCompleteTest"
       fullscreen
@@ -137,7 +137,7 @@ getMyCategories();
         v-model:model-value="isCompleteTest"
         @show-result="showResult"
       />
-    </v-dialog> -->
+    </v-dialog>
     
     <v-dialog
       v-if="isCompleteTestResult && testResultAttempId"
