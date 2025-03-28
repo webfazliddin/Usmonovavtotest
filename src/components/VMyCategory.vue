@@ -21,6 +21,13 @@ const emits = defineEmits(["start", "continue"]);
 <template>
   <div class="bg-info pa-3 rounded">
     <div class="category-header d-flex justify-content-between flex-wrap">
+      <div class="item " v-if="item?.progressPercentage" >
+        <div class="icon">
+           <FileDescriptionIcon color="black"  />
+        </div>
+
+        <span > {{ $t("progressPercentage", { count: item?.progressPercentage }) }} </span>
+      </div>
       <div class="item " v-if="item?.questionsCount" >
         <div class="icon">
            <FileDescriptionIcon color="black"  />

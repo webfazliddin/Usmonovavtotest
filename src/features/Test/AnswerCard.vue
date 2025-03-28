@@ -17,13 +17,13 @@ const props = defineProps<IProps>();
 const { item, question } = toRefs(props);
 
 const alphabet = [
-  "F1",
-  "F2",
-  "F3",
-  "F4",
-  "F5",
-  "F6",
-  "F7",
+  "A",
+  "B",
+  "C",
+  "D",
+  "E",
+  "F",
+  "G",
   "H",
   "I",
   "J",
@@ -69,7 +69,7 @@ const alphabet = [
     <VIcon
       :bg="active ? 'var(--light)' : 'var(--oquv-kurslari-info-text-color)'"
     >
-      <div class="num font-weight-bold mr-8">
+      <div class="num font-weight-bold mr-4"  style="font-size: 17px;"> 
         {{ alphabet[index] }}
       </div>
     </VIcon>
@@ -77,22 +77,17 @@ const alphabet = [
   </UiParentCard>
 </template>
 
-<style>
-.v-card-text {
-  padding: 15px 20px !important;
-}
-</style>
 <style lang="scss" scoped>
 
 .test-card {
-  // padding: 0.75rem 1.25rem;
+  padding: 0.15rem 1.25rem;
   display: flex;
   align-items: center;
-  // border-radius: 0.5rem;
+  border-radius: 0.5rem;
   gap: 0.75rem;
   transition: all 0.4s;
   border: 1px solid rgba(8, 7, 7, 0.1);
-margin-bottom: 0.5rem;
+  margin-bottom: 0.5rem;
 
   &.active {
     background: rgb(var(--v-theme-primary)) !important;
@@ -127,10 +122,10 @@ margin-bottom: 0.5rem;
 
 @media screen and (max-width: 767px) {
   .textChose {
-    font-size: 12px !important;
+    font-size: 16px !important;
   }
   .num {
-    font-size: 10px !important;
+    font-size: 16px !important;
   }
 }
 </style>
