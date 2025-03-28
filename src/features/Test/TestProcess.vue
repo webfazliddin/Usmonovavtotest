@@ -134,22 +134,6 @@ fetchAttemp();
 <template>
   <v-card class="bg-background" elevation="0">
     <v-card-text class="bg-light mx-4">
-      <v-slide-group show-arrows v-if="attempt.length">
-          <v-slide-group-item v-for="(n, i) in category.questionsCount" :key="i">
-            <div class="d-flex align-center">
-              <div class="btn-outline" @click="setActiveQuestionIndex(i)" :class="{
-                'active': i === activeQuestionIndex,
-                'success': attempt[i]?.isCorrect,
-                'error': attempt[i]?.choiceId && !attempt[i]?.isCorrect
-              }">
-                <button class="btn">
-                  <span>{{ n }}</span>
-                </button>
-              </div>
-              <div class="divider" v-if="i !== category.questionsCount - 1"></div>
-            </div>
-          </v-slide-group-item>
-        </v-slide-group>
       <div style="
           display: flex;
           justify-content: space-between;
@@ -171,8 +155,8 @@ fetchAttemp();
       </div>
       <v-card elevation="0">
         <v-card-text v-if="attempt.length && activeQuestion">
-          <v-row class="">
-            <v-col lg="7" cols="12">
+          <v-row class="mb-2">
+            <v-col lg="6" cols="12">
               <AnswerCard v-for="(answer, index) in activeQuestion.question.choices" :key="answer.id" :item="answer"
                 :question="activeQuestion" :active-question="activeQuestion" :index="index"
                 @click="handleAnswerClick(answer.id)" :active="activeQuestion.choiceId == answer.id" />
@@ -183,23 +167,40 @@ fetchAttemp();
                   {{ $t("nextQuestion") }}
                 </v-btn>
               </v-card-actions>
-              <div class="showHiddenBtn" @click="isDescriptionVisible = !isDescriptionVisible">
+              <div class="showHiddenBtn mb-2" @click="isDescriptionVisible = !isDescriptionVisible">
                 {{ isDescriptionVisible ? "Berkitish" : "Izohni ko'rish" }}
               </div>
               <span v-if="
                 isDescriptionVisible && activeQuestion.question?.description
-              " class="d-block mt-4 text-warning d-flex align-center justify-center text-13 quiz-description">
-                <span><img src="../../assets/images/warning.svg" alt="" /></span>
+              " class=" text-warning d-flex align-center justify-center text-13 quiz-description">
+                <span><img style="width: 30px; margin-top:5px" src="../../assets/images/warning.svg" alt="" /></span>
                 <span> {{ activeQuestion.question.description }}</span>
               </span>
             </v-col>
-            <v-col lg="5" cols="12">
+            <v-col lg="6" cols="12">
               <img :src="`https://api.uatest.uz/api/Files?fileName=${activeQuestion.question.fileId}`"
                 v-if="activeQuestion?.question?.fileId" class="image1" />
               <img v-else src="../../assets/images/car.jpg" class="image2" />
             </v-col>
           </v-row>
+          <v-slide-group show-arrows v-if="attempt.length">
+        <v-slide-group-item v-for="(n, i) in category.questionsCount" :key="i">
+          <div class="d-flex align-center">
+            <div class="btn-outline" @click="setActiveQuestionIndex(i)" :class="{
+              'active': i === activeQuestionIndex,
+              'success': attempt[i]?.isCorrect,
+              'error': attempt[i]?.choiceId && !attempt[i]?.isCorrect
+            }">
+              <button class="btn">
+                <span>{{ n }}</span>
+              </button>
+            </div>
+            <div class="divider" v-if="i !== category.questionsCount - 1"></div>
+          </div>
+        </v-slide-group-item>
+      </v-slide-group>
         </v-card-text>
+      
       </v-card>
     </v-card-text>
   </v-card>
@@ -267,17 +268,45 @@ fetchAttemp();
   }
 }
 
-.image1 {
-  height: 500px;
+// .image1 {
+//   height: 600px;
+//   width: 100%;
+//   border-radius: 7px;
+// }
+
+// .image2 {
+//   height: 600px;
+//   border-radius: 7px;
+//   width: 100%;
+//   background-size: auto;
+// }
+.image1,
+.image2 {
   width: 100%;
+  max-height: 600px;
+  object-fit: cover;
   border-radius: 7px;
 }
 
-.image2 {
-  height: 500px;
-  border-radius: 7px;
-  width: 100%;
-  background-size: auto;
+@media (max-width: 1024px) {
+  .image1,
+  .image2 {
+    max-height: 400px;
+  }
+}
+
+@media (max-width: 768px) {
+  .image1,
+  .image2 {
+    max-height: 300px;
+  }
+}
+
+@media (max-width: 480px) {
+  .image1,
+  .image2 {
+    max-height: 200px;
+  }
 }
 
 .btn-outline {
