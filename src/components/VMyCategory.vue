@@ -3,6 +3,7 @@ import { MyCategories } from "@/views/MyCategories/types";
 import { toRefs } from "vue";
 import {
   FileDescriptionIcon,
+  PercentageIcon,
   UserCheckIcon,
 } from "vue-tabler-icons";
 
@@ -21,21 +22,27 @@ const emits = defineEmits(["start", "continue"]);
 <template>
   <div class="bg-info pa-3 rounded">
     <div class="category-header d-flex justify-content-between flex-wrap">
-      <div class="item " v-if="item?.progressPercentage" >
-        <div class="icon">
-           <FileDescriptionIcon color="black"  />
+      <div v-if="item">
+        <div class="item" v-if="item.progressPercentage"
+          :style="{ color: item.progressPercentage >= 80 ? 'green' : 'white' }">
+          <div class="icon">
+            <PercentageIcon color="black" :color="item.progressPercentage >= 80 ? 'green' : 'white'" />
+          </div>
+          <span>
+            {{ $t("progress", { count: Math.round(item.progressPercentage) }) }} -
+            {{ item.progressPercentage >= 80 ? $t("goodJob") : $t("needsImprovement") }}
+          </span>
         </div>
-
-        <span > {{ $t("progressPercentage", { count: item?.progressPercentage }) }} </span>
       </div>
-      <div class="item " v-if="item?.questionsCount" >
+      
+      <div class="item " v-if="item?.questionsCount">
         <div class="icon">
-           <FileDescriptionIcon color="black"  />
+          <FileDescriptionIcon color="black" />
         </div>
-
-        <span > {{ $t("testCount", { count: item?.questionsCount }) }} </span>
+        <span> {{ $t("testCount", { count: item?.questionsCount }) }} </span>
       </div>
-      <div class="item" v-if="item?.answeredCount" >
+
+      <div class="item" v-if="item?.answeredCount">
         <div class="icon">
           <UserCheckIcon color="black" />
         </div>
@@ -44,9 +51,9 @@ const emits = defineEmits(["start", "continue"]);
           {{ $t("answeredCount", { count: item?.answeredCount }) }}
         </span>
       </div>
-      <div class="item" v-if="item?.correctAnswerCount" >
-        <div class="icon">
-          <img src="@/assets/images/testCount.png" alt="" />
+      <div class="item" v-if="item?.correctAnswerCount">
+        <div style="color: black; font-size: 25px;" class="icon">
+          ✔
         </div>
 
         <span>
@@ -56,7 +63,7 @@ const emits = defineEmits(["start", "continue"]);
     </div>
 
     <div class="category-body mt-4 mx-2">
-      <li v-if="item?.description" >
+      <li v-if="item?.description">
         {{ item.description }}
       </li>
       <v-btn class="mt-4" color="light" @click="emits('start', item)">
@@ -74,9 +81,11 @@ const emits = defineEmits(["start", "continue"]);
   background: linear-gradient(91.88deg, #0e449b 0%, #4284eb 100%);
   cursor: pointer;
 }
+
 .category-header {
   display: flex;
   gap: 60px;
+
   .item {
     display: flex;
     align-items: center;
@@ -94,6 +103,7 @@ const emits = defineEmits(["start", "continue"]);
     line-height: 24px;
     font-weight: 500;
   }
+
   .icon {
     width: 2.5625rem;
     height: 2.5625rem;

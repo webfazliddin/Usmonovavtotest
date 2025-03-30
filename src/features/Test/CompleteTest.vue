@@ -5,6 +5,7 @@ import AnswerCard from "./AnswerCard.vue";
 import { notify } from "@kyvg/vue3-notification";
 import { useFormatter } from "@/utils/formatter";
 import { ExamService } from "@/services/services/Exams.service";
+import defaultImage from '@/assets/images/car.jpg';
 
 interface IProps {
   modelValue: boolean;
@@ -18,8 +19,8 @@ const { secondsToHms } = useFormatter();
 
 const attempt = ref<ICategoryAttempData[]>([]);
 
-// const timer_interval = ref<number | undefined>();
-const timer = ref(60);
+const timer_interval = ref<number | undefined>();
+const timer = ref(1200 );
 const activeQuestionIndex = ref(0);
 const saveLoading = ref(false);
 const activeQuestion = computed(
@@ -27,20 +28,20 @@ const activeQuestion = computed(
 );
 const selected = ref<number | null>(null);
 
-// const clearTimer = () => clearInterval(timer_interval.value);
+const clearTimer = () => clearInterval(timer_interval.value);
 
-// const refreshTimer = () => {
-//   clearTimer();
+const refreshTimer = () => {
+  clearTimer();
 
-//   timer_interval.value = setInterval(() => {
-//     if (timer.value === 0) {
-//       clearTimer();
-//       return;
-//     }
+  timer_interval.value = setInterval(() => {
+    if (timer.value === 0) {
+      clearTimer();
+      return;
+    }
 
-//     timer.value--;
-//   }, 1000);
-// };
+    timer.value--;
+  }, 1000);
+};
 
 const fetchAttemp = () => {
   ExamService.Exmas().then((res) => {
@@ -105,7 +106,7 @@ const setActiveQuestionIndex = (index: number) => {
   }
 };
 
-// refreshTimer();
+refreshTimer();
 fetchAttemp();
 </script>
 
@@ -130,96 +131,89 @@ fetchAttemp();
         </div>
       </v-toolbar>
     </v-card-title>
+
     <v-card-text class="bg-light mx-4" v-if="attempt.length">
-      <v-slide-group show-arrows>
-        <v-slide-group-item v-for="(n, i) in attempt" icon>
-          <div class="d-flex align-center">
-            <div
-              class="btn-outline"
-              @click="setActiveQuestionIndex(i)"
-              :class="[
-                {
-                  active: i == activeQuestionIndex,
-                  less: i < activeQuestionIndex,
-                  success: n.choiceId,
-                  error: n.choiceId && !n.isCorrect,
-                },
-              ]"
-            >
-              <button class="btn">
-                <span>{{ i + 1 }} </span>
-              </button>
-            </div>
-            <div class="divider" v-if="i + 1 != attempt.length"></div>
-          </div>
-        </v-slide-group-item>
-      </v-slide-group>
+  <v-card elevation="0" class="mt-4" v-if="activeQuestion">
+    <v-card-title class="rounded-lg">
+      <h3 class="text-center question-text">
+        {{ activeQuestionIndex + 1 }}. {{ activeQuestion.question.questionText }}
+      </h3>
+    </v-card-title>
 
-      <v-card elevation="0" class="mt-4" v-if="activeQuestion">
-        <v-card-title class="rounded-lg">
-          <h3 class="text-center question-text">
-            {{ activeQuestionIndex + 1 }}.
-            {{ activeQuestion.question.questionText }}
-          </h3>
-        </v-card-title>
-
-        <v-card-text class="mt-8">
-          <template v-for="(att, attIndex) in attempt">
-            <v-row v-if="attIndex == activeQuestionIndex">
-              <v-col
-                v-for="(answer, index) in att.question.choices"
-                cols="12"
-                class="py-0 my-1"
-              >
+    <v-card-text class="mt-8">
+      <template v-for="(att, attIndex) in attempt">
+        <v-row v-if="attIndex == activeQuestionIndex" class="d-flex align-center">
+          <!-- Answer choices on the left -->
+          <v-col md="6" sm="12" cols="12" class="py-0 my-1">
+            <v-row>
+              <v-col cols="12" v-for="(answer, index) in att.question.choices" :key="answer.id">
                 <AnswerCard
-                  :key="answer.id"
                   :item="answer"
                   :question="att"
                   :active-question="activeQuestion"
                   :index="index"
                   @click="handleAnswerClick(answer.id)"
                   :active="activeQuestion.choiceId == answer.id"
-                >
-                </AnswerCard>
+                />
               </v-col>
-              <span
-                v-if="activeQuestion.question?.description"
-                class="d-block mb-4 text-warning d-flex align-center justify-center text-13 quiz-description"
-              >
-                {{ activeQuestion.question.description }}
-              </span>
             </v-row>
-          </template>
-        </v-card-text>
-
-        <v-card-actions>
-          <v-btn
-            variant="flat"
-            color="error"
-            @click="emits('update:modelValue', false)"
-          >
-            {{ $t("back") }}
-          </v-btn>
-          <v-spacer />
-          <v-btn
-            variant="flat"
-            color="success"
-            @click="nextAttemp()"
-            v-if="activeQuestionIndex !== attempt.length"
-          >
-            {{
-              activeQuestionIndex === attempt.length - 1
-                ? $t("finishQuestion")
-                : $t("nextQuestion")
-            }}
-          </v-btn>
-        </v-card-actions>
-      </v-card>
+          </v-col>
+          
+          <!-- Image on the right -->
+          <v-col md="6" sm="12" cols="12" class="d-flex justify-center">
+            <img 
+              :src="activeQuestion?.question?.fileId 
+                ? `https://api.uatest.uz/api/Files?fileName=${activeQuestion.question.fileId}`
+                : defaultImage"
+              class="responsive-image"
+            />
+          </v-col>
+        </v-row>
+      </template>
     </v-card-text>
+
+    <v-card-actions>
+      <v-btn variant="flat" color="error" @click="emits('update:modelValue', false)">
+        {{ $t("back") }}
+      </v-btn>
+      <v-spacer />
+      <v-btn variant="flat" color="success" @click="nextAttemp()" v-if="activeQuestionIndex !== attempt.length">
+        {{ activeQuestionIndex === attempt.length - 1 ? $t("finishQuestion") : $t("nextQuestion") }}
+      </v-btn>
+    </v-card-actions>
+  </v-card>
+  
+  <v-slide-group show-arrows>
+    <v-slide-group-item v-for="(n, i) in attempt" :key="i">
+      <div class="d-flex align-center">
+        <div
+          class="btn-outline"
+          @click="setActiveQuestionIndex(i)"
+          :class="{
+            active: i == activeQuestionIndex,
+            less: i < activeQuestionIndex,
+            success: n.choiceId,
+            error: n.choiceId && !n.isCorrect,
+          }"
+        >
+          <button class="btn">
+            <span>{{ i + 1 }}</span>
+          </button>
+        </div>
+        <div class="divider" v-if="i + 1 != attempt.length"></div>
+      </div>
+    </v-slide-group-item>
+  </v-slide-group>
+</v-card-text>
   </v-card>
 </template>
 
 <style lang="scss" scoped>
+.responsive-image {
+  max-width: 100%;
+  height: auto;
+  object-fit: contain;
+}
 .bg-gradient {
   background: linear-gradient(91.88deg, #0e449b 0%, #4284eb 100%);
 }
@@ -257,19 +251,19 @@ fetchAttemp();
     justify-content: center;
     gap: 10px;
     .icon {
-      width: 2.5625rem;
-      height: 2.5625rem;
+      width: 4.5625rem;
+      height: 3.5625rem;
       display: flex;
       align-items: center;
       justify-content: center;
       border-radius: 50%;
 
       img {
-        width: 1.5625rem;
-        height: 1.5625rem;
+        width: 4.5625rem;
+        height: 4.5625rem;
       }
 
-      background-color: rgb(var(--v-theme-background));
+      // background-color: rgb(var(--v-theme-background));
     }
   }
 }

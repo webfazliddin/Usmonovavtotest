@@ -46,14 +46,8 @@ store.fetchCategories();
     </v-row>
 
     <UiParentCard>
-      <FormTable
-        :fields="fields"
-        :items="categories"
-        :loading="categoriesLoading"
-        :filter="filter"
-        @refresh="store.fetchCategories"
-        append-action
-      >
+      <FormTable :fields="fields" :items="categories" :loading="categoriesLoading" :filter="filter"
+        @refresh="store.fetchCategories" append-action>
         <template #actions="{ item }">
           <v-btn size="30" icon variant="flat" class="grey100">
             <v-avatar size="22">
@@ -61,12 +55,7 @@ store.fetchCategories();
             </v-avatar>
             <v-menu activator="parent">
               <v-list>
-                <v-list-item
-                  @click="fetchCategoriesPage(item)"
-                  value="edit"
-                  hide-details
-                  min-height="38"
-                >
+                <v-list-item @click="fetchCategoriesPage(item)" value="edit" hide-details min-height="38">
                   <v-list-item-title>
                     <v-avatar size="20" class="mr-2">
                       <component :is="PencilIcon" stroke-width="2" size="20" />
@@ -75,11 +64,7 @@ store.fetchCategories();
                   </v-list-item-title>
                 </v-list-item>
 
-                <DeleteAction
-                  :item="item"
-                  :service="CategoriesService"
-                  @refresh="store.fetchCategories()"
-                >
+                <DeleteAction :item="item" :service="CategoriesService" @refresh="store.fetchCategories()">
                 </DeleteAction>
               </v-list>
             </v-menu>

@@ -6,4 +6,5 @@ export interface MyCategories {
   questionsCount: number;
   answeredCount: number;
   correctAnswerCount: number;
+  progressPercentage: number;
 }

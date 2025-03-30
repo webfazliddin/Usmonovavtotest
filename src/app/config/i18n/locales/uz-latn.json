@@ -70,7 +70,11 @@
   "selectedUserResult": "{users} foydalanuvchi natijasi {category} bo'limi",
   "myCategories": "Test",
   "changeLang": "Tilni almashitirish",
-    "changeProfile": "Chiqish",
-    "search": "Qidirish",
-    "ChooseBelow": "Tanlang"
+  "changeProfile": "Chiqish",
+  "search": "Qidirish",
+  "ChooseBelow": "Tanlang",
+  "Progress": "O'zlashtirish",
+    "progress": "O'zlashtirish: {count}%",
+    "goodJob": "Ajoyib ish! Shu ruhda davom eting! 🎉",
+    "needsImprovement": "Yana harakat qiling!"
 }
