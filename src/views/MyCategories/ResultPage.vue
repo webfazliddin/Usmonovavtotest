@@ -14,7 +14,14 @@ const goTestsButton = () => {
 
 <template>
   <div>
-    <ResultTest :attemp-id="attempId" @goTests="goTestsButton" />
+    <v-card>
+      <v-card-title>
+        <h1>{{ $t("testResult") }}</h1>
+      </v-card-title>
+      <v-card-text>
+        <ResultTest :attemp-id="attempId" @goTests="goTestsButton" />
+      </v-card-text>
+    </v-card>
   </div>
 </template>
 
