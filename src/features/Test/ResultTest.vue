@@ -5,14 +5,14 @@ import AnswerCard from "./AnswerCard.vue";
 import { ExamService } from "@/services/services/Exams.service";
 
 interface IProps {
-  modelValue: boolean;
+  modelValue?: boolean;
   attempId: number;
   view?: boolean;
 }
 const props = defineProps<IProps>();
 const { attempId } = toRefs(props);
 
-const emits = defineEmits(["update:modelValue"]);
+const emits = defineEmits(["update:modelValue", "goTests"]);
 
 const attempt = ref<ICategoryAttempData[]>([]);
 
@@ -39,7 +39,7 @@ fetchAttemp();
 </script>
 
 <template>
-  <v-card class="bg-background">
+  <v-card class="bg-background" elevation="0">
     <v-card-title class="pa-0 mx-4">
       <v-toolbar color="info" class="px-8 mt-4 py-4 bg-gradient rounded-lg">
         <div class="test-header">
@@ -114,12 +114,8 @@ fetchAttemp();
         </v-card-text>
 
         <v-card-actions>
-          <v-btn
-            variant="flat"
-            color="error"
-            @click="emits('update:modelValue', false)"
-          >
-            {{ $t("back") }}
+          <v-btn variant="flat" color="error" @click="emits('goTests')">
+            {{ $t("goTests") }}
           </v-btn>
           <v-spacer />
           <v-btn

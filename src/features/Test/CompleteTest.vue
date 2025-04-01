@@ -1,14 +1,14 @@
 <script setup lang="ts">
-import { computed, ref, toRefs } from "vue";
+import { computed, onMounted, ref, toRefs } from "vue";
 import { ICategoryAttempData, IPostAttemp } from "./types";
 import AnswerCard from "./AnswerCard.vue";
 import { notify } from "@kyvg/vue3-notification";
 import { useFormatter } from "@/utils/formatter";
 import { ExamService } from "@/services/services/Exams.service";
-import defaultImage from '@/assets/images/car.jpg';
+import defaultImage from "@/assets/images/car.jpg";
 
 interface IProps {
-  modelValue: boolean;
+  modelValue?: boolean;
   view?: boolean;
 }
 const props = defineProps<IProps>();
@@ -20,7 +20,7 @@ const { secondsToHms } = useFormatter();
 const attempt = ref<ICategoryAttempData[]>([]);
 
 const timer_interval = ref<number | undefined>();
-const timer = ref(1200 );
+const timer = ref(1200);
 const activeQuestionIndex = ref(0);
 const saveLoading = ref(false);
 const activeQuestion = computed(
@@ -106,12 +106,23 @@ const setActiveQuestionIndex = (index: number) => {
   }
 };
 
+const handleKeyDownClick = (event: KeyboardEvent) => {
+  // TEST jarayonida 50 ta savolni to'risi mishkani uyodan buyoga ob kelish qiyin narsa, kere bo'masa prosta pastdegi 3 ta qatorni komment ob qo'yasiz
+  if (event.key == "Enter") {
+    nextAttemp();
+  }
+};
+
 refreshTimer();
 fetchAttemp();
+
+onMounted(() => {
+  window.addEventListener("keydown", handleKeyDownClick);
+});
 </script>
 
 <template>
-  <v-card class="bg-background">
+  <v-card class="bg-background" elevation="0">
     <v-card-title class="pa-0 mx-4">
       <v-toolbar color="info" class="px-8 mt-4 py-4 bg-gradient rounded-lg">
         <div class="test-header">
@@ -133,78 +144,101 @@ fetchAttemp();
     </v-card-title>
 
     <v-card-text class="bg-light mx-4" v-if="attempt.length">
-  <v-card elevation="0" class="mt-4" v-if="activeQuestion">
-    <v-card-title class="rounded-lg">
-      <h3 class="text-center question-text">
-        {{ activeQuestionIndex + 1 }}. {{ activeQuestion.question.questionText }}
-      </h3>
-    </v-card-title>
+      <v-card elevation="0" class="mt-4" v-if="activeQuestion">
+        <v-card-title class="rounded-lg">
+          <h3 class="text-center question-text">
+            {{ activeQuestionIndex + 1 }}.
+            {{ activeQuestion.question.questionText }}
+          </h3>
+        </v-card-title>
 
-    <v-card-text class="mt-8">
-      <template v-for="(att, attIndex) in attempt">
-        <v-row v-if="attIndex == activeQuestionIndex" class="d-flex align-center">
-          <!-- Answer choices on the left -->
-          <v-col md="6" sm="12" cols="12" class="py-0 my-1">
-            <v-row>
-              <v-col cols="12" v-for="(answer, index) in att.question.choices" :key="answer.id">
-                <AnswerCard
-                  :item="answer"
-                  :question="att"
-                  :active-question="activeQuestion"
-                  :index="index"
-                  @click="handleAnswerClick(answer.id)"
-                  :active="activeQuestion.choiceId == answer.id"
+        <v-card-text class="mt-8">
+          <template v-for="(att, attIndex) in attempt">
+            <v-row
+              v-if="attIndex == activeQuestionIndex"
+              class="d-flex align-center"
+            >
+              <!-- Answer choices on the left -->
+              <v-col md="6" sm="12" cols="12" class="py-0 my-1">
+                <v-row>
+                  <v-col
+                    cols="12"
+                    v-for="(answer, index) in att.question.choices"
+                    :key="answer.id"
+                  >
+                    <AnswerCard
+                      :item="answer"
+                      :question="att"
+                      :active-question="activeQuestion"
+                      :index="index"
+                      @click="handleAnswerClick(answer.id)"
+                      :active="activeQuestion.choiceId == answer.id"
+                    />
+                  </v-col>
+                </v-row>
+              </v-col>
+
+              <!-- Image on the right -->
+              <v-col md="6" sm="12" cols="12" class="d-flex justify-center">
+                <img
+                  :src="
+                    activeQuestion?.question?.fileId
+                      ? `https://api.uatest.uz/api/Files?fileName=${activeQuestion.question.fileId}`
+                      : defaultImage
+                  "
+                  class="responsive-image"
                 />
               </v-col>
             </v-row>
-          </v-col>
-          
-          <!-- Image on the right -->
-          <v-col md="6" sm="12" cols="12" class="d-flex justify-center">
-            <img 
-              :src="activeQuestion?.question?.fileId 
-                ? `https://api.uatest.uz/api/Files?fileName=${activeQuestion.question.fileId}`
-                : defaultImage"
-              class="responsive-image"
-            />
-          </v-col>
-        </v-row>
-      </template>
-    </v-card-text>
+          </template>
+        </v-card-text>
 
-    <v-card-actions>
-      <v-btn variant="flat" color="error" @click="emits('update:modelValue', false)">
-        {{ $t("back") }}
-      </v-btn>
-      <v-spacer />
-      <v-btn variant="flat" color="success" @click="nextAttemp()" v-if="activeQuestionIndex !== attempt.length">
-        {{ activeQuestionIndex === attempt.length - 1 ? $t("finishQuestion") : $t("nextQuestion") }}
-      </v-btn>
-    </v-card-actions>
-  </v-card>
-  
-  <v-slide-group show-arrows>
-    <v-slide-group-item v-for="(n, i) in attempt" :key="i">
-      <div class="d-flex align-center">
-        <div
-          class="btn-outline"
-          @click="setActiveQuestionIndex(i)"
-          :class="{
-            active: i == activeQuestionIndex,
-            less: i < activeQuestionIndex,
-            success: n.choiceId,
-            error: n.choiceId && !n.isCorrect,
-          }"
-        >
-          <button class="btn">
-            <span>{{ i + 1 }}</span>
-          </button>
-        </div>
-        <div class="divider" v-if="i + 1 != attempt.length"></div>
-      </div>
-    </v-slide-group-item>
-  </v-slide-group>
-</v-card-text>
+        <v-card-actions>
+          <!-- <v-btn
+            variant="flat"
+            color="error"
+            @click="emits('update:modelValue', false)"
+          >
+            {{ $t("back") }}
+          </v-btn> -->
+          <v-spacer />
+          <v-btn
+            variant="flat"
+            color="success"
+            @click="nextAttemp()"
+            v-if="activeQuestionIndex !== attempt.length"
+          >
+            {{
+              activeQuestionIndex === attempt.length - 1
+                ? $t("finishQuestion")
+                : $t("nextQuestion")
+            }}
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+
+      <v-slide-group show-arrows>
+        <v-slide-group-item v-for="(n, i) in attempt" :key="i">
+          <div class="d-flex align-center">
+            <div
+              class="btn-outline"
+              @click="setActiveQuestionIndex(i)"
+              :class="{
+                active: i == activeQuestionIndex,
+                less: i < activeQuestionIndex,
+                success: n.choiceId,
+                error: n.choiceId && !n.isCorrect,
+              }"
+            >
+              <button class="btn">
+                <span>{{ i + 1 }}</span>
+              </button>
+            </div>
+            <div class="divider" v-if="i + 1 != attempt.length"></div>
+          </div>
+        </v-slide-group-item>
+      </v-slide-group>
+    </v-card-text>
   </v-card>
 </template>
 

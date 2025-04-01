@@ -23,19 +23,29 @@ const emits = defineEmits(["start", "continue"]);
   <div class="bg-info pa-3 rounded">
     <div class="category-header d-flex justify-content-between flex-wrap">
       <div v-if="item">
-        <div class="item" v-if="item.progressPercentage"
-          :style="{ color: item.progressPercentage >= 80 ? 'green' : 'white' }">
+        <div
+          class="item"
+          v-if="item.progressPercentage"
+          :style="{ color: item.progressPercentage >= 80 ? 'green' : 'white' }"
+        >
           <div class="icon">
-            <PercentageIcon color="black" :color="item.progressPercentage >= 80 ? 'green' : 'white'" />
+            <PercentageIcon color="black" />
           </div>
           <span>
-            {{ $t("progress", { count: Math.round(item.progressPercentage) }) }} -
-            {{ item.progressPercentage >= 80 ? $t("goodJob") : $t("needsImprovement") }}
+            {{
+              $t("progress", { count: Math.round(item.progressPercentage) })
+            }}
+            -
+            {{
+              item.progressPercentage >= 80
+                ? $t("goodJob")
+                : $t("needsImprovement")
+            }}
           </span>
         </div>
       </div>
-      
-      <div class="item " v-if="item?.questionsCount">
+
+      <div class="item" v-if="item?.questionsCount">
         <div class="icon">
           <FileDescriptionIcon color="black" />
         </div>
@@ -52,9 +62,7 @@ const emits = defineEmits(["start", "continue"]);
         </span>
       </div>
       <div class="item" v-if="item?.correctAnswerCount">
-        <div style="color: black; font-size: 25px;" class="icon">
-          ✔
-        </div>
+        <div style="color: black; font-size: 25px" class="icon">✔</div>
 
         <span>
           {{ $t("correctAnswerCount", { count: item.correctAnswerCount }) }}
@@ -69,7 +77,12 @@ const emits = defineEmits(["start", "continue"]);
       <v-btn class="mt-4" color="light" @click="emits('start', item)">
         {{ $t("startTest") }}
       </v-btn>
-      <v-btn v-if="canContiniue" class="mt-4 ml-10" style="background-color: #FFAB00;" @click="emits('continue', item)">
+      <v-btn
+        v-if="canContiniue"
+        class="mt-4 ml-10"
+        style="background-color: #ffab00"
+        @click="emits('continue', item)"
+      >
         {{ $t("continueTest") }}
       </v-btn>
     </div>

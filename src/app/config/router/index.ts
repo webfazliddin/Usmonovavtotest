@@ -20,6 +20,17 @@ export const router = createRouter({
       name: "SignIn",
       component: () => import("@/views/Auth/SignIn.vue"),
     },
+
+    {
+      path: "/admin/complete-test",
+      name: "CompleteTest",
+      component: () => import("@/views/MyCategories/CompletePage.vue"),
+    },
+    {
+      path: "/result/:attemptId",
+      name: "ResultPage",
+      component: () => import("@/views/MyCategories/ResultPage.vue"),
+    },
     MainRoutes,
   ],
 });

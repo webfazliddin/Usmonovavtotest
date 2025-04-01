@@ -6,15 +6,16 @@ import UiParentCard from "@/components/UiParentCard.vue";
 import VMyCategory from "@/components/VMyCategory.vue";
 import { AxiosResponse } from "axios";
 import TestProcess from "@/features/Test/TestProcess.vue";
-import CompleteTest from "@/features/Test/CompleteTest.vue";
 import ResultTest from "@/features/Test/ResultTest.vue";
+import { useRouter } from "vue-router";
+
+const router = useRouter();
 
 const myCategories = ref<MyCategories[]>([]);
 const loading = ref(false);
 const isDialog = ref<boolean>(false);
 const isCompleteTestResult = ref<boolean>(false);
 const testResultAttempId = ref<number | null>(null);
-const isCompleteTest = ref<boolean>(false);
 const continueTest = ref<boolean>(false);
 const selectedCategory = ref<MyCategories | null>(null);
 const defaultOpenPanels = ref<number[]>([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]);
@@ -45,9 +46,13 @@ const getMyCategories = () => {
     });
 };
 
-const showResult = (val: number) => {
-  testResultAttempId.value = val;
-  isCompleteTestResult.value = true;
+// const showResult = (val: number) => {
+//   testResultAttempId.value = val;
+//   isCompleteTestResult.value = true;
+// };
+
+const openCompleteTest = () => {
+  router.push({ name: "CompleteTest" });
 };
 
 getMyCategories();
@@ -65,67 +70,92 @@ getMyCategories();
             {{ item.name }}
           </v-expansion-panel-title>
           <v-expansion-panel-text>
-            <VMyCategory :item="item" @start="
-              () => {
-                isDialog = true;
-                selectedCategory = item;
-              }
-            " @continue="
+            <VMyCategory
+              :item="item"
+              @start="
+                () => {
+                  isDialog = true;
+                  selectedCategory = item;
+                }
+              "
+              @continue="
                 () => {
                   isDialog = true;
                   selectedCategory = item;
                   continueTest = true;
                 }
-              " />
+              "
+            />
           </v-expansion-panel-text>
         </v-expansion-panel>
-
 
         <v-expansion-panel class="mt-4">
           <v-expansion-panel-title>
             {{ $t("finalTest") }}
           </v-expansion-panel-title>
           <v-expansion-panel-text>
-            <VMyCategory :item="{
-              name: $t('finalTest'),
-              questionsCount: 0,
-              answeredCount: 0,
-              correctAnswerCount: 0,
-              progressPercentage: 0,
-              attemptId: null,
-              description: '',
-              id: 0,
-            }" :canContiniue="false" @start="
-                () => {
-                  isCompleteTest = true;
-                }
-              " />
+            <VMyCategory
+              :item="{
+                name: $t('finalTest'),
+                questionsCount: 0,
+                answeredCount: 0,
+                correctAnswerCount: 0,
+                progressPercentage: 0,
+                attemptId: null,
+                description: '',
+                id: 0,
+              }"
+              :canContiniue="false"
+              @start="openCompleteTest"
+            />
           </v-expansion-panel-text>
         </v-expansion-panel>
-
-
-
       </v-expansion-panels>
     </UiParentCard>
 
-    <v-dialog class="v-dialogs" v-if="isDialog" v-model:model-value="isDialog" fullscreen>
-      <TestProcess v-if="selectedCategory" :category="selectedCategory" v-model:model-value="isDialog"
+    <v-dialog
+      class="v-dialogs"
+      v-if="isDialog"
+      v-model:model-value="isDialog"
+      fullscreen
+    >
+      <TestProcess
+        v-if="selectedCategory"
+        :category="selectedCategory"
+        v-model:model-value="isDialog"
         @update:model-value="
           (val) => {
             isDialog = val;
             continueTest = false;
             getMyCategories();
           }
-        " :continueTest="continueTest" />
+        "
+        :continueTest="continueTest"
+      />
     </v-dialog>
 
-    <v-dialog v-if="isCompleteTest" v-model:model-value="isCompleteTest" fullscreen>
-      <CompleteTest v-model:model-value="isCompleteTest" @show-result="showResult" />
-    </v-dialog>
+    <!-- <v-dialog
+      v-if="isCompleteTest"
+      v-model:model-value="isCompleteTest"
+      fullscreen
+    >
+      <CompleteTest
+        v-model:model-value="isCompleteTest"
+        @show-result="showResult"
+      />
+    </v-dialog> -->
 
-    <v-dialog v-if="isCompleteTestResult && testResultAttempId" v-model:model-value="isCompleteTestResult" fullscreen>
-      <ResultTest v-if="testResultAttempId" v-model:model-value="isCompleteTestResult" :attempId="testResultAttempId"
-        @update:model-value="getMyCategories" />
+    <v-dialog
+      v-if="isCompleteTestResult && testResultAttempId"
+      v-model:model-value="isCompleteTestResult"
+      fullscreen
+    >
+      <ResultTest
+        v-if="testResultAttempId"
+        v-model:model-value="isCompleteTestResult"
+        :attempId="testResultAttempId"
+        @update:model-value="getMyCategories"
+      />
     </v-dialog>
   </div>
 </template>
