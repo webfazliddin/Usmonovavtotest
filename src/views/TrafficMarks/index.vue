@@ -103,7 +103,7 @@ watch(
       </FormTable>
     </UiParentCard>
 
-    <v-dialog v-model="isDialog" :width="450">
+    <v-dialog v-model="isDialog" :width="450" persistent>
       <Edit v-model="isDialog" />
     </v-dialog>
   </div>
