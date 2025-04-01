@@ -37,6 +37,12 @@ const result = computed(() => {
           icon: LayoutGridIcon,
           visible: true,
         },
+        {
+          title: "markCategories",
+          to: "/admin/mark-categories",
+          icon: LayoutGridIcon,
+          visible: userStore.getIsAdmin,
+        },
       ],
     },
   ];

@@ -1,41 +1,50 @@
 <script setup lang="ts">
 import { storeToRefs } from "pinia";
-import { useRouter } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 import UiParentCard from "@/components/UiParentCard.vue";
 import { DotsVerticalIcon, PencilIcon } from "vue-tabler-icons";
-import { useUsers } from "./store/useUsers";
 import { IFields } from "@/models/basic";
 import FormTable from "@/components/form/FormTable.vue";
-import { useCategories } from "../Categories/store/useCategories";
 import DeleteAction from "@/components/Actions/DeleteAction.vue";
 import { UsersService } from "@/services/services/Users.service";
+import { useMarkCategories } from "./store/useMarkCategories";
+import Edit from "./edit.vue";
+import { ref, watch } from "vue";
 
-const store = useUsers();
-const categoriesStore = useCategories();
-
-const { users, usersLoading, filter } = storeToRefs(store);
-
+const store = useMarkCategories();
 const router = useRouter();
+
+const { data, dataLoading, filter } = storeToRefs(store);
+
+const route = useRoute();
+const isDialog = ref(false);
 
 const fields: IFields[] = [
   { key: "id", label: "ID" },
-  { key: "firstName", label: "firstName" },
-  { key: "lastName", label: "lastName" },
-  { key: "userName", label: "userName" },
-  { key: "phoneNumber", label: "phoneNumber" },
+  { key: "name", label: "name" },
 ];
 
-const fetchUserPage = (item: any) => {
+const fetchDetail = (item: any) => {
   router.push({
-    name: "EditUsers",
+    name: "EditMarkCategories",
     params: {
       id: item?.id ? item?.id : 0,
     },
   });
+  isDialog.value = true;
 };
 
-store.fetchUsers();
-categoriesStore.fetchCategories();
+store.fetchData();
+
+watch(
+  () => route.params.id,
+  (val) => {
+    if (val) {
+      isDialog.value = true;
+    }
+  },
+  { immediate: true }
+);
 </script>
 
 <template>
@@ -45,7 +54,7 @@ categoriesStore.fetchCategories();
         <h2>{{ $t("users") }}</h2>
       </v-col>
       <v-col md="6" cols="12" class="text-sm-right">
-        <v-btn color="info" @click="fetchUserPage(0)">
+        <v-btn color="info" @click="fetchDetail(0)">
           {{ $t("createUser") }}
         </v-btn>
       </v-col>
@@ -54,10 +63,10 @@ categoriesStore.fetchCategories();
     <UiParentCard>
       <FormTable
         :fields="fields"
-        :items="users"
-        :loading="usersLoading"
+        :items="data"
+        :loading="dataLoading"
         :filter="filter"
-        @refresh="store.fetchUsers"
+        @refresh="store.fetchData"
         append-action
       >
         <template #actions="{ item }">
@@ -71,7 +80,7 @@ categoriesStore.fetchCategories();
                   value="edit"
                   hide-details
                   min-height="38"
-                  @click="fetchUserPage(item)"
+                  @click="fetchDetail(item)"
                 >
                   <v-list-item-title>
                     <v-avatar size="20" class="mr-2">
@@ -83,7 +92,7 @@ categoriesStore.fetchCategories();
                 <DeleteAction
                   :item="item"
                   :service="UsersService"
-                  @refresh="store.fetchUsers()"
+                  @refresh="store.fetchData()"
                 >
                 </DeleteAction>
               </v-list>
@@ -92,6 +101,10 @@ categoriesStore.fetchCategories();
         </template>
       </FormTable>
     </UiParentCard>
+
+    <v-dialog v-model="isDialog" :width="450">
+      <Edit v-model="isDialog" />
+    </v-dialog>
   </div>
 </template>
 
