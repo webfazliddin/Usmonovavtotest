@@ -14,7 +14,7 @@ const props = withDefaults(defineProps<FormSelectTypes>(), {
   hideDetails: true,
   placeholder: "ChooseBelow",
   validateOn: "lazy submit",
-  clearable: true
+  clearable: true,
 });
 
 const emits = defineEmits<{
@@ -27,12 +27,12 @@ const emits = defineEmits<{
 }>();
 // @ts-ignore
 const model = computed({
-  get(): string {
+  get() {
     return props.modelValue == 0 ? null : props.modelValue;
   },
-  set(newValue: string): void {
+  set(newValue) {
     emits("update:modelValue", newValue);
-  }
+  },
 });
 const customRules = ref<any>([]);
 
@@ -47,7 +47,7 @@ const setRules = () => {
         if (value) return true;
         // @ts-ignore
         return t("fieldNotEmpty");
-      }
+      },
     ];
   } else {
     customRules.value = [];

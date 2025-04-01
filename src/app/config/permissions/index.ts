@@ -43,6 +43,12 @@ const result = computed(() => {
           icon: LayoutGridIcon,
           visible: userStore.getIsAdmin,
         },
+        {
+          title: "trafficMarks",
+          to: "/admin/traffic-marks",
+          icon: LayoutGridIcon,
+          visible: userStore.getIsAdmin,
+        },
       ],
     },
   ];

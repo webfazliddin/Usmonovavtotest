@@ -14,7 +14,7 @@ export const MarkCategoriesService = {
   GetMarkCategories(query: string) {
     return ApiService.get(`MarkCategories?${query}`);
   },
-  PostMarkCategories(data: FormData) {
+  PostMarkCategories(data: any) {
     return ApiService.post(`MarkCategories`, data);
   },
   MarkCategoriesSelectlist() {
