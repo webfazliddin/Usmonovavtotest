@@ -18,11 +18,11 @@ const route = useRoute();
       <v-main class="mt-5">
         <v-container fluid class="page-wrapper mt-6 pb-sm-15 pb-10">
           <div :class="customizer.boxed ? 'maxWidth' : ''">
-            <BaseBreadcrumb
+            <!-- <BaseBreadcrumb
               v-if="route.meta.pageTitle || route.meta.breadcrumbs"
               :title="$t(route.meta.pageTitle as string)"
               :breadcrumbs="route.meta.breadcrumbs"
-            />
+            /> -->
             <router-view v-slot="{ Component }">
               <transition name="fade" mode="out-in">
                 <component :is="Component"></component>

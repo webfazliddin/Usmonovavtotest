@@ -1,3 +1,4 @@
+import { CardTestsRoutes } from "@/views/CardTests/Routes";
 import { CategoriesRoutes } from "@/views/Categories/Routes";
 import { MarkCategoriesRoutes } from "@/views/MarkCategories/Routes";
 import { MyCategoriesRoutes } from "@/views/MyCategories/Routes";
@@ -29,6 +30,7 @@ const MainRoutes: RouteRecordRaw = {
     ...MyCategoriesRoutes,
     ...MarkCategoriesRoutes,
     ...TrafficMarksRoutes,
+    ...CardTestsRoutes,
   ],
 };
 

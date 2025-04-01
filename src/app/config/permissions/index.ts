@@ -49,6 +49,12 @@ const result = computed(() => {
           icon: LayoutGridIcon,
           visible: userStore.getIsAdmin,
         },
+        {
+          title: "cardTests",
+          to: "/admin/card-tests",
+          icon: LayoutGridIcon,
+          visible: userStore.getIsAdmin,
+        },
       ],
     },
   ];
