@@ -27,14 +27,13 @@ import LoginForm from "./widgets/LoginForm.vue";
   </div>
 </template>
 
-<style lang="scss">
-.logoImg{
+<style lang="scss" scoped>
+.logoImg {
   display: flex;
-  justify-content:center;
+  justify-content: center;
 }
 
 img {
- 
   width: 100px;
 }
 </style>
