@@ -14,7 +14,7 @@ export const CardTestsService = {
   GetCardTests(query: string) {
     return ApiService.get(`CardTests?${query}`);
   },
-  PostCardTests(data: any) {
+  PostCardTests(data: any, id?: string | number) {
     return ApiService.post(`CardTests`, data);
   },
 };

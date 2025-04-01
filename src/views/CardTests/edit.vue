@@ -33,7 +33,7 @@ const router = useRouter();
 const { throttle } = useThrottle();
 
 const { t } = useI18n();
-const id = computed(() => route.params.id);
+const id = computed(() => route.params.id as string);
 const cardQuestions = ref<number[]>([]);
 const cardQuestionsList = ref<number[]>([]);
 const cardQuestionLoading = ref(false);
@@ -59,8 +59,9 @@ const saveData = async (submit: SubmitEventPromise) => {
   const { valid } = await submit;
 
   if (valid) {
-    const textUpd = +String(id) ? "Edited" : "Created";
-    CardTestsService.PostCardTests(data.value).then((res) => {
+    const api = +String(id.value) ? "PutCardTests" : "PostCardTests";
+    const textUpd = +String(id.value) ? "Edited" : "Created";
+    CardTestsService[api](data.value, id.value).then((res) => {
       notify({
         text: t(`successUser${textUpd}`),
         type: "success",
