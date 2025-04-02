@@ -63,6 +63,9 @@ store.fetchData();
       position: relative;
       overflow: hidden;
       border-radius: 8px;
+      background-position: center;
+      background-repeat: no-repeat;
+      background-size: cover;
 
       &__content {
         position: relative;
