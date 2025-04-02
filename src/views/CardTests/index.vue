@@ -6,10 +6,10 @@ import { DotsVerticalIcon, PencilIcon } from "vue-tabler-icons";
 import { IFields } from "@/models/basic";
 import FormTable from "@/components/form/FormTable.vue";
 import DeleteAction from "@/components/Actions/DeleteAction.vue";
-import { UsersService } from "@/services/services/Users.service";
 import Edit from "./edit.vue";
 import { ref, watch } from "vue";
 import { useCardTests } from "./store/useCategories";
+import { CardTestsService } from "@/services/services/CardTests.service";
 
 const store = useCardTests();
 const router = useRouter();
@@ -92,7 +92,7 @@ watch(
                 </v-list-item>
                 <DeleteAction
                   :item="item"
-                  :service="UsersService"
+                  :service="CardTestsService"
                   @refresh="store.fetchData()"
                 >
                 </DeleteAction>
