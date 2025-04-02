@@ -56,7 +56,7 @@ const fetchAttemp = async () => {
 };
 
 const nextAttemp = () => {
-  if (userStore.isAdmin) return;
+  // if (userStore.isAdmin) return;
 
   if (view.value) {
     activeQuestionIndex.value = activeQuestionIndex.value + 1;
@@ -206,20 +206,18 @@ onMounted(() => {
             {{ $t("back") }}
           </v-btn>
           <v-spacer />
-          <template v-if="!userStore.isAdmin">
-            <v-btn
-              variant="flat"
-              color="success"
-              @click="nextAttemp()"
-              v-if="activeQuestionIndex !== attempt.length"
-            >
-              {{
-                activeQuestionIndex === attempt.length - 1
-                  ? $t("finishQuestion")
-                  : $t("nextQuestion")
-              }}
-            </v-btn>
-          </template>
+          <v-btn
+            variant="flat"
+            color="success"
+            @click="nextAttemp()"
+            v-if="activeQuestionIndex !== attempt.length"
+          >
+            {{
+              activeQuestionIndex === attempt.length - 1
+                ? $t("finishQuestion")
+                : $t("nextQuestion")
+            }}
+          </v-btn>
         </v-card-actions>
       </v-card>
 

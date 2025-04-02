@@ -17,7 +17,7 @@ const fetchCards = async () => {
 fetchCards();
 
 const fetchCard = (item: any) => {
-  if (!item?.isLocked) return;
+  // if (!item?.isLocked) return;
 
   router.push({ name: "CardTest", params: { cardId: item.id } });
 };

@@ -63,7 +63,7 @@ const result = computed(() =>
             class="mt-4 text-center mx-auto"
             :text="$t('lookResult')"
             color="info"
-            @click="emits('loolResult', props.data[0].attemptId)"
+            @click="emits('loolResult', props.data[0]?.attemptId)"
           />
         </div>
       </div>
