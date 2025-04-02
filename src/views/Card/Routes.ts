@@ -9,6 +9,6 @@ export const CardRoutes: RouteRecordRaw[] = [
   {
     path: "/card-test/:cardId",
     name: "CardTest",
-    component: () => import("@/features/Test/CardTest.vue"),
+    component: () => import("./CardTest.vue"),
   },
 ];
