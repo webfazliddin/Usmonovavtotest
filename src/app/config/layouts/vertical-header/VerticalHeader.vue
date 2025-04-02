@@ -5,33 +5,54 @@ import LanguageDD from "./LanguageDD.vue";
 import { useCustomizerStore } from "../store/customizer";
 import { useTheme } from "vuetify";
 import ProfileDD from "./ProfileDD.vue";
+import { useRouter } from "vue-router";
 
+const router = useRouter();
 const theme = useTheme();
 const customer = useCustomizerStore();
 const priority = ref(customer.setHorizontalLayout ? 0 : 0);
 const valueIn = ref(false);
 
+const openCards = () => {
+  router.push({ name: "Card" });
+};
+
 watch(priority, (newPriority) => {
   priority.value = newPriority;
 });
+
 watch(
   () => valueIn.value,
   () => {
-    theme.global.name.value = theme.global.current.value.dark ? "ORANGE_THEME" : "DARK_RED_THEME";
+    theme.global.name.value = theme.global.current.value.dark
+      ? "ORANGE_THEME"
+      : "DARK_RED_THEME";
   }
 );
 </script>
 
 <template>
-  <v-app-bar elevation="0" :priority="priority" color="background" id="top" class="vertical-header pt-5 pb-2 mb-3">
+  <v-app-bar
+    elevation="0"
+    :priority="priority"
+    color="background"
+    id="top"
+    class="vertical-header pt-5 pb-2 mb-3"
+  >
     <div class="header">
       <div class="header-left-side">
-        <v-btn class="hidden-lg-and-up" icon variant="text" @click.stop="customer.SET_SIDEBAR_DRAWER" size="small">
+        <v-btn
+          class="hidden-lg-and-up"
+          icon
+          variant="text"
+          @click.stop="customer.SET_SIDEBAR_DRAWER"
+          size="small"
+        >
           <Menu2Icon size="25" />
         </v-btn>
         <div class="title-organization">
           <h4 class="nunito">
-            {{  $t("signInBannerDescription") }}
+            {{ $t("signInBannerDescription") }}
           </h4>
         </div>
       </div>
@@ -45,13 +66,33 @@ watch(
         </label>
         <LanguageDD />
         <ProfileDD />
+        <v-btn
+          class="custom-hover-primary"
+          variant="text"
+          icon
+          @click="openCards"
+        >
+          <v-avatar size="35">
+            <img
+              class="card-page"
+              src="@/assets/images/testIcon.png"
+              width="35"
+              alt="card"
+            />
+          </v-avatar>
+
+          <v-tooltip activator="parent" location="top">
+            {{ $t("goToCards") }}
+          </v-tooltip>
+        </v-btn>
       </div>
     </div>
   </v-app-bar>
 </template>
 <style scoped lang="scss">
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap');
-.nunito{
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap");
+
+.nunito {
   font-family: "Montserrat", sans-serif;
   color: #373737;
   font-weight: 500;
