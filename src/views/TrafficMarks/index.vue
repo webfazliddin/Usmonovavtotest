@@ -195,6 +195,19 @@ watch(
         }
       }
     }
+
+    @media screen and (max-width: 1440px) {
+      flex: 0 0 calc(100% / 4 - 8px);
+    }
+    @media screen and (max-width: 960px) {
+      flex: 0 0 calc(100% / 3 - 8px);
+    }
+    @media screen and (max-width: 768px) {
+      flex: 0 0 calc(100% / 2 - 8px);
+    }
+    @media screen and (max-width: 600px) {
+      flex: 0 0 calc(100% / 1 - 8px);
+    }
   }
 }
 </style>
