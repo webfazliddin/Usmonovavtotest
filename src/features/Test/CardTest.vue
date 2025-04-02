@@ -7,7 +7,6 @@ import { useFormatter } from "@/utils/formatter";
 import defaultImage from "@/assets/images/car.jpg";
 import { CardService } from "@/services/services/Cards.service";
 import { useRoute, useRouter } from "vue-router";
-import { useUserStore } from "@/app/config/layouts/store/user";
 
 interface IProps {
   modelValue?: boolean;
@@ -18,8 +17,6 @@ const { view } = toRefs(props);
 
 const emits = defineEmits(["update:modelValue", "showResult"]);
 const { secondsToHms } = useFormatter();
-
-const userStore = useUserStore();
 
 const attempt = ref<ICategoryAttempData[]>([]);
 
