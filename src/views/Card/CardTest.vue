@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import CompleteTest from "@/features/Test/CompleteTest.vue";
 import { ref } from "vue";
 import { useRouter } from "vue-router";
 

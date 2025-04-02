@@ -24,6 +24,7 @@ interface ICardTestsDto {
   shortName: string;
   fullName: string;
   cardTestQuestions: ICardTestQuestions[];
+  id: number;
 }
 
 defineProps<{
@@ -52,6 +53,7 @@ const tabRow = ref<ICardTestQuestions>({
   orderCode: 1,
   questionId: null,
   question: "",
+  id: 0,
 });
 
 const cardQuestionsFilter = ref<{
@@ -69,6 +71,7 @@ const data = ref<ICardTestsDto>({
   fullName: "",
   orderCode: "",
   shortName: "",
+  id: 0,
 });
 
 const saveData = async (submit: SubmitEventPromise) => {
@@ -112,6 +115,16 @@ const addRow = async (submit: SubmitEventPromise) => {
         tabRow.value
       );
     } else {
+      const d = data.value.cardTestQuestions.map((el) => el.questionId);
+
+      if (d.includes(tabRow.value.questionId)) {
+        notify({
+          text: t("includedQuestions"),
+          type: "warn",
+        });
+
+        return;
+      }
       data.value.cardTestQuestions.push(
         JSON.parse(JSON.stringify(tabRow.value))
       );
@@ -121,6 +134,7 @@ const addRow = async (submit: SubmitEventPromise) => {
       orderCode: data.value.cardTestQuestions.length + 1,
       questionId: null,
       question: "",
+      id: 0,
     };
   }
 };
