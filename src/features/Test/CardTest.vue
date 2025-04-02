@@ -7,6 +7,7 @@ import { useFormatter } from "@/utils/formatter";
 import defaultImage from "@/assets/images/car.jpg";
 import { CardService } from "@/services/services/Cards.service";
 import { useRoute, useRouter } from "vue-router";
+import { useUserStore } from "@/app/config/layouts/store/user";
 
 interface IProps {
   modelValue?: boolean;
@@ -17,6 +18,8 @@ const { view } = toRefs(props);
 
 const emits = defineEmits(["update:modelValue", "showResult"]);
 const { secondsToHms } = useFormatter();
+
+const userStore = useUserStore();
 
 const attempt = ref<ICategoryAttempData[]>([]);
 
@@ -53,6 +56,8 @@ const fetchAttemp = async () => {
 };
 
 const nextAttemp = () => {
+  if (userStore.isAdmin) return;
+
   if (view.value) {
     activeQuestionIndex.value = activeQuestionIndex.value + 1;
     return;
@@ -201,18 +206,20 @@ onMounted(() => {
             {{ $t("back") }}
           </v-btn>
           <v-spacer />
-          <v-btn
-            variant="flat"
-            color="success"
-            @click="nextAttemp()"
-            v-if="activeQuestionIndex !== attempt.length"
-          >
-            {{
-              activeQuestionIndex === attempt.length - 1
-                ? $t("finishQuestion")
-                : $t("nextQuestion")
-            }}
-          </v-btn>
+          <template v-if="!userStore.isAdmin">
+            <v-btn
+              variant="flat"
+              color="success"
+              @click="nextAttemp()"
+              v-if="activeQuestionIndex !== attempt.length"
+            >
+              {{
+                activeQuestionIndex === attempt.length - 1
+                  ? $t("finishQuestion")
+                  : $t("nextQuestion")
+              }}
+            </v-btn>
+          </template>
         </v-card-actions>
       </v-card>
 
