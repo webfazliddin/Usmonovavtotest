@@ -5,7 +5,7 @@ export const TrafficMarksService = {
     return ApiService.get(`/TrafficMarks/${id}`);
   },
 
-  DeleteTrafficMarks(id: string | number) {
+  Delete(id: string | number) {
     return ApiService.delete(`TrafficMarks/${id}`);
   },
   PutTrafficMarks(data: any, id: number | string) {

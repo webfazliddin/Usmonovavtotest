@@ -5,7 +5,7 @@ export const CardTestsService = {
     return ApiService.get(`/CardTests/${id}`);
   },
 
-  DeleteCardTests(id: string | number) {
+  Delete(id: string | number) {
     return ApiService.delete(`CardTests/${id}`);
   },
   PutCardTests(data: any, id: number | string) {
