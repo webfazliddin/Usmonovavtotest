@@ -17,7 +17,7 @@ const fetchCards = async () => {
 fetchCards();
 
 const fetchCard = (item: any) => {
-  if (item?.isLocked) return;
+  if (!item?.isLocked) return;
 
   router.push({ name: "CardTest", params: { cardId: item.id } });
 };
@@ -36,10 +36,10 @@ const fetchCard = (item: any) => {
       <div
         class="card"
         v-for="(card, index) in cards"
-        @click="fetchCard(card.id)"
+        @click="fetchCard(card)"
         :class="[
           {
-            locked: card.isLocked,
+            locked: !card.isLocked,
           },
         ]"
       >
@@ -57,7 +57,7 @@ const fetchCard = (item: any) => {
 
           <LockIcon
             size="16"
-            v-if="card.isLocked"
+            v-if="!card.isLocked"
             color="rgb(var(--v-theme-error))"
           />
           <LockOpenIcon size="16" v-else color="rgb(var(--v-theme-info))" />
