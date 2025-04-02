@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from "vue-router";
 import MainRoutes from "./MainRoutes";
 import { useAdapter } from "@/utils/useAdapter";
+import { CardRoutes } from "@/views/Card/Routes";
 
 const { getAdapter } = useAdapter();
 
@@ -31,6 +32,7 @@ export const router = createRouter({
       name: "ResultPage",
       component: () => import("@/views/MyCategories/ResultPage.vue"),
     },
+    ...CardRoutes,
     MainRoutes,
   ],
 });

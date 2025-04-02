@@ -141,12 +141,12 @@ watch(
             >
             </FileUpload>
           </v-col>
-          <!-- <v-col cols="12">
+          <v-col cols="12">
             <img
-              :src="`https://api.uatest.uz/api/Files?fileName=${data.fileId}`"
+              :src="`https://api.uatest.uz/api/TrafficMarks/downloadfile?fileName=${data.fileId}`"
               alt=""
             />
-          </v-col> -->
+          </v-col>
         </v-row>
       </v-card-text>
 
