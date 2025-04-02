@@ -180,6 +180,7 @@ watch(
       display: flex;
       align-items: center;
       gap: 4px;
+      margin-top: 0.5rem;
 
       span {
         font-size: 18px;

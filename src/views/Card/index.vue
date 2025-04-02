@@ -1,7 +1,10 @@
 <script setup lang="ts">
 import { CardService } from "@/services/services/Cards.service";
 import { ref } from "vue";
+import { useRouter } from "vue-router";
 import { LockIcon, LockOpenIcon } from "vue-tabler-icons";
+
+const router = useRouter();
 
 const cards = ref<any[]>([]);
 
@@ -12,6 +15,12 @@ const fetchCards = async () => {
 };
 
 fetchCards();
+
+const fetchCard = (item: any) => {
+  if (item?.isLocked) return;
+
+  router.push({ name: "CardTest", params: { cardId: item.id } });
+};
 </script>
 
 <template>
@@ -24,7 +33,16 @@ fetchCards();
       accusamus?
     </p>
     <div class="cards">
-      <div class="card" v-for="(card, index) in cards">
+      <div
+        class="card"
+        v-for="(card, index) in cards"
+        @click="fetchCard(card.id)"
+        :class="[
+          {
+            locked: card.isLocked,
+          },
+        ]"
+      >
         <div class="card--inner">
           <div class="card--inner__content">
             <div class="title">
@@ -39,7 +57,7 @@ fetchCards();
 
           <LockIcon
             size="16"
-            v-if="card.isLogged"
+            v-if="card.isLocked"
             color="rgb(var(--v-theme-error))"
           />
           <LockOpenIcon size="16" v-else color="rgb(var(--v-theme-info))" />
@@ -146,6 +164,10 @@ p {
           opacity: 0.4;
         }
       }
+    }
+
+    &.locked {
+      opacity: 0.7;
     }
   }
 }
