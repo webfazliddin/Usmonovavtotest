@@ -7,7 +7,7 @@ export const CardService = {
   GetCard(id: number | string) {
     return ApiService.get(`Cards/${id}`);
   },
-  GetAttemp(id: number | string, result: any) {
-    return ApiService.post(`Cards/${id}`, result);
+  GetAttemp(cardId: number | string, id: number | string, result: any) {
+    return ApiService.post(`Cards/${cardId}/${id}`, result);
   },
 };

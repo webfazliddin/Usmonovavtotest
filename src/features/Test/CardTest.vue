@@ -23,6 +23,8 @@ const attempt = ref<ICategoryAttempData[]>([]);
 const route = useRoute();
 const router = useRouter();
 
+const cardId = route.params.cardId as string;
+
 const timer_interval = ref<number | undefined>();
 const timer = ref(1200);
 const activeQuestionIndex = ref(0);
@@ -67,9 +69,9 @@ const nextAttemp = () => {
     choiceId: activeQuestion.value.choiceId,
   };
 
+  if (!cardId) return;
   saveLoading.value = true;
-
-  CardService.GetAttemp(`${activeQuestion.value.attemptId}`, result)
+  CardService.GetAttemp(cardId, activeQuestion.value.attemptId, result)
     .then((res) => {
       selected.value = null;
 
