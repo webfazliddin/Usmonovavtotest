@@ -12,7 +12,6 @@ const loading = ref(false);
 const isResult = ref(false);
 const result = ref<ICategoryAttempData[]>([]);
 const attemptId = ref<number | null>(null);
-const cardId = ref<number | null>(null);
 
 const showResult = (val: number) => {
   loading.value = true;
