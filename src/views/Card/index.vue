@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { CardService } from "@/services/services/Cards.service";
+import { setError } from "@/utils/helpers";
 import { ref } from "vue";
 import { useRouter } from "vue-router";
 import { LockIcon, LockOpenIcon } from "vue-tabler-icons";
@@ -9,9 +10,14 @@ const router = useRouter();
 const cards = ref<any[]>([]);
 
 const fetchCards = async () => {
-  const { data } = await CardService.GetCards();
-
-  cards.value = data;
+  // const { data } = await CardService.GetCards();
+  CardService.GetCards()
+    .then((res) => {
+      cards.value = res.data;
+    })
+    .catch((e) => {
+      setError(e);
+    });
 };
 
 fetchCards();
@@ -25,21 +31,26 @@ const fetchCard = (item: any) => {
 
 <template>
   <div class="container">
-  <div class="d-flex justify-space-between align-center mb-4">
-    <h1 class="my-4">{{ $t("LevelUp") }}</h1>
-    <v-btn color="error" @click="router.back()">
-            {{ $t("back") }}
-          </v-btn>
-  </div>
+    <div class="d-flex justify-space-between align-center mb-4">
+      <h1 class="my-4">{{ $t("LevelUp") }}</h1>
+      <v-btn color="error" @click="router.back()">
+        {{ $t("back") }}
+      </v-btn>
+    </div>
     <p class="mb-4">
       {{ $t("LevelUpText") }}
     </p>
     <div class="cards">
-      <div class="card" v-for="(card, index) in cards" @click="fetchCard(card)" :class="[
-        {
-          locked: !card.isLocked,
-        },
-      ]">
+      <div
+        class="card"
+        v-for="(card, index) in cards"
+        @click="fetchCard(card)"
+        :class="[
+          {
+            locked: !card.isLocked,
+          },
+        ]"
+      >
         <div class="card--inner">
           <div class="card--inner__content">
             <div class="title">
@@ -50,7 +61,11 @@ const fetchCard = (item: any) => {
         </div>
         <div class="level">
           <span> {{ index + 1 }} level </span>
-          <LockIcon size="25" v-if="!card.isLocked" color="rgb(var(--v-theme-error))" />
+          <LockIcon
+            size="25"
+            v-if="!card.isLocked"
+            color="rgb(var(--v-theme-error))"
+          />
           <LockOpenIcon size="16" v-else color="green" />
         </div>
       </div>
