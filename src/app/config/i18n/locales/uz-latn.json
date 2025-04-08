@@ -81,5 +81,8 @@
   "Progress": "O'zlashtirish",
     "progress": "O'zlashtirish: {count}%",
     "goodJob": "Ajoyib ish! Shu ruhda davom eting! 🎉",
-    "needsImprovement": "Yana harakat qiling!"
+    "needsImprovement": "Yana harakat qiling!",
+      "goToCards": "Level up",
+      "LevelUp": "🔒Level up",
+      "LevelUpText": "Har bir levelni qulfini ochib chiqishingiz kerak!Levelni 100% to'g'ri yechsangiz qulf ochiladi va keyingi level siz uchun ochiladi!"
 }

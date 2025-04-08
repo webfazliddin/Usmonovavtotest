@@ -3,7 +3,7 @@ import { computed, onMounted, ref, toRefs } from "vue";
 import { ICategoryAttempData, IPostAttemp } from "./types";
 import AnswerCard from "./AnswerCard.vue";
 import { notify } from "@kyvg/vue3-notification";
-import { useFormatter } from "@/utils/formatter";
+// import { useFormatter } from "@/utils/formatter";
 import defaultImage from "@/assets/images/car.jpg";
 import { CardService } from "@/services/services/Cards.service";
 import { useRoute, useRouter } from "vue-router";
@@ -16,7 +16,7 @@ const props = defineProps<IProps>();
 const { view } = toRefs(props);
 
 const emits = defineEmits(["update:modelValue", "showResult"]);
-const { secondsToHms } = useFormatter();
+// const { secondsToHms } = useFormatter();
 
 const attempt = ref<ICategoryAttempData[]>([]);
 
@@ -26,7 +26,7 @@ const router = useRouter();
 const cardId = route.params.cardId as string;
 
 const timer_interval = ref<number | undefined>();
-const timer = ref(1200);
+// const timer = ref(1200);
 const activeQuestionIndex = ref(0);
 const saveLoading = ref(false);
 const activeQuestion = computed(
@@ -34,20 +34,20 @@ const activeQuestion = computed(
 );
 const selected = ref<number | null>(null);
 
-const clearTimer = () => clearInterval(timer_interval.value);
+// const clearTimer = () => clearInterval(timer_interval.value);
 
-const refreshTimer = () => {
-  clearTimer();
+// const refreshTimer = () => {
+//   clearTimer();
 
-  timer_interval.value = setInterval(() => {
-    if (timer.value === 0) {
-      clearTimer();
-      return;
-    }
+//   timer_interval.value = setInterval(() => {
+//     if (timer.value === 0) {
+//       clearTimer();
+//       return;
+//     }
 
-    timer.value--;
-  }, 1000);
-};
+//     timer.value--;
+//   }, 1000);
+// };
 
 const fetchAttemp = async () => {
   const { data } = await CardService.GetCard(+route.params.cardId);
@@ -120,7 +120,7 @@ const handleKeyDownClick = (event: KeyboardEvent) => {
   }
 };
 
-refreshTimer();
+// refreshTimer();
 fetchAttemp();
 
 onMounted(() => {
@@ -130,26 +130,6 @@ onMounted(() => {
 
 <template>
   <v-card class="bg-background" elevation="0">
-    <v-card-title class="pa-0 mx-4">
-      <v-toolbar color="info" class="px-8 mt-4 py-4 bg-gradient rounded-lg">
-        <div class="test-header">
-          <div class="left-collar">
-            <div class="img">
-              <img src="@/assets/images/testIcon.png" alt="" />
-            </div>
-            <h5>{{ $t("finalTest") }}</h5>
-          </div>
-
-          <div class="right-collar">
-            <div class="icon">
-              <img src="@/assets/images/testTimer.png" alt="" />
-            </div>
-            {{ secondsToHms(timer) }}
-          </div>
-        </div>
-      </v-toolbar>
-    </v-card-title>
-
     <v-card-text class="bg-light mx-4" v-if="attempt.length">
       <v-card elevation="0" class="mt-4" v-if="activeQuestion">
         <v-card-title class="rounded-lg">

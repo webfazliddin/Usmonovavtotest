@@ -47,17 +47,18 @@ const returnToLessons = () => {
   <div>
     <v-card>
       <v-card-title>
-        <h1>{{ $t("CardTest") }}</h1>
+        <div class="d-flex justify-space-between align-center mb-4">
+          <h1 class="my-4">{{ $t("LevelUp") }}</h1>
+          <v-btn color="error" @click="router.back()">
+            {{ $t("back") }}
+          </v-btn>
+        </div>
       </v-card-title>
       <v-card-text>
         <CardTest @show-result="showResult" />
 
         <v-dialog width="600" v-model:model-value="isResult">
-          <CardResultModal
-            :data="result"
-            @lool-result="loolResult"
-            @return-to-lessons="returnToLessons"
-          />
+          <CardResultModal :data="result" @lool-result="loolResult" @return-to-lessons="returnToLessons" />
         </v-dialog>
       </v-card-text>
     </v-card>

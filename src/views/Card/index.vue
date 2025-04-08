@@ -25,24 +25,21 @@ const fetchCard = (item: any) => {
 
 <template>
   <div class="container">
-    <h1>Card title</h1>
-    <p>
-      Lorem ipsum dolor sit amet consectetur adipisicing elit. Cum illo impedit
-      labore accusamus nulla provident sit consequatur omnis deleniti ducimus,
-      blanditiis pariatur saepe debitis quod obcaecati corporis? Esse, voluptas
-      accusamus?
+  <div class="d-flex justify-space-between align-center mb-4">
+    <h1 class="my-4">{{ $t("LevelUp") }}</h1>
+    <v-btn color="error" @click="router.back()">
+            {{ $t("back") }}
+          </v-btn>
+  </div>
+    <p class="mb-4">
+      {{ $t("LevelUpText") }}
     </p>
     <div class="cards">
-      <div
-        class="card"
-        v-for="(card, index) in cards"
-        @click="fetchCard(card)"
-        :class="[
-          {
-            locked: !card.isLocked,
-          },
-        ]"
-      >
+      <div class="card" v-for="(card, index) in cards" @click="fetchCard(card)" :class="[
+        {
+          locked: !card.isLocked,
+        },
+      ]">
         <div class="card--inner">
           <div class="card--inner__content">
             <div class="title">
@@ -51,16 +48,10 @@ const fetchCard = (item: any) => {
             </div>
           </div>
         </div>
-
         <div class="level">
           <span> {{ index + 1 }} level </span>
-
-          <LockIcon
-            size="16"
-            v-if="!card.isLocked"
-            color="rgb(var(--v-theme-error))"
-          />
-          <LockOpenIcon size="16" v-else color="rgb(var(--v-theme-info))" />
+          <LockIcon size="25" v-if="!card.isLocked" color="rgb(var(--v-theme-error))" />
+          <LockOpenIcon size="16" v-else color="green" />
         </div>
       </div>
     </div>
@@ -86,23 +77,23 @@ p {
   line-height: 1.125rem;
   color: rgb(var(--v-theme-textSecondary));
 }
+
 .cards {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: 8px;
+  gap: 15px 10px;
 
   .card {
     position: relative;
-
     transition: all 0.4s;
-    flex: 0 0 calc(100% / 5 - 8px);
+    flex: 0 0 calc(100% / 4 - 8px);
     cursor: pointer;
 
     &--inner {
       background: url("@/assets/images/card-bg.png") no-repeat center/cover;
       height: 0;
-      padding-bottom: 56.25%;
+      padding-bottom: 66.25%;
       position: relative;
       overflow: hidden;
       border-radius: 8px;
@@ -146,7 +137,7 @@ p {
     .level {
       display: flex;
       align-items: center;
-      gap: 4px;
+      gap: 10px;
 
       span {
         font-size: 18px;
@@ -173,12 +164,15 @@ p {
     @media screen and (max-width: 1440px) {
       flex: 0 0 calc(100% / 4 - 8px);
     }
+
     @media screen and (max-width: 960px) {
       flex: 0 0 calc(100% / 3 - 8px);
     }
+
     @media screen and (max-width: 768px) {
       flex: 0 0 calc(100% / 2 - 8px);
     }
+
     @media screen and (max-width: 600px) {
       flex: 0 0 calc(100% / 1 - 8px);
     }

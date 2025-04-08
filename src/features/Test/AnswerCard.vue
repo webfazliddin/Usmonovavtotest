@@ -90,7 +90,7 @@ const alphabet = [
   margin-bottom: 0.5rem;
 
   &.active {
-    background: rgb(var(--v-theme-primary)) !important;
+    background: #ffc700 !important;
     .num {
       color: rgb(var(--v-theme-light));
       }
