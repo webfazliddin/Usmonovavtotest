@@ -2,7 +2,7 @@
 import { computed, ref, toRefs } from "vue";
 import { ICategoryAttempData } from "./types";
 import AnswerCard from "./AnswerCard.vue";
-import { ExamService } from "@/services/services/Exams.service";
+import { CardService } from "@/services/services/Cards.service";
 
 interface IProps {
   modelValue?: boolean;
@@ -22,7 +22,7 @@ const activeQuestion = computed(
 );
 
 const fetchAttemp = () => {
-  ExamService.GetExmasResultByAttemp(attempId.value).then((res) => {
+  CardService.Result(attempId.value).then((res) => {
     attempt.value = res.data;
   });
 };

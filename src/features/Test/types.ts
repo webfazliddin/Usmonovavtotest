@@ -45,3 +45,10 @@ export interface IPostAttemp {
   questionId: number | null;
   choiceId: number | null;
 }
+
+export interface CardTestResult {
+  attemptId: number;
+  questionsCount: number;
+  answeredCount: number;
+  correctAnswerCount: number;
+}

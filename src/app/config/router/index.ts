@@ -32,6 +32,11 @@ export const router = createRouter({
       name: "ResultPage",
       component: () => import("@/views/MyCategories/ResultPage.vue"),
     },
+    {
+      path: "/card-result/:attemptId",
+      name: "CardResultPage",
+      component: () => import("@/views/Card/CardResultPage.vue"),
+    },
 
     {
       path: "/traffic-marks",

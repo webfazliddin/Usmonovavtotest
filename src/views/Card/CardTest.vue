@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import TestResultModal from "@/features/Result/TestResultModal.vue";
+import CardResultModal from "@/features/Result/CardResultModal.vue";
 import CardTest from "@/features/Test/CardTest.vue";
-import { ICategoryAttempData } from "@/features/Test/types";
-import { ExamService } from "@/services/services/Exams.service";
+import { CardTestResult } from "@/features/Test/types";
+import { CardService } from "@/services/services/Cards.service";
 import { setError } from "@/utils/helpers";
 import { ref } from "vue";
 import { useRouter } from "vue-router";
@@ -10,13 +10,13 @@ import { useRouter } from "vue-router";
 const router = useRouter();
 const loading = ref(false);
 const isResult = ref(false);
-const result = ref<ICategoryAttempData[]>([]);
+const result = ref<CardTestResult | null>(null);
 const attemptId = ref<number | null>(null);
 
 const showResult = (val: number) => {
   loading.value = true;
   attemptId.value = val;
-  ExamService.GetExmasResultByAttemp(val)
+  CardService.DefaultResult(val)
     .then((res) => {
       isResult.value = true;
       result.value = res.data;
@@ -31,7 +31,7 @@ const showResult = (val: number) => {
 
 const loolResult = () => {
   router.push({
-    name: "ResultPage",
+    name: "CardResultPage",
     params: { attemptId: attemptId.value },
   });
 };
@@ -53,7 +53,7 @@ const returnToLessons = () => {
         <CardTest @show-result="showResult" />
 
         <v-dialog width="600" v-model:model-value="isResult">
-          <TestResultModal
+          <CardResultModal
             :data="result"
             @lool-result="loolResult"
             @return-to-lessons="returnToLessons"
