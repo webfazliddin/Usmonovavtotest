@@ -289,7 +289,7 @@ onMounted(() => {
   </v-card>
 </template>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .custom-select {
   .v-field__loader {
     top: 0 !important;

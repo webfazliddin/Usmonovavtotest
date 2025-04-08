@@ -38,7 +38,7 @@ const router = useRouter()
   </div>
 </template>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .page-breadcrumb {
   .v-toolbar {
     background: transparent;

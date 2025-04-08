@@ -42,7 +42,7 @@ fetchAttemp();
 
 <template>
   <v-card class="bg-background" elevation="0">
-    <v-card-title class="pa-0 mx-4">
+    <!-- <v-card-title class="pa-0 mx-4">
       <v-toolbar color="info" class="px-8 mt-4 py-4 bg-gradient rounded-lg">
         <div class="test-header">
           <div class="left-collar">
@@ -53,31 +53,8 @@ fetchAttemp();
           </div>
         </div>
       </v-toolbar>
-    </v-card-title>
+    </v-card-title> -->
     <v-card-text class="bg-light mx-4" v-if="attempt.length">
-      <v-slide-group show-arrows>
-        <v-slide-group-item v-for="(n, i) in attempt" icon>
-          <div class="d-flex align-center">
-            <div
-              class="btn-outline"
-              @click="setActiveQuestionIndex(i)"
-              :class="[
-                {
-                  active: i == activeQuestionIndex,
-                  less: i < activeQuestionIndex,
-                  success: n.isCorrect,
-                  error: n.choiceId && !n.isCorrect,
-                },
-              ]"
-            >
-              <button class="btn">
-                <span>{{ i + 1 }} </span>
-              </button>
-            </div>
-            <div class="divider" v-if="i + 1 != attempt.length"></div>
-          </div>
-        </v-slide-group-item>
-      </v-slide-group>
 
       <v-card elevation="0" class="mt-4" v-if="activeQuestion">
         <v-card-title class="rounded-lg">
@@ -86,10 +63,8 @@ fetchAttemp();
             {{ activeQuestion.question.questionText }}
           </h3>
 
-          <span
-            v-if="activeQuestion.question?.description"
-            class="d-block mb-4 text-warning d-flex align-center justify-center text-13"
-          >
+          <span v-if="activeQuestion.question?.description"
+            class="d-block mb-4 text-warning d-flex align-center justify-center text-13">
             {{ activeQuestion.question.description }}
           </span>
         </v-card-title>
@@ -97,18 +72,9 @@ fetchAttemp();
         <v-card-text class="mt-8">
           <template v-for="(att, attIndex) in attempt">
             <v-row v-if="attIndex == activeQuestionIndex">
-              <v-col
-                v-for="(answer, index) in att.question.choices"
-                cols="12"
-                class="py-0 my-1"
-              >
-                <AnswerCard
-                  :key="answer.id"
-                  :item="answer"
-                  :question="att"
-                  :index="index"
-                  :active="activeQuestion.choiceId == answer.id"
-                >
+              <v-col v-for="(answer, index) in att.question.choices" cols="12" class="py-0 my-1">
+                <AnswerCard :key="answer.id" :item="answer" :question="att" :index="index"
+                  :active="activeQuestion.choiceId == answer.id">
                 </AnswerCard>
               </v-col>
             </v-row>
@@ -120,17 +86,32 @@ fetchAttemp();
             {{ $t("goTests") }}
           </v-btn>
           <v-spacer />
-          <v-btn
-            variant="flat"
-            color="success"
-            @click="nextAttemp()"
-            v-if="activeQuestionIndex !== attempt.length - 1"
-          >
+          <v-btn variant="flat" color="success" @click="nextAttemp()" v-if="activeQuestionIndex !== attempt.length - 1">
             {{ $t("nextQuestion") }}
           </v-btn>
         </v-card-actions>
       </v-card>
+      <v-slide-group show-arrows>
+        <v-slide-group-item v-for="(n, i) in attempt" icon>
+          <div class="d-flex align-center">
+            <div class="btn-outline" @click="setActiveQuestionIndex(i)" :class="[
+              {
+                active: i == activeQuestionIndex,
+                less: i < activeQuestionIndex,
+                success: n.isCorrect,
+                error: n.choiceId && !n.isCorrect,
+              },
+            ]">
+              <button class="btn">
+                <span>{{ i + 1 }} </span>
+              </button>
+            </div>
+            <div class="divider" v-if="i + 1 != attempt.length"></div>
+          </div>
+        </v-slide-group-item>
+      </v-slide-group>
     </v-card-text>
+
   </v-card>
 </template>
 
@@ -138,10 +119,12 @@ fetchAttemp();
 .bg-gradient {
   background: linear-gradient(91.88deg, #0e449b 0%, #4284eb 100%);
 }
+
 .bg-light {
   border-radius: 10px;
   margin-top: 26px;
 }
+
 .test-header {
   display: flex;
   justify-content: space-between;
@@ -151,6 +134,7 @@ fetchAttemp();
     display: flex;
     align-items: center;
     gap: 10px;
+
     .img {
       width: 40px;
       height: 40px;
@@ -159,6 +143,7 @@ fetchAttemp();
       align-items: center;
       justify-content: center;
       border-radius: 8px;
+
       img {
         width: 27px;
         height: 27px;
@@ -171,6 +156,7 @@ fetchAttemp();
     align-items: center;
     justify-content: center;
     gap: 10px;
+
     .icon {
       width: 2.5625rem;
       height: 2.5625rem;
@@ -204,10 +190,12 @@ fetchAttemp();
     background: rgb(var(--v-theme-primary)) !important;
     color: rgb(var(--v-theme-light));
   }
+
   &.less {
     background: rgb(var(--v-theme-primary));
     color: rgb(var(--v-theme-light));
   }
+
   &.success {
     background: rgb(var(--v-theme-success));
     color: rgb(var(--v-theme-light));

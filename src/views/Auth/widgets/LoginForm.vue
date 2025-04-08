@@ -82,7 +82,7 @@ const submit = async (submit: SubmitEventPromise) => {
 </template>
 
 
-<style>
+<style lang="scss" scoped>
   .v-btn {
     height: 50px !important;
   }
