@@ -3,6 +3,7 @@ import { computed, ref, toRefs } from "vue";
 import { ICategoryAttempData } from "./types";
 import AnswerCard from "./AnswerCard.vue";
 import { CardService } from "@/services/services/Cards.service";
+import { setError } from "@/utils/helpers";
 
 interface IProps {
   modelValue?: boolean;
@@ -22,9 +23,13 @@ const activeQuestion = computed(
 );
 
 const fetchAttemp = () => {
-  CardService.Result(attempId.value).then((res) => {
-    attempt.value = res.data;
-  });
+  CardService.Result(attempId.value)
+    .then((res) => {
+      attempt.value = res.data;
+    })
+    .catch((e) => {
+      setError(e);
+    });
 };
 
 const nextAttemp = () => {

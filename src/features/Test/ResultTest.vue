@@ -3,6 +3,7 @@ import { computed, ref, toRefs } from "vue";
 import { ICategoryAttempData } from "./types";
 import AnswerCard from "./AnswerCard.vue";
 import { ExamService } from "@/services/services/Exams.service";
+import { setError } from "@/utils/helpers";
 
 interface IProps {
   modelValue?: boolean;
@@ -22,9 +23,13 @@ const activeQuestion = computed(
 );
 
 const fetchAttemp = () => {
-  ExamService.GetExmasResultByAttemp(attempId.value).then((res) => {
-    attempt.value = res.data;
-  });
+  ExamService.GetExmasResultByAttemp(attempId.value)
+    .then((res) => {
+      attempt.value = res.data;
+    })
+    .catch((e) => {
+      setError(e);
+    });
 };
 
 const nextAttemp = () => {
