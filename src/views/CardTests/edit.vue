@@ -220,7 +220,7 @@ onMounted(() => {
           <v-form @submit.prevent="addRow">
             <v-row>
               <v-col cols="12">
-                <h2>{{ $t("cardQuestionsTitle") }}</h2>
+                <h2>{{ $t("testPage") }}</h2>
               </v-col>
               <v-col lg="4" cols="12">
                 <form-input
@@ -230,7 +230,7 @@ onMounted(() => {
               </v-col>
               <v-col lg="4" cols="12">
                 <v-label class="mb-2 font-weight-medium">
-                  {{ $t("cardQuestions") }}
+                  {{ $t("testPage") }}
                 </v-label>
                 <v-select
                   class="custom-select"

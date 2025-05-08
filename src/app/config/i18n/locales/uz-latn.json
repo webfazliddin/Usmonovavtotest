@@ -17,7 +17,7 @@
   "back": "Orqaga",
   "save": "Saqlash",
   "createTest": "Yaratish",
-  "cardTests": "Level up",
+  "cardTests": "Imtihon",
   "markCategories": "Belgilar bo'limi",
   "trafficMarks": "Belgilar ma'lumotlari (admin)",
   "questionText": "Savol matni",
@@ -86,8 +86,13 @@
     "progress": "O'zlashtirish: {count}%",
     "goodJob": "Ajoyib ish! Shu ruhda davom eting! 🎉",
     "needsImprovement": "Yana harakat qiling!",
-      "goToCards": "Level up",
-      "LevelUp": "🔒Level up",
       "allQuestionCount": "🔒Jami testlar soni",
-      "LevelUpText": "Har bir levelni qulfini ochib chiqishingiz kerak!Levelni 100% to'g'ri yechsangiz qulf ochiladi va keyingi level siz uchun ochiladi!"
+      "LevelUpText": "Har bir levelni qulfini ochib chiqishingiz kerak!Levelni 100% to'g'ri yechsangiz qulf ochiladi va keyingi level siz uchun ochiladi!",
+       "cardTest": "Qulfliklar",
+       "allTestCount": "Jami testlar soni",
+       "orderCode": "Tartib raqam",
+       "AddRow": "Qo'shish",
+       "question": "Savol",
+       "action": "Amallar",
+        "EditeMarkCategories": "Qulflik test ma'lumotlari"
 }

@@ -32,14 +32,14 @@ const fetchCard = (item: any) => {
 <template>
   <div class="container">
     <div class="d-flex justify-space-between align-center mb-4">
-      <h1 class="my-4">{{ $t("LevelUp") }}</h1>
+      <h1 class="my-4">{{ $t("cardTests") }}</h1>
       <v-btn color="error" @click="router.back()">
         {{ $t("back") }}
       </v-btn>
     </div>
-    <p class="mb-4">
+    <!-- <p class="mb-4">
       {{ $t("LevelUpText") }}
-    </p>
+    </p> -->
     <div class="cards">
       <div
         class="card"

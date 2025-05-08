@@ -2,6 +2,8 @@ import {
   CircleIcon,
   FileDescriptionIcon,
   LayoutGridIcon,
+  LockBoltIcon,
+  LockOffIcon,
   UsersIcon,
 } from "vue-tabler-icons";
 import { useUserStore } from "../layouts/store/user";
@@ -26,6 +28,12 @@ const result = computed(() => {
           visible: userStore.getIsAdmin,
         },
         {
+          title: "cardTest",
+          to: "/admin/card-tests",
+          icon: LayoutGridIcon,
+          visible: userStore.getIsAdmin,
+        },
+        {
           title: "users",
           to: "/admin/users",
           icon: UsersIcon,
@@ -37,30 +45,31 @@ const result = computed(() => {
           icon: LayoutGridIcon,
           visible: true,
         },
+        // {
+        //   title: "markCategories",
+        //   to: "/admin/mark-categories",
+        //   icon: LayoutGridIcon,
+        //   visible: userStore.getIsAdmin,
+        // },
+        // {
+        //   title: "trafficMarks",
+        //   to: "/admin/traffic-marks",
+        //   icon: LayoutGridIcon,
+        //   visible: userStore.getIsAdmin,
+        // },
+
         {
-          title: "markCategories",
-          to: "/admin/mark-categories",
+          title: "50",
+          to: "admin/complete-test",
           icon: LayoutGridIcon,
-          visible: userStore.getIsAdmin,
-        },
-        {
-          title: "trafficMarks",
-          to: "/admin/traffic-marks",
-          icon: LayoutGridIcon,
-          visible: userStore.getIsAdmin,
+          visible: true,
         },
         {
           title: "cardTests",
-          to: "/admin/card-tests",
-          icon: LayoutGridIcon,
-          visible: userStore.getIsAdmin,
+          to: "/card",
+          icon: LockBoltIcon,
+          visible: true,
         },
-        // {
-        //   title: "Card",
-        //   to: "/card",
-        //   icon: LayoutGridIcon,
-        //   visible: !userStore.getIsAdmin,
-        // },
       ],
     },
   ];

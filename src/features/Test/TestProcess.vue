@@ -27,11 +27,11 @@ const activeQuestion = computed(() => attempt.value[activeQuestionIndex.value]);
 
 const fetchAttemp = () => {
   if (view.value) return;
-  
+
   const url = continueTest.value
     ? `/${category.value.id}/attempts/${category.value.attemptId}`
     : `/${category.value.id}/attempts`;
-  
+
   AttemptService.StartQuestion(url).then((res: AxiosResponse<{ questions: ICategoryAttempData[] }>) => {
     attempt.value = res.data.questions.map(item => ({ ...item, canChange: true }));
     foundLastQuestion();
@@ -81,48 +81,45 @@ fetchAttemp();
   <v-card class="bg-background" elevation="0">
     <v-card-text class="bg-light mx-4">
       <v-card-title v-if="activeQuestion" class="rounded-lg">
-        <h3 class="text-start question-text">{{ activeQuestionIndex + 1 }}. {{ activeQuestion.question.questionText }}</h3>
+        <h3 class="text-start question-text">{{ activeQuestionIndex + 1 }}. {{ activeQuestion.question.questionText }}
+        </h3>
       </v-card-title>
-      
+
       <v-card elevation="0">
         <v-card-text v-if="attempt.length">
           <v-row class="mb-2">
             <v-col lg="6" cols="12">
-              <AnswerCard v-for="(answer, index) in activeQuestion.question.choices" :key="answer.id"
-                :item="answer" :question="activeQuestion" :index="index"
-                @click="handleAnswerClick(answer.id)" :active="activeQuestion.choiceId == answer.id" />
-              
+              <AnswerCard v-for="(answer, index) in activeQuestion.question.choices" :key="answer.id" :item="answer"
+                :question="activeQuestion" :index="index" @click="handleAnswerClick(answer.id)"
+                :active="activeQuestion.choiceId == answer.id" />
+
               <div class="showHiddenBtn mb-2" @click="isDescriptionVisible = !isDescriptionVisible">
                 {{ isDescriptionVisible ? "Berkitish" : "Izohni ko'rish" }}
               </div>
-              
+
               <span v-if="isDescriptionVisible && activeQuestion.question?.description"
                 class="text-warning d-flex align-center justify-center text-13 quiz-description">
                 <img src="../../assets/images/warning.svg" alt="" style="width: 30px; margin-top:5px" />
                 <span>{{ activeQuestion.question.description }}</span>
               </span>
             </v-col>
-            
+
             <v-col md="6" sm="12" cols="12" class="d-flex justify-center">
-              <img :src="activeQuestion?.question?.fileId ? `https://api.uatest.uz/api/Files?fileName=${activeQuestion.question.fileId}` : defaultImage"
+              <img
+                :src="activeQuestion?.question?.fileId ? `https://api.uatest.uz/api/Files?fileName=${activeQuestion.question.fileId}` : defaultImage"
                 class="responsive-image" />
             </v-col>
           </v-row>
         </v-card-text>
 
         <v-card-actions class="d-flex justify-space-between">
-  <v-btn variant="flat" color="error" @click="emits('update:modelValue', false)">
-    {{ $t("back") }}
-  </v-btn>
-  <v-btn
-    variant="flat"
-    color="success"
-    @click="nextAttemp()"
-    v-if="activeQuestionIndex !== attempt.length - 1"
-  >
-    {{ $t("nextQuestion") }}
-  </v-btn>
-</v-card-actions>
+          <v-btn variant="flat" color="error" @click="emits('update:modelValue', false)">
+            {{ $t("back") }}
+          </v-btn>
+          <v-btn variant="flat" color="success" @click="nextAttemp()" v-if="activeQuestionIndex !== attempt.length - 1">
+            {{ $t("nextQuestion") }}
+          </v-btn>
+        </v-card-actions>
       </v-card>
 
       <v-slide-group show-arrows v-if="attempt.length">
@@ -193,8 +190,11 @@ fetchAttemp();
 
 .quiz-description {
   white-space: pre-wrap;
-  background: rgba(247, 182, 19, 0.1);
-  color: #dea303;
+  line-height: 1.2 !important;
+  font-size: 14px;
+  font-weight: 500;
+  color: #2196f3;
+  background: #f0f4ff;
   padding: 1rem;
   border-radius: 8px;
   display: flex;
@@ -202,6 +202,13 @@ fetchAttemp();
   gap: 10px;
   font-weight: 500;
   font-size: 14px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-align: justify;
+  cursor: pointer;
 }
 
 .btn {
@@ -212,5 +219,39 @@ fetchAttemp();
   justify-content: center;
   align-items: center;
   border-radius: 50%;
+}
+
+.showHiddenBtn {
+  cursor: pointer;
+  color: #2196f3;
+  font-size: 14px;
+  font-weight: 500;
+  text-decoration: underline;
+  margin-top: 30px;
+}
+
+.showHiddenBtn:hover {
+  color: #0e449b;
+}
+
+
+.btn-outline:hover {
+  background: #0e449b;
+  color: white;
+}
+
+.btn-outline.success:hover {
+  background: #4caf50;
+  color: white;
+}
+
+.btn-outline.error:hover {
+  background: #f44336;
+  color: white;
+}
+
+.btn-outline.active:hover {
+  background: #0e449b;
+  color: white;
 }
 </style>

@@ -16,7 +16,7 @@ const router = useRouter();
     :mobile-breakpoint="960" app class="leftSidebar" :rail="customizer.mini_sidebar" expand-on-hover width="256">
     <div class="pa-5 pl-4" style="display: flex; align-items: center; cursor: pointer" @click="router.push('/')">
       <div class="d-flex align-center justify-between">
-        <div> <img :src="LogoRu" width="50" alt="" /></div><div class="ml-5 nunito">UATest.uz</div>
+        <div> <img :src="LogoRu" width="50" alt="" /></div><div class="ml-5 nunito">USMONOV AVTO TEST</div>
       </div>
       <v-btn class="hidden-md-and-down ml-auto" icon color="primary" variant="text"
         @click.stop="customizer.SET_MINI_SIDEBAR(!customizer.mini_sidebar)">

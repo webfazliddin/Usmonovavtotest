@@ -6,11 +6,13 @@ import { notify } from "@kyvg/vue3-notification";
 import { useFormatter } from "@/utils/formatter";
 import { ExamService } from "@/services/services/Exams.service";
 import defaultImage from "@/assets/images/car.jpg";
+import { useRouter } from "vue-router";
 
 interface IProps {
   modelValue?: boolean;
   view?: boolean;
 }
+const router = useRouter();
 const props = defineProps<IProps>();
 const { view } = toRefs(props);
 
@@ -124,13 +126,13 @@ onMounted(() => {
 <template>
   <v-card class="bg-background" elevation="0">
     <v-card-title class="pa-0 mx-4">
-      <v-toolbar color="info" class="px-8 mt-4 py-4 bg-gradient rounded-lg">
+      <v-toolbar color="info" class="px-8 mt-4 py-2 bg-gradient rounded-lg">
         <div class="test-header">
           <div class="left-collar">
             <div class="img">
               <img src="@/assets/images/testIcon.png" alt="" />
             </div>
-            <h5>{{ $t("finalTest") }}</h5>
+            <!-- <h5>{{ $t("finalTest") }}</h5> -->50
           </div>
 
           <div class="right-collar">
@@ -142,8 +144,8 @@ onMounted(() => {
         </div>
       </v-toolbar>
     </v-card-title>
-
     <v-card-text class="bg-light mx-4" v-if="attempt.length">
+
       <v-card elevation="0" class="mt-4" v-if="activeQuestion">
         <v-card-title class="rounded-lg">
           <h3 class="text-center question-text">
@@ -154,60 +156,34 @@ onMounted(() => {
 
         <v-card-text class="mt-8">
           <template v-for="(att, attIndex) in attempt">
-            <v-row
-              v-if="attIndex == activeQuestionIndex"
-              class="d-flex align-center"
-            >
+            <v-row v-if="attIndex == activeQuestionIndex" class="d-flex align-center">
               <!-- Answer choices on the left -->
               <v-col md="6" sm="12" cols="12" class="py-0 my-1">
                 <v-row>
-                  <v-col
-                    cols="12"
-                    v-for="(answer, index) in att.question.choices"
-                    :key="answer.id"
-                  >
-                    <AnswerCard
-                      :item="answer"
-                      :question="att"
-                      :active-question="activeQuestion"
-                      :index="index"
-                      @click="handleAnswerClick(answer.id)"
-                      :active="activeQuestion.choiceId == answer.id"
-                    />
+                  <v-col cols="12" v-for="(answer, index) in att.question.choices" :key="answer.id">
+                    <AnswerCard :item="answer" :question="att" :active-question="activeQuestion" :index="index"
+                      @click="handleAnswerClick(answer.id)" :active="activeQuestion.choiceId == answer.id" />
                   </v-col>
                 </v-row>
               </v-col>
 
               <!-- Image on the right -->
               <v-col md="6" sm="12" cols="12" class="d-flex justify-center">
-                <img
-                  :src="
-                    activeQuestion?.question?.fileId
-                      ? `https://api.uatest.uz/api/Files?fileName=${activeQuestion.question.fileId}`
-                      : defaultImage
-                  "
-                  class="responsive-image"
-                />
+                <img :src="activeQuestion?.question?.fileId
+                  ? `https://api.uatest.uz/api/Files?fileName=${activeQuestion.question.fileId}`
+                  : defaultImage
+                  " class="responsive-image" />
               </v-col>
             </v-row>
           </template>
         </v-card-text>
 
         <v-card-actions>
-          <!-- <v-btn
-            variant="flat"
-            color="error"
-            @click="emits('update:modelValue', false)"
-          >
+          <v-btn variant="flat" color="error" @click="router.back()">
             {{ $t("back") }}
-          </v-btn> -->
+          </v-btn>
           <v-spacer />
-          <v-btn
-            variant="flat"
-            color="success"
-            @click="nextAttemp()"
-            v-if="activeQuestionIndex !== attempt.length"
-          >
+          <v-btn variant="flat" color="success" @click="nextAttemp()" v-if="activeQuestionIndex !== attempt.length">
             {{
               activeQuestionIndex === attempt.length - 1
                 ? $t("finishQuestion")
@@ -220,16 +196,12 @@ onMounted(() => {
       <v-slide-group show-arrows>
         <v-slide-group-item v-for="(n, i) in attempt" :key="i">
           <div class="d-flex align-center">
-            <div
-              class="btn-outline"
-              @click="setActiveQuestionIndex(i)"
-              :class="{
-                active: i == activeQuestionIndex,
-                less: i < activeQuestionIndex,
-                success: n.choiceId,
-                error: n.choiceId && !n.isCorrect,
-              }"
-            >
+            <div class="btn-outline" @click="setActiveQuestionIndex(i)" :class="{
+              active: i == activeQuestionIndex,
+              less: i < activeQuestionIndex,
+              success: n.choiceId,
+              error: n.choiceId && !n.isCorrect,
+            }">
               <button class="btn">
                 <span>{{ i + 1 }}</span>
               </button>
@@ -248,13 +220,16 @@ onMounted(() => {
   height: auto;
   object-fit: contain;
 }
+
 .bg-gradient {
   background: linear-gradient(91.88deg, #0e449b 0%, #4284eb 100%);
 }
+
 .bg-light {
   border-radius: 10px;
   margin-top: 26px;
 }
+
 .test-header {
   display: flex;
   justify-content: space-between;
@@ -264,6 +239,7 @@ onMounted(() => {
     display: flex;
     align-items: center;
     gap: 10px;
+
     .img {
       width: 40px;
       height: 40px;
@@ -272,6 +248,7 @@ onMounted(() => {
       align-items: center;
       justify-content: center;
       border-radius: 8px;
+
       img {
         width: 27px;
         height: 27px;
@@ -284,6 +261,7 @@ onMounted(() => {
     align-items: center;
     justify-content: center;
     gap: 10px;
+
     .icon {
       width: 4.5625rem;
       height: 3.5625rem;
@@ -329,10 +307,12 @@ onMounted(() => {
     background: rgb(var(--v-theme-primary)) !important;
     color: rgb(var(--v-theme-light));
   }
+
   &.less {
     background: rgb(var(--v-theme-primary));
     color: rgb(var(--v-theme-light));
   }
+
   &.success {
     background: rgb(var(--v-theme-success));
     color: rgb(var(--v-theme-light));

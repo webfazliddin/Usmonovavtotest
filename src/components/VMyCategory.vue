@@ -21,53 +21,64 @@ const emits = defineEmits(["start", "continue"]);
 
 <template>
   <div class="bg-info pa-3 rounded">
-    <div class="category-header d-flex justify-content-between flex-wrap">
-      <div v-if="item">
-        <div
-          class="item"
-          v-if="item.progressPercentage"
-          :style="{ color: item.progressPercentage >= 80 ? 'green' : 'white' }"
-        >
-          <div class="icon">
-            <PercentageIcon color="black" />
+    <div class="category-header ">
+      <div class="d-flex">
+        <!-- Agar ma'lumotlar mavjud bo'lsa -->
+        <template
+          v-if="item.progressPercentage || item.questionsCount || item.answeredCount || item.correctAnswerCount">
+          <div class="item" v-if="item.progressPercentage"
+            :style="{ color: item.progressPercentage >= 80 ? 'green' : 'white' }">
+            <div class="icon">
+              <PercentageIcon color="black" />
+            </div>
+            <span>
+              {{
+                $t("progress", { count: Math.round(item.progressPercentage) })
+              }}
+              -
+              {{
+                item.progressPercentage >= 80
+                  ? $t("goodJob")
+                  : $t("needsImprovement")
+              }}
+            </span>
           </div>
-          <span>
-            {{
-              $t("progress", { count: Math.round(item.progressPercentage) })
-            }}
-            -
-            {{
-              item.progressPercentage >= 80
-                ? $t("goodJob")
-                : $t("needsImprovement")
-            }}
-          </span>
-        </div>
+
+          <div class="item" v-if="item?.questionsCount">
+            <div class="icon">
+              <FileDescriptionIcon color="black" />
+            </div>
+            <span> {{ $t("testCount", { count: item?.questionsCount }) }} </span>
+          </div>
+
+          <div class="item" v-if="item?.answeredCount">
+            <div class="icon">
+              <UserCheckIcon color="black" />
+            </div>
+            <span>
+              {{ $t("answeredCount", { count: item?.answeredCount }) }}
+            </span>
+          </div>
+
+          <div class="item" v-if="item?.correctAnswerCount">
+            <div style="color: black; font-size: 25px" class="icon">✔</div>
+            <span>
+              {{ $t("correctAnswerCount", { count: item.correctAnswerCount }) }}
+            </span>
+          </div>
+        </template>
+
+        <!-- Agar hech qanday ma'lumot yo'q bo'lsa -->
+        <template v-else>
+          <div class="item">
+            <div class="icon">
+              ❗
+            </div>
+            <span> Ma'lumot topilmadi! </span>
+          </div>
+        </template>
       </div>
 
-      <div class="item" v-if="item?.questionsCount">
-        <div class="icon">
-          <FileDescriptionIcon color="black" />
-        </div>
-        <span> {{ $t("testCount", { count: item?.questionsCount }) }} </span>
-      </div>
-
-      <div class="item" v-if="item?.answeredCount">
-        <div class="icon">
-          <UserCheckIcon color="black" />
-        </div>
-
-        <span>
-          {{ $t("answeredCount", { count: item?.answeredCount }) }}
-        </span>
-      </div>
-      <div class="item" v-if="item?.correctAnswerCount">
-        <div style="color: black; font-size: 25px" class="icon">✔</div>
-
-        <span>
-          {{ $t("correctAnswerCount", { count: item.correctAnswerCount }) }}
-        </span>
-      </div>
     </div>
 
     <div class="category-body mt-4 mx-2">
@@ -77,12 +88,7 @@ const emits = defineEmits(["start", "continue"]);
       <v-btn class="mt-4" color="light" @click="emits('start', item)">
         {{ $t("startTest") }}
       </v-btn>
-      <v-btn
-        v-if="canContiniue"
-        class="mt-4 ml-10"
-        style="background-color: #ffab00"
-        @click="emits('continue', item)"
-      >
+      <v-btn v-if="canContiniue" class="mt-4 ml-10" style="background-color: #ffab00" @click="emits('continue', item)">
         {{ $t("continueTest") }}
       </v-btn>
     </div>
@@ -96,12 +102,10 @@ const emits = defineEmits(["start", "continue"]);
 }
 
 .category-header {
-  display: flex;
-  gap: 60px;
-
   .item {
     display: flex;
     align-items: center;
+    margin-right: 12px;
 
     span {
       font-size: 14px;

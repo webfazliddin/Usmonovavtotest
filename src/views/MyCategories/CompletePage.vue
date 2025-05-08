@@ -39,7 +39,7 @@ const returnToLessons = (val: number | null) => {
   <div>
     <v-card>
       <v-card-title>
-        <h1>{{ $t("completeTest") }}</h1>
+        <!-- <h1>{{ $t("completeTest") }}</h1> -->
       </v-card-title>
       <v-card-text>
         <CompleteTest @show-result="showResult" />
