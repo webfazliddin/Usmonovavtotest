@@ -3,6 +3,7 @@ import FormTabRow from "@/components/form/FormTabRow.vue";
 import { useThrottle } from "@/composables/useThrottle";
 import { IFields, ISelectList } from "@/models/basic";
 import { CardTestsService } from "@/services/services/CardTests.service";
+import { CategoriesService } from "@/services/services/Categories";
 import { QuestionsService } from "@/services/services/Questions";
 import { notify } from "@kyvg/vue3-notification";
 import { AxiosResponse } from "axios";
@@ -167,10 +168,12 @@ const back = () => {
 };
 
 const fetchQuestions = () => {
+  if (!data.value.categoryId) return;
+
   cardQuestionLoading.value = true;
   throttle(() => {
     QuestionsService.GetQuestions(
-      `Page=${cardQuestionsFilter.value.page}&Size=${cardQuestionsFilter.value.size}`
+      `Page=${cardQuestionsFilter.value.page}&Size=${cardQuestionsFilter.value.size}&categoryId=${data.value.categoryId}`
     )
       .then((res) => {
         cardQuestionsList.value = res.data.data;
@@ -180,6 +183,11 @@ const fetchQuestions = () => {
         cardQuestionLoading.value = false;
       });
   }, 400);
+};
+const fetchCategories = () => {
+  CategoriesService.SelectList().then((res) => {
+    categories.value = res.data;
+  });
 };
 
 watch(
@@ -193,7 +201,8 @@ watch(
 );
 
 onMounted(() => {
-  fetchQuestions();
+  fetchCategories();
+  // fetchQuestions();
 });
 </script>
 
@@ -224,6 +233,9 @@ onMounted(() => {
               :list="categories"
               v-model="data.categoryId"
               :label="$t('category')"
+              item-title="name"
+              item-value="id"
+              @update:model-value="fetchQuestions"
             >
             </form-select>
           </v-col>
