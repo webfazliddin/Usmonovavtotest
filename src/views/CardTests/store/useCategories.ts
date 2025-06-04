@@ -6,6 +6,7 @@ interface IFilter {
   page: number;
   size: number;
   total: number;
+  search: "";
 }
 
 export const useCardTests = defineStore("card-tests", {
@@ -16,6 +17,7 @@ export const useCardTests = defineStore("card-tests", {
       page: 1,
       size: 20,
       total: 0,
+      search: "",
     } as IFilter,
   }),
   actions: {

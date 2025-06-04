@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import FormTabRow from "@/components/form/FormTabRow.vue";
 import { useThrottle } from "@/composables/useThrottle";
-import { IFields } from "@/models/basic";
+import { IFields, ISelectList } from "@/models/basic";
 import { CardTestsService } from "@/services/services/CardTests.service";
 import { QuestionsService } from "@/services/services/Questions";
 import { notify } from "@kyvg/vue3-notification";
@@ -25,6 +25,7 @@ interface ICardTestsDto {
   fullName: string;
   cardTestQuestions: ICardTestQuestions[];
   id: number;
+  categoryId: number | null;
 }
 
 defineProps<{
@@ -40,6 +41,7 @@ const { throttle } = useThrottle();
 const { t } = useI18n();
 const id = computed(() => route.params.id as string);
 const cardQuestionsList = ref<number[]>([]);
+const categories = ref<ISelectList[]>([]);
 const cardQuestionLoading = ref(false);
 const editIndex = ref(-1);
 
@@ -72,6 +74,17 @@ const data = ref<ICardTestsDto>({
   orderCode: "",
   shortName: "",
   id: 0,
+  categoryId: null,
+});
+
+const searchValue = ref("");
+const questions = computed(() => {
+  if (searchValue.value.length) {
+    return data.value.cardTestQuestions.filter((v) =>
+      v.question.toLowerCase().includes(searchValue.value.toLowerCase())
+    );
+  }
+  return data.value.cardTestQuestions;
 });
 
 const saveData = async (submit: SubmitEventPromise) => {
@@ -206,11 +219,18 @@ onMounted(() => {
           <v-col lg="4" cols="12">
             <form-input v-model="data.fullName" :label="$t('fullName')" />
           </v-col>
+          <v-col lg="4" cols="12">
+            <form-select
+              :list="categories"
+              v-model="data.categoryId"
+              :label="$t('category')"
+            >
+            </form-select>
+          </v-col>
         </v-row>
-
         <FormTabRow
           :fields="fields"
-          :items="data.cardTestQuestions"
+          :items="questions"
           v-model:edit-index="editIndex"
           @delete-tab-row="deleteRow"
           :actions="{
@@ -219,8 +239,14 @@ onMounted(() => {
         >
           <v-form @submit.prevent="addRow">
             <v-row>
-              <v-col cols="12">
+              <v-col cols="auto">
                 <h2>{{ $t("testPage") }}</h2>
+              </v-col>
+              <v-col lg="12" cols="12">
+                <form-input
+                  v-model="searchValue"
+                  :label="$t('searchQuestion')"
+                ></form-input>
               </v-col>
               <v-col lg="4" cols="12">
                 <form-input
