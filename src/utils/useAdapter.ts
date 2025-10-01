@@ -6,12 +6,12 @@ export function useAdapter() {
     type: "local" | "session" = "local"
   ) {
     adapterType = type;
-    if (adapterType === "local" && key) {
+    if (!key) return;
+
+    if (adapterType === "local") {
       localStorage.setItem(key, value);
-    } else {
-      if (key == "session") {
-        sessionStorage.setItem(key, value);
-      }
+    } else if (adapterType === "session") {
+      sessionStorage.setItem(key, value);
     }
   }
 

@@ -12,12 +12,12 @@ const MainRoutes: RouteRecordRaw = {
   meta: {
     requiresAuth: true,
   },
-  redirect: "/main",
+  redirect: "/admin/my-categories",
   component: () => import("@/app/config/layouts/FullLayout.vue"),
   children: [
     {
       path: "/",
-      redirect: "/home",
+      redirect: "/admin/my-categories",
     },
     {
       name: "Dashboard",

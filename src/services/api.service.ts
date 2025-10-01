@@ -18,9 +18,10 @@ const ApiService = {
     axios.defaults.headers.common = {};
   },
   setHeader() {
-    axios.defaults.headers.common[
-      "Authorization"
-    ] = `Bearer ${localStorage.getItem("token")}`;
+    const token = localStorage.getItem("token") || sessionStorage.getItem("token");
+    if (token) {
+      axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+    }
   },
   get(resource: string, config?: AxiosRequestConfig) {
     return axios.get(resource, config);
