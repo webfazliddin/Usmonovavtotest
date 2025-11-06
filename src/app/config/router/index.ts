@@ -32,7 +32,7 @@ export const router = createRouter({
 
 router.beforeEach(async (to, from, next) => {
   const token = getAdapter("token");
-  const isAdmin = getAdapter("isAdmin") === "true";
+  const isAdmin = getAdapter("isAdmin") === true;
 
   // Check if user is authenticated
   if (!token && to.meta?.requiresAuth) {
