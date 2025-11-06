@@ -36,24 +36,29 @@ const returnToLessons = (val: number | null) => {
 </script>
 
 <template>
-  <div>
-    <v-card>
-      <v-card-title>
-        <!-- <h1>{{ $t("completeTest") }}</h1> -->
-      </v-card-title>
-      <v-card-text>
-        <CompleteTest @show-result="showResult" />
+  <div class="complete-page-wrapper">
+    <CompleteTest @show-result="showResult" />
 
-        <v-dialog width="600" v-model:model-value="isResult">
-          <TestResultModal
-            :data="result"
-            @lool-result="loolResult"
-            @return-to-lessons="returnToLessons"
-          />
-        </v-dialog>
-      </v-card-text>
-    </v-card>
+    <v-dialog width="600" v-model:model-value="isResult">
+      <TestResultModal
+        :data="result"
+        @lool-result="loolResult"
+        @return-to-lessons="returnToLessons"
+      />
+    </v-dialog>
   </div>
 </template>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.complete-page-wrapper {
+  width: 100vw;
+  height: 100vh;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  overflow: hidden;
+  background: #F8FAFB;
+}
+</style>

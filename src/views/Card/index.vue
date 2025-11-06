@@ -30,43 +30,49 @@ const fetchCard = (item: any) => {
 </script>
 
 <template>
-  <div class="container">
-    <div class="d-flex justify-space-between align-center mb-4">
-      <h1 class="my-4">{{ $t("cardTests") }}</h1>
-      <v-btn color="error" @click="router.back()">
-        {{ $t("back") }}
-      </v-btn>
+  <div class="modern-page">
+    <!-- Page Header -->
+    <div class="page-header">
+      <button class="back-btn" @click="router.back()">
+        <span>{{ $t("back") }}</span>
+      </button>
     </div>
-    <!-- <p class="mb-4">
-      {{ $t("LevelUpText") }}
-    </p> -->
-    <div class="cards">
+
+    <!-- Cards Grid -->
+    <div class="modern-cards-grid">
       <div
-        class="card"
         v-for="(card, index) in cards"
+        :key="card.id"
+        class="modern-card-item"
+        :class="{ 'modern-card-item--locked': !card.isLocked }"
         @click="fetchCard(card)"
-        :class="[
-          {
-            locked: !card.isLocked,
-          },
-        ]"
       >
-        <div class="card--inner">
-          <div class="card--inner__content">
-            <div class="title">
-              <img src="@/assets/images/testIcon.png" alt="" />
-              <h4>{{ card.name }}</h4>
+        <div class="card-background">
+          <div class="card-overlay"></div>
+          <div class="card-content">
+            <div class="card-icon">
+              <img src="@/assets/images/testIcon.png" alt="Test Icon" />
             </div>
+            <h3 class="card-name">{{ card.name }}</h3>
           </div>
         </div>
-        <div class="level">
-          <span> {{ index + 1 }} level </span>
-          <LockIcon
-            size="25"
-            v-if="!card.isLocked"
-            color="rgb(var(--v-theme-error))"
-          />
-          <LockOpenIcon size="16" v-else color="green" />
+
+        <div class="card-footer">
+          <div class="level-badge">
+            <span class="level-text">Level {{ index + 1 }}</span>
+          </div>
+          <div class="lock-status">
+            <LockIcon
+              v-if="!card.isLocked"
+              :size="20"
+              class="lock-icon"
+            />
+            <LockOpenIcon
+              v-else
+              :size="20"
+              class="unlock-icon"
+            />
+          </div>
         </div>
       </div>
     </div>
@@ -74,123 +80,267 @@ const fetchCard = (item: any) => {
 </template>
 
 <style lang="scss" scoped>
-.container {
-  max-width: 1440px;
+.modern-page {
+  max-width: 1920px;
   margin: 0 auto;
+  animation: fadeIn 0.4s ease;
 }
 
-h1 {
-  margin-bottom: 0.5rem;
-  font-size: 2rem;
-  line-height: 3rem;
-  font-weight: 600;
-}
-
-p {
-  margin-bottom: 0.5rem;
-  font-size: 0.875rem;
-  line-height: 1.125rem;
-  color: rgb(var(--v-theme-textSecondary));
-}
-
-.cards {
+.page-header {
   display: flex;
-  flex-wrap: wrap;
+  justify-content: space-between;
   align-items: center;
-  gap: 15px 10px;
+  margin-bottom: 32px;
+  flex-wrap: wrap;
+  gap: 16px;
+}
 
-  .card {
-    position: relative;
-    transition: all 0.4s;
-    flex: 0 0 calc(100% / 4 - 8px);
-    cursor: pointer;
+.header-content {
+  flex: 1;
+  min-width: 0;
+}
 
-    &--inner {
-      background: url("@/assets/images/card-bg.png") no-repeat center/cover;
-      height: 0;
-      padding-bottom: 66.25%;
-      position: relative;
-      overflow: hidden;
-      border-radius: 8px;
+.page-title {
+  font-family: 'Poppins', sans-serif;
+  font-size: 32px;
+  font-weight: 700;
+  color: #111827;
+  margin: 0 0 8px 0;
+  line-height: 1.2;
+}
 
-      &__content {
-        position: relative;
-        z-index: 2;
-        color: #dadada;
-        padding: 8px;
-        position: absolute;
-        bottom: -100%;
-        transition: all 0.4s;
+.page-subtitle {
+  font-family: 'Poppins', sans-serif;
+  font-size: 15px;
+  color: #6B7280;
+  margin: 0;
+}
 
-        .title {
-          display: flex;
-          align-items: center;
-          gap: 4px;
-        }
+.back-btn {
+  font-family: 'Poppins', sans-serif;
+  font-size: 15px;
+  font-weight: 600;
+  padding: 12px 24px;
+  border-radius: 10px;
+  background: #F8F9FC;
+  color: #4A90E2;
+  border: 1px solid #E8ECF4;
+  cursor: pointer;
+  transition: all 0.2s ease;
 
-        img {
-          width: 24px;
-          height: 24px;
-        }
-      }
+  &:hover {
+    background: #4A90E2;
+    color: white;
+    border-color: #4A90E2;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(74, 144, 226, 0.2);
+  }
 
-      &::after {
-        content: "";
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: #000;
-        z-index: 1;
-        border-radius: 8px;
-        opacity: 0;
-        transition: all 0.4s;
-      }
+  &:active {
+    transform: translateY(0);
+  }
+}
+
+.modern-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 24px;
+}
+
+.modern-card-item {
+  background: white;
+  border-radius: 16px;
+  border: 1px solid #E8ECF4;
+  overflow: hidden;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  animation: scaleIn 0.3s ease;
+
+  &:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 12px 32px rgba(74, 144, 226, 0.2);
+    border-color: #4A90E2;
+
+    .card-overlay {
+      opacity: 1;
     }
 
-    .level {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-
-      span {
-        font-size: 18px;
-        font-weight: 500;
-      }
+    .card-content {
+      transform: translateY(0);
+      opacity: 1;
     }
+  }
+
+  &--locked {
+    opacity: 0.6;
+    cursor: not-allowed;
 
     &:hover {
-      .card--inner {
-        .card--inner__content {
-          bottom: 0;
-        }
-
-        &::after {
-          opacity: 0.4;
-        }
-      }
+      transform: translateY(0);
+      box-shadow: 0 2px 8px rgba(74, 144, 226, 0.08);
     }
+  }
+}
 
-    &.locked {
-      opacity: 0.7;
-    }
+.card-background {
+  position: relative;
+  height: 200px;
+  background: url("@/assets/images/card-bg.png") no-repeat center/cover;
+  overflow: hidden;
+}
 
-    @media screen and (max-width: 1440px) {
-      flex: 0 0 calc(100% / 4 - 8px);
-    }
+.card-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, rgba(74, 144, 226, 0.9) 0%, rgba(37, 99, 235, 0.9) 100%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
 
-    @media screen and (max-width: 960px) {
-      flex: 0 0 calc(100% / 3 - 8px);
-    }
+.card-content {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 20px;
+  color: white;
+  z-index: 2;
+  transform: translateY(20px);
+  opacity: 0;
+  transition: all 0.3s ease;
+}
 
-    @media screen and (max-width: 768px) {
-      flex: 0 0 calc(100% / 2 - 8px);
-    }
+.card-icon {
+  width: 48px;
+  height: 48px;
+  background: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(10px);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.3);
 
-    @media screen and (max-width: 600px) {
-      flex: 0 0 calc(100% / 1 - 8px);
-    }
+  img {
+    width: 28px;
+    height: 28px;
+    object-fit: contain;
+  }
+}
+
+.card-name {
+  font-family: 'Poppins', sans-serif;
+  font-size: 18px;
+  font-weight: 600;
+  margin: 0;
+  line-height: 1.3;
+}
+
+.card-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 20px;
+  background: #F8F9FC;
+  border-top: 1px solid #E8ECF4;
+}
+
+.level-badge {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  background: white;
+  border-radius: 8px;
+  border: 1px solid #E8ECF4;
+}
+
+.level-text {
+  font-family: 'Poppins', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  color: #4A90E2;
+}
+
+.lock-status {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  background: white;
+  border: 1px solid #E8ECF4;
+}
+
+.lock-icon {
+  color: #EF4444;
+}
+
+.unlock-icon {
+  color: #10B981;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@media (max-width: 1280px) {
+  .modern-cards-grid {
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 20px;
+  }
+}
+
+@media (max-width: 960px) {
+  .page-title {
+    font-size: 28px;
+  }
+
+  .modern-cards-grid {
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 16px;
+  }
+
+  .card-background {
+    height: 180px;
+  }
+}
+
+@media (max-width: 600px) {
+  .page-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .back-btn {
+    width: 100%;
+  }
+
+  .modern-cards-grid {
+    grid-template-columns: 1fr;
   }
 }
 </style>

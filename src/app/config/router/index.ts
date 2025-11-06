@@ -1,7 +1,6 @@
 import { createRouter, createWebHistory } from "vue-router";
 import MainRoutes from "./MainRoutes";
 import { useAdapter } from "@/utils/useAdapter";
-import { CardRoutes } from "@/views/Card/Routes";
 
 const { getAdapter } = useAdapter();
 
@@ -14,6 +13,7 @@ export const router = createRouter({
     },
     {
       path: "/error/403",
+      name: "Forbidden",
       component: () => import("@/views/403.vue"),
     },
     {
@@ -21,36 +21,45 @@ export const router = createRouter({
       name: "SignIn",
       component: () => import("@/views/Auth/SignIn.vue"),
     },
-
-    {
-      path: "/admin/complete-test",
-      name: "CompleteTest",
-      component: () => import("@/views/MyCategories/CompletePage.vue"),
-    },
-    {
-      path: "/result/:attemptId",
-      name: "ResultPage",
-      component: () => import("@/views/MyCategories/ResultPage.vue"),
-    },
-    {
-      path: "/card-result/:attemptId",
-      name: "CardResultPage",
-      component: () => import("@/views/Card/CardResultPage.vue"),
-    },
-
     {
       path: "/traffic-marks",
       name: "Marks",
       component: () => import("@/views/TrafficMarks/MarksUser.vue"),
     },
-    ...CardRoutes,
     MainRoutes,
   ],
 });
+
 router.beforeEach(async (to, from, next) => {
-  if (!getAdapter("token") && to.meta?.requiresAuth) {
+  const token = getAdapter("token");
+  const isAdmin = getAdapter("isAdmin") === "true";
+
+  // Check if user is authenticated
+  if (!token && to.meta?.requiresAuth) {
     next({ name: "SignIn" });
     return;
   }
+
+  // Admin-only routes protection (only block non-admin users)
+  const adminOnlyRoutes = [
+    "/admin/categories",
+    "/admin/questions",
+    "/admin/card-tests",
+    "/admin/users",
+    "/admin/mark-categories",
+    "/admin/traffic-marks",
+  ];
+
+  const isAdminRoute = adminOnlyRoutes.some(route => to.path.startsWith(route));
+
+  // If trying to access admin route WITHOUT admin privileges (and has token)
+  // This means: if it's an admin route AND user is NOT admin AND user has token
+  if (isAdminRoute && !isAdmin && token) {
+    // Redirect non-admin users to forbidden page
+    next({ name: "Forbidden" });
+    return;
+  }
+
+  // Allow admins to access all routes
   next();
 });

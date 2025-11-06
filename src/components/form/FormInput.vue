@@ -64,14 +64,14 @@ watch(
 </script>
 
 <template>
-  <div>
-    <v-label v-if="label" class="mb-2 font-weight-medium">
+  <div class="modern-form-input">
+    <v-label v-if="label" class="modern-label">
       {{ label }}
-      <span v-if="required && !hideStar" style="color: red">*</span>
+      <span v-if="required && !hideStar" class="required-star">*</span>
     </v-label>
     <v-text-field
       v-if="type !== 'textarea'"
-      class="w-100"
+      class="modern-text-field"
       v-bind="props"
       :rules="customRules"
       label=""
@@ -92,7 +92,7 @@ watch(
     </v-text-field>
     <v-textarea
       v-else
-      class="w-100"
+      class="modern-text-field"
       v-bind="props"
       :rules="customRules"
       label=""
@@ -113,3 +113,85 @@ watch(
     </v-textarea>
   </div>
 </template>
+
+<style scoped lang="scss">
+.modern-form-input {
+  .modern-label {
+    font-family: 'Poppins', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    color: #374151;
+    margin-bottom: 8px;
+    display: block;
+
+    .required-star {
+      color: #EF4444;
+      margin-left: 2px;
+    }
+  }
+
+  .modern-text-field {
+    :deep(.v-input__control) {
+      border-radius: 8px !important;
+    }
+
+    :deep(.v-field) {
+      background: #FFFFFF !important;
+      border-radius: 8px !important;
+      border: 1px solid #E8ECF4 !important;
+      transition: all 0.2s ease;
+      font-family: 'Poppins', sans-serif;
+
+      &:hover {
+        border-color: #4A90E2 !important;
+        box-shadow: 0 2px 8px rgba(74, 144, 226, 0.08);
+      }
+    }
+
+    :deep(.v-field__overlay) {
+      border-radius: 8px !important;
+    }
+
+    :deep(.v-field--focused) {
+      border-color: #4A90E2 !important;
+      box-shadow: 0 4px 12px rgba(74, 144, 226, 0.12);
+    }
+
+    :deep(.v-field--error) {
+      border-color: #EF4444 !important;
+    }
+
+    :deep(.v-field__input) {
+      font-family: 'Poppins', sans-serif;
+      font-size: 14px;
+      color: #111827;
+      padding: 12px 16px;
+      min-height: 48px;
+
+      &::placeholder {
+        color: #9CA3AF;
+        opacity: 1;
+      }
+    }
+
+    :deep(.v-field__outline) {
+      display: none !important;
+    }
+
+    :deep(.v-field__append-inner) {
+      padding-right: 12px;
+      color: #6B7280;
+
+      .v-icon {
+        opacity: 0.7;
+        transition: all 0.2s ease;
+
+        &:hover {
+          opacity: 1;
+          color: #4A90E2;
+        }
+      }
+    }
+  }
+}
+</style>

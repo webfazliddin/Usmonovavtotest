@@ -1,0 +1,274 @@
+// Modern Design System
+// Consistent design patterns for all pages
+
+// Color Palette
+$primary: #4A90E2;
+$primary-light: #EFF6FF;
+$primary-dark: #2563EB;
+$secondary: #6B7280;
+$success: #10B981;
+$warning: #F59E0B;
+$error: #EF4444;
+$info: #3B82F6;
+
+// Backgrounds
+$bg-main: #F8F9FC;
+$bg-card: #FFFFFF;
+$bg-hover: #F8F9FC;
+$bg-active: #EFF6FF;
+
+// Borders
+$border-color: #E8ECF4;
+$border-hover: #4A90E2;
+$border-radius: 12px;
+$border-radius-lg: 16px;
+$border-radius-sm: 8px;
+
+// Shadows
+$shadow-sm: 0 1px 3px rgba(74, 144, 226, 0.06);
+$shadow-md: 0 2px 8px rgba(74, 144, 226, 0.08);
+$shadow-lg: 0 4px 16px rgba(74, 144, 226, 0.12);
+$shadow-xl: 0 8px 24px rgba(74, 144, 226, 0.16);
+
+// Typography
+$font-family: 'Poppins', sans-serif;
+$text-primary: #111827;
+$text-secondary: #6B7280;
+$text-tertiary: #9CA3AF;
+
+// Spacing
+$spacing-xs: 8px;
+$spacing-sm: 12px;
+$spacing-md: 16px;
+$spacing-lg: 24px;
+$spacing-xl: 32px;
+$spacing-2xl: 48px;
+
+// Transitions
+$transition-fast: 0.15s ease;
+$transition-normal: 0.2s ease;
+$transition-slow: 0.3s ease;
+
+// Modern Card Styles
+@mixin modern-card {
+  background: $bg-card;
+  border-radius: $border-radius-lg;
+  border: 1px solid $border-color;
+  box-shadow: $shadow-md;
+  transition: all $transition-normal;
+
+  &:hover {
+    box-shadow: $shadow-lg;
+    transform: translateY(-2px);
+    border-color: rgba($primary, 0.3);
+  }
+}
+
+// Modern Button Styles
+@mixin modern-button-primary {
+  font-family: $font-family;
+  font-weight: 600;
+  border-radius: $border-radius-sm;
+  padding: 12px 24px;
+  background: $primary;
+  color: white;
+  border: none;
+  transition: all $transition-normal;
+  text-transform: none;
+  letter-spacing: 0;
+
+  &:hover {
+    background: $primary-dark;
+    transform: translateY(-2px);
+    box-shadow: $shadow-lg;
+  }
+
+  &:active {
+    transform: translateY(0);
+  }
+}
+
+@mixin modern-button-secondary {
+  font-family: $font-family;
+  font-weight: 500;
+  border-radius: $border-radius-sm;
+  padding: 12px 24px;
+  background: $bg-hover;
+  color: $text-primary;
+  border: 1px solid $border-color;
+  transition: all $transition-normal;
+  text-transform: none;
+  letter-spacing: 0;
+
+  &:hover {
+    background: $primary-light;
+    color: $primary;
+    border-color: $primary;
+  }
+}
+
+// Modern Input Styles
+@mixin modern-input {
+  font-family: $font-family;
+  border-radius: $border-radius-sm;
+  border: 1px solid $border-color;
+  padding: 12px 16px;
+  transition: all $transition-normal;
+
+  &:hover {
+    border-color: $primary;
+  }
+
+  &:focus {
+    border-color: $primary;
+    box-shadow: 0 0 0 3px rgba($primary, 0.1);
+    outline: none;
+  }
+}
+
+// Modern Badge/Chip Styles
+@mixin modern-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 500;
+  transition: all $transition-fast;
+}
+
+// Gradient Backgrounds
+@mixin gradient-primary {
+  background: linear-gradient(135deg, $primary 0%, $primary-dark 100%);
+}
+
+@mixin gradient-success {
+  background: linear-gradient(135deg, $success 0%, #059669 100%);
+}
+
+@mixin gradient-card {
+  background: linear-gradient(135deg, rgba($primary, 0.05) 0%, rgba($primary, 0.02) 100%);
+}
+
+// Animation Keyframes
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+// Utility Classes
+.modern-animate-fade {
+  animation: fadeIn $transition-slow;
+}
+
+.modern-animate-slide {
+  animation: slideIn $transition-slow;
+}
+
+.modern-animate-scale {
+  animation: scaleIn $transition-normal;
+}
+
+// Modern Grid System
+.modern-grid {
+  display: grid;
+  gap: $spacing-lg;
+
+  &--2 {
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  }
+
+  &--3 {
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  }
+
+  &--4 {
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  }
+}
+
+// Modern Typography
+.modern-heading {
+  font-family: $font-family;
+  color: $text-primary;
+  font-weight: 600;
+  line-height: 1.3;
+
+  &--xl {
+    font-size: 32px;
+  }
+
+  &--lg {
+    font-size: 24px;
+  }
+
+  &--md {
+    font-size: 20px;
+  }
+
+  &--sm {
+    font-size: 16px;
+  }
+}
+
+.modern-text {
+  font-family: $font-family;
+  color: $text-secondary;
+  line-height: 1.6;
+
+  &--primary {
+    color: $text-primary;
+  }
+
+  &--secondary {
+    color: $text-secondary;
+  }
+
+  &--tertiary {
+    color: $text-tertiary;
+  }
+}
+
+// Modern Container
+.modern-container {
+  max-width: 1920px;
+  margin: 0 auto;
+  padding: 0 $spacing-xl;
+
+  @media (max-width: 1280px) {
+    padding: 0 $spacing-lg;
+  }
+
+  @media (max-width: 960px) {
+    padding: 0 $spacing-md;
+  }
+}

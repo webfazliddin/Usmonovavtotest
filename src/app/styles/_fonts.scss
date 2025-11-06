@@ -1,20 +1,12 @@
-@font-face {
-  font-family: "DM Sans";
-  src: local("DMSans-Regular"), local("DMSans-Regular.ttf"), url("/fonts/DMSans-Regular.ttf") format("truetype");
-  font-weight: 400;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: "DM Sans";
-  src: local("DMSans-Medium"), local("DMSans-Medium.ttf"), url("/fonts/DMSans-Medium.ttf") format("truetype");
-  font-weight: 500;
-  font-style: normal;
-}
-
-@font-face {
-  font-family: "DM Sans";
-  src: local("DMSans-Bold"), local("DMSans-Bold.ttf"), url("/fonts/DMSans-Bold.ttf") format("truetype");
-  font-weight: 700;
-  font-style: normal;
-}
+// Poppins font is loaded via Google Fonts in index.html
+// No custom @font-face needed as we're using the Google Fonts CDN
+// The font is configured globally in _variables.scss as 'Poppins', sans-serif
+//
+// Google Fonts URL: https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap
+//
+// Available weights:
+// - 300 (Light)
+// - 400 (Regular)
+// - 500 (Medium)
+// - 600 (Semi-bold)
+// - 700 (Bold)

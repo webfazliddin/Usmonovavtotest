@@ -11,65 +11,75 @@ import { computed } from "vue";
 const userStore = useUserStore();
 
 const result = computed(() => {
+  const isAdmin = userStore.getIsAdmin;
+
   const array = [
     {
       title: "Admin",
       children: [
+        // ADMIN ONLY - Categories management
         {
           title: "categories",
           to: "/admin/categories",
           icon: CircleIcon,
-          visible: userStore.getIsAdmin,
+          visible: isAdmin, // Only admins can see
         },
+        // ADMIN ONLY - Questions management
         {
           title: "testPage",
           to: "/admin/questions",
           icon: FileDescriptionIcon,
-          visible: userStore.getIsAdmin,
+          visible: isAdmin, // Only admins can see
         },
+        // ADMIN ONLY - Card tests management
         {
           title: "cardTest",
           to: "/admin/card-tests",
           icon: LayoutGridIcon,
-          visible: userStore.getIsAdmin,
+          visible: isAdmin, // Only admins can see
         },
+        // ADMIN ONLY - Users management
         {
           title: "users",
           to: "/admin/users",
           icon: UsersIcon,
-          visible: userStore.getIsAdmin,
+          visible: isAdmin, // Only admins can see
         },
+        // BOTH - My training categories (available for all users)
         {
           title: "myCategories",
           to: "/admin/my-categories",
           icon: LayoutGridIcon,
-          visible: true,
+          visible: true, // Available for all users
         },
-        // {
-        //   title: "markCategories",
-        //   to: "/admin/mark-categories",
-        //   icon: LayoutGridIcon,
-        //   visible: userStore.getIsAdmin,
-        // },
-        // {
-        //   title: "trafficMarks",
-        //   to: "/admin/traffic-marks",
-        //   icon: LayoutGridIcon,
-        //   visible: userStore.getIsAdmin,
-        // },
-
+        // BOTH - Random 50 question tests (available for all users)
         {
-          title: "50",
-          to: "admin/complete-test",
+          title: "randomTests",
+          to: "/admin/complete-test",
           icon: LayoutGridIcon,
-          visible: true,
+          visible: true, // Available for all users
         },
+        // BOTH - Card-based tests (available for all users)
         {
           title: "cardTests",
           to: "/card",
           icon: LockBoltIcon,
-          visible: true,
+          visible: true, // Available for all users
         },
+        // ADMIN ONLY - Mark categories (commented out, restore if needed)
+        // {
+        //   title: "markCategories",
+        //   to: "/admin/mark-categories",
+        //   icon: LayoutGridIcon,
+        //   visible: isAdmin,
+        // },
+        // ADMIN ONLY - Traffic marks (commented out, restore if needed)
+        // {
+        //   title: "trafficMarks",
+        //   to: "/admin/traffic-marks",
+        //   icon: LayoutGridIcon,
+        //   visible: isAdmin,
+        // },
       ],
     },
   ];

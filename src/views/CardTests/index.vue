@@ -49,13 +49,13 @@ watch(
 </script>
 
 <template>
-  <div>
-    <v-row class="mb-4">
-      <v-col md="6" cols="12">
-        <h2>{{ $t("cardTests") }}</h2>
+  <div class="admin-page-container">
+    <v-row class="page-header">
+      <v-col md="6" cols="12" class="header-left">
+        <h2 class="page-title">{{ $t("cardTests") }}</h2>
       </v-col>
-      <v-col md="6" cols="12" class="text-sm-right">
-        <v-btn color="info" @click="fetchDetail(0)">
+      <v-col md="6" cols="12" class="header-right">
+        <v-btn color="info" class="create-button" @click="fetchDetail(0)">
           {{ $t("createTest") }}
         </v-btn>
       </v-col>
@@ -110,8 +110,79 @@ watch(
 </template>
 
 <style lang="scss" scoped>
-.banner-icon {
-  width: 2.75rem;
-  height: 2.75rem;
+.admin-page-container {
+  width: 100%;
+  max-width: 100%;
+}
+
+.page-header {
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+}
+
+.page-title {
+  font-size: 24px;
+  font-weight: 600;
+  margin: 0;
+}
+
+.header-right {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.create-button {
+  min-width: 140px;
+}
+
+// Tablet styles
+@media (max-width: 960px) {
+  .page-title {
+    font-size: 22px;
+  }
+
+  .create-button {
+    min-width: 120px;
+  }
+}
+
+// Mobile styles
+@media (max-width: 600px) {
+  .page-header {
+    margin-bottom: 12px;
+  }
+
+  .header-left,
+  .header-right {
+    padding: 8px 12px !important;
+  }
+
+  .page-title {
+    font-size: 20px;
+  }
+
+  .header-right {
+    justify-content: flex-start;
+    margin-top: -8px;
+  }
+
+  .create-button {
+    width: 100%;
+    max-width: 100%;
+  }
+}
+
+// Small mobile
+@media (max-width: 375px) {
+  .page-title {
+    font-size: 18px;
+  }
 }
 </style>

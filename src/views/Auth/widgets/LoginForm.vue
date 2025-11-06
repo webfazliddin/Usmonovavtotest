@@ -120,25 +120,27 @@ const submit = async (submitEvent: SubmitEventPromise) => {
 }
 
 .custom-input :deep(.v-field) {
-  background: #f5f5f5;
-  border: 1px solid #e0e0e0;
+  background: #f5f7fa;
+  border: 1px solid #e3e8ef;
   border-radius: 12px;
-  transition: all 0.3s;
+  transition: all 0.2s ease;
 
   &:hover {
-    background: #fafafa;
-    border-color: #bdbdbd;
+    background: #eef2f7;
+    border-color: #d0d7e3;
   }
 
   &.v-field--focused {
     background: #fff;
-    border-color: #673ab7;
-    box-shadow: 0 0 0 3px rgba(103, 58, 183, 0.1);
+    border-color: #5c6ec0;
+    box-shadow: 0 0 0 3px rgba(92, 110, 192, 0.1);
   }
 
   .v-field__input {
     padding: 12px 16px;
     min-height: 48px;
+    font-family: 'Poppins', sans-serif;
+    color: #2d3561;
 
     &::placeholder {
       color: #9e9e9e;
@@ -163,11 +165,20 @@ const submit = async (submitEvent: SubmitEventPromise) => {
     min-height: auto;
   }
 
+  :deep(.v-checkbox-btn) {
+    .v-selection-control__input {
+      .v-icon {
+        color: #5c6ec0;
+      }
+    }
+  }
+
   :deep(.v-selection-control--dirty .v-icon) {
-    color: #673ab7;
+    color: #5c6ec0;
   }
 
   .checkbox-label {
+    font-family: 'Poppins', sans-serif;
     font-size: 14px;
     color: #616161;
     margin-left: 8px;
@@ -177,17 +188,19 @@ const submit = async (submitEvent: SubmitEventPromise) => {
 .submit-btn {
   height: 54px !important;
   border-radius: 12px;
+  font-family: 'Poppins', sans-serif;
   font-size: 16px;
   font-weight: 600;
   text-transform: none;
   letter-spacing: 0.5px;
-  background: linear-gradient(135deg, #673ab7, #5c6bc0) !important;
-  box-shadow: 0 8px 24px rgba(103, 58, 183, 0.3);
-  transition: all 0.3s;
+  background: #5c6ec0 !important;
+  box-shadow: 0 4px 12px rgba(92, 110, 192, 0.2);
+  transition: all 0.2s ease;
   color: #fff;
 
   &:hover {
-    box-shadow: 0 12px 32px rgba(103, 58, 183, 0.4);
+    background: #4a5ba8 !important;
+    box-shadow: 0 6px 16px rgba(92, 110, 192, 0.3);
     transform: translateY(-2px);
   }
 
@@ -399,10 +412,10 @@ const submit = async (submitEvent: SubmitEventPromise) => {
     height: 48px !important;
     font-size: 14px;
     border-radius: 10px;
-    box-shadow: 0 6px 20px rgba(103, 58, 183, 0.3);
+    box-shadow: 0 4px 12px rgba(92, 110, 192, 0.2);
 
     &:hover {
-      box-shadow: 0 8px 24px rgba(103, 58, 183, 0.4);
+      box-shadow: 0 6px 16px rgba(92, 110, 192, 0.3);
       transform: translateY(-1px);
     }
   }

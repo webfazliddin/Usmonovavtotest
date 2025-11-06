@@ -17,7 +17,7 @@
   "back": "Orqaga",
   "save": "Saqlash",
   "createTest": "Yaratish",
-  "cardTests": "Imtihon",
+  "cardTests": "Qulflik testlar",
   "markCategories": "Belgilar bo'limi",
   "trafficMarks": "Belgilar ma'lumotlari (admin)",
   "questionText": "Savol matni",
@@ -94,5 +94,11 @@
        "AddRow": "Qo'shish",
        "question": "Savol",
        "action": "Amallar",
-        "EditeMarkCategories": "Qulflik test ma'lumotlari"
+        "EditeMarkCategories": "Qulflik test ma'lumotlari",
+        "CreateMarkCategories": "Qulflik test yaratish",
+        "name": "Nomi",
+        "cancel": "Bekor qilish",
+        "searchQuestion": "Savollarni qidirish",
+        "includedQuestions": "Bu savol allaqachon qo'shilgan",
+        "randomTests": "Random testlar"
 }

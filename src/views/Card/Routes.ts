@@ -11,4 +11,9 @@ export const CardRoutes: RouteRecordRaw[] = [
     name: "CardTest",
     component: () => import("./CardTest.vue"),
   },
+  {
+    path: "/card-result/:attemptId",
+    name: "CardResultPage",
+    component: () => import("./CardResultPage.vue"),
+  },
 ];

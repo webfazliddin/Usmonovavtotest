@@ -3,7 +3,6 @@ import { useGlobal } from "@/composables/useGlobal";
 import { ITable } from "@/models/vuetify/types";
 import { computed } from "vue";
 import { ArrowDownIcon, ArrowUpIcon } from "vue-tabler-icons";
-import UiParentCard from "../UiParentCard.vue";
 
 const props = withDefaults(defineProps<ITable>(), {
   tableHeight: "540",
@@ -43,10 +42,10 @@ const refresh = (props: any) => {
 </script>
 
 <template>
-  <div>
-    <UiParentCard class="border" elevation="0">
+  <div class="modern-table-wrapper">
+    <div class="table-container">
       <v-table
-        class="month-table"
+        class="modern-table"
         :height="tableHeight"
         :density="density"
         :fixed-header="fixedHeader"
@@ -55,20 +54,19 @@ const refresh = (props: any) => {
         :hover="hover"
         :ref="tableRef"
       >
-        <thead class="text-center">
-          <tr>
-            <th class="font-weight-bold text-center" v-if="prependAction">
-              <v-label>{{ $t("actions") }}</v-label>
+        <thead>
+          <tr class="table-header-row">
+            <th class="table-header-cell prepend-action" v-if="prependAction">
+              <span>{{ $t("actions") }}</span>
             </th>
             <template v-for="(field, index) in fields">
               <slot :name="`header-${field.key}`" :index="index" :field="field">
-                <th class="font-weight-bold pa-0" :class="field.thClass">
-                  <div class="d-flex align-center cursor-pointer mx-2">
-                    <v-label>
-                      {{ $t(field.label) }}
-                    </v-label>
+                <th class="table-header-cell" :class="field.thClass">
+                  <div class="header-content">
+                    <span>{{ $t(field.label) }}</span>
                     <ArrowDownIcon
-                      size="20"
+                      :size="18"
+                      class="sort-icon"
                       v-if="
                         filter &&
                         filter.sortBy == field.key &&
@@ -77,7 +75,8 @@ const refresh = (props: any) => {
                       "
                     />
                     <ArrowUpIcon
-                      size="20"
+                      :size="18"
+                      class="sort-icon"
                       v-if="
                         filter &&
                         filter.sortBy == field.key &&
@@ -89,16 +88,16 @@ const refresh = (props: any) => {
                 </th>
               </slot>
             </template>
-            <th class="font-weight-bold text-center" v-if="appendAction">
-              <v-label>{{ $t("actions") }}</v-label>
+            <th class="table-header-cell append-action" v-if="appendAction">
+              <span>{{ $t("actions") }}</span>
             </th>
           </tr>
         </thead>
 
         <tbody>
-          <tr v-if="loading">
-            <td class="px-0" :colspan="fields.length + 1">
-              <div>
+          <tr v-if="loading" class="table-loading-row">
+            <td class="table-loading-cell" :colspan="fields.length + (prependAction ? 1 : 0) + (appendAction ? 1 : 0)">
+              <div class="loading-wrapper">
                 <v-skeleton-loader type="table-tbody"></v-skeleton-loader>
                 <v-skeleton-loader type="table-tbody"></v-skeleton-loader>
               </div>
@@ -109,27 +108,32 @@ const refresh = (props: any) => {
             v-if="
               (!loading && items && items.length == 0) || (!loading && !items)
             "
+            class="table-empty-row"
           >
             <td
-              :class="[`font-weight-bold h5 text-center bg-light`]"
-              :colspan="fields.length + 1"
+              class="table-empty-cell"
+              :colspan="fields.length + (prependAction ? 1 : 0) + (appendAction ? 1 : 0)"
             >
-              <div>
+              <div class="empty-state">
                 {{ $t("notFound") }}
               </div>
             </td>
           </tr>
+
           <template v-if="!loading && items">
             <tr
               v-for="(item, index) in items"
               :key="index"
+              class="table-body-row"
               @click="emits('rowClick', item)"
             >
-              <!-- ACTIONS -->
-              <td v-if="prependAction">
+              <!-- PREPEND ACTIONS -->
+              <td v-if="prependAction" class="table-body-cell prepend-action">
                 <slot name="prepend-action" :item="item" :fields="fields">
                 </slot>
               </td>
+
+              <!-- DATA CELLS -->
               <template v-for="(field, fieldIndex) in fields">
                 <slot
                   :name="field.key"
@@ -137,7 +141,7 @@ const refresh = (props: any) => {
                   :index="index"
                   :field="field"
                 >
-                  <td :key="fieldIndex" :class="[field.tdClass]">
+                  <td :key="fieldIndex" class="table-body-cell" :class="[field.tdClass]">
                     <template
                       v-if="
                         field.key != 'status' &&
@@ -152,7 +156,7 @@ const refresh = (props: any) => {
                       }}
                     </template>
                     <v-chip
-                      class="font-weight-bold px-2 mr-2"
+                      class="status-chip"
                       rounded="lg"
                       size="small"
                       v-if="field.key == 'status'"
@@ -161,7 +165,7 @@ const refresh = (props: any) => {
                       {{ item[field.key] }}
                     </v-chip>
                     <v-chip
-                      class="font-weight-bold px-2 mr-2"
+                      class="status-chip"
                       rounded="lg"
                       size="small"
                       v-if="field.key == 'prtnContractStatus'"
@@ -170,7 +174,7 @@ const refresh = (props: any) => {
                       {{ item[field.key] }}
                     </v-chip>
                     <v-chip
-                      class="font-weight-bold px-2 mr-2"
+                      class="status-chip"
                       rounded="lg"
                       size="small"
                       v-if="field.key == 'state'"
@@ -181,15 +185,16 @@ const refresh = (props: any) => {
                   </td>
                 </slot>
               </template>
-              <!-- ACTIONS -->
-              <td v-if="appendAction" class="text-center">
+
+              <!-- APPEND ACTIONS -->
+              <td v-if="appendAction" class="table-body-cell append-action">
                 <slot name="actions" :item="item"> </slot>
               </td>
             </tr>
           </template>
         </tbody>
       </v-table>
-    </UiParentCard>
+    </div>
     <slot
       name="pagination"
       :lastNumber="lastNumber"
@@ -235,9 +240,201 @@ const refresh = (props: any) => {
 </template>
 
 <style lang="scss" scoped>
-a {
-  text-decoration: none;
-  outline: none;
-  background: transparent;
+.modern-table-wrapper {
+  animation: fadeIn 0.3s ease;
+}
+
+.table-container {
+  background: white;
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+.modern-table {
+  border-collapse: collapse;
+  width: 100%;
+
+  :deep(table) {
+    border-collapse: collapse;
+  }
+
+  // Remove all outer borders
+  :deep(thead),
+  :deep(tbody) {
+    border: none;
+  }
+}
+
+// Header Styles
+.table-header-row {
+  background: #F8F9FC;
+  border-bottom: 1px solid #E8ECF4;
+
+  .table-header-cell {
+    padding: 16px 20px;
+    font-family: 'Poppins', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    color: #374151;
+    text-align: left;
+    border: none;
+    white-space: nowrap;
+
+    &.prepend-action,
+    &.append-action {
+      width: 120px;
+      text-align: right;
+    }
+
+    .header-content {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+
+      span {
+        user-select: none;
+      }
+    }
+
+    .sort-icon {
+      color: #4A90E2;
+      flex-shrink: 0;
+    }
+  }
+}
+
+// Body Styles
+.table-body-row {
+  border-bottom: 1px solid #E8ECF4;
+  transition: all 0.2s ease;
+  cursor: pointer;
+
+  &:hover {
+    background: #F8F9FC;
+  }
+
+  &:last-child {
+    border-bottom: none;
+  }
+
+  .table-body-cell {
+    padding: 16px 20px;
+    font-family: 'Poppins', sans-serif;
+    font-size: 14px;
+    color: #111827;
+    border: none;
+    vertical-align: middle;
+
+    &.prepend-action,
+    &.append-action {
+      width: 120px;
+      text-align: right;
+    }
+
+    .status-chip {
+      font-weight: 600;
+      font-family: 'Poppins', sans-serif;
+    }
+  }
+}
+
+// Loading State
+.table-loading-row {
+  .table-loading-cell {
+    padding: 0;
+    border: none;
+
+    .loading-wrapper {
+      padding: 16px;
+    }
+  }
+}
+
+// Empty State
+.table-empty-row {
+  .table-empty-cell {
+    padding: 48px 20px;
+    text-align: center;
+    border: none;
+
+    .empty-state {
+      font-family: 'Poppins', sans-serif;
+      font-size: 16px;
+      font-weight: 600;
+      color: #6B7280;
+    }
+  }
+}
+
+// Pagination
+:deep(.my-custom-pagination) {
+  .v-pagination__item,
+  .v-pagination__next,
+  .v-pagination__prev {
+    font-family: 'Poppins', sans-serif;
+    border-radius: 8px;
+
+    &--is-active {
+      background: #4A90E2 !important;
+      color: white;
+    }
+  }
+}
+
+// Animations
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+// Responsive
+@media (max-width: 960px) {
+  .table-header-cell,
+  .table-body-cell {
+    padding: 12px 16px !important;
+    font-size: 13px !important;
+  }
+
+  .table-header-cell {
+    &.prepend-action,
+    &.append-action {
+      width: 100px;
+    }
+  }
+
+  .table-body-cell {
+    &.prepend-action,
+    &.append-action {
+      width: 100px;
+    }
+  }
+}
+
+@media (max-width: 600px) {
+  .table-header-cell,
+  .table-body-cell {
+    padding: 10px 12px !important;
+    font-size: 12px !important;
+  }
+
+  .table-header-cell {
+    &.prepend-action,
+    &.append-action {
+      width: 80px;
+    }
+  }
+
+  .table-body-cell {
+    &.prepend-action,
+    &.append-action {
+      width: 80px;
+    }
+  }
 }
 </style>

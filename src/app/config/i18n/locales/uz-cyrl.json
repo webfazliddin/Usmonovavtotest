@@ -88,5 +88,12 @@
             "AddRow": "Қўшиш",
                    "question": "Савол",
        "action": "Амаллар",
-               "EditeMarkCategories": "Қулфлик тест маълумотлари"
+               "EditeMarkCategories": "Қулфлик тест маълумотлари",
+               "CreateMarkCategories": "Қулфлик тест яратиш",
+               "name": "Номи",
+               "cancel": "Бекор қилиш",
+               "searchQuestion": "Саволларни қидириш",
+               "includedQuestions": "Бу савол аллақачон қўшилган",
+               "randomTests": "Рандом тестлар",
+               "cardTests": "Қулфлик тестлар"
 }

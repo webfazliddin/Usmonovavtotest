@@ -17,7 +17,7 @@ interface ICardTestQuestions {
   cardTestId?: number;
   orderCode: number;
   questionId: number | null;
-  question: string;
+  question?: string; // Optional because backend might not return it
 }
 
 interface ICardTestsDto {
@@ -79,13 +79,20 @@ const data = ref<ICardTestsDto>({
 });
 
 const searchValue = ref("");
+
+// All questions for table (no filter needed)
 const questions = computed(() => {
-  if (searchValue.value.length) {
-    return data.value.cardTestQuestions.filter((v) =>
-      v.question.toLowerCase().includes(searchValue.value.toLowerCase())
+  return data.value.cardTestQuestions;
+});
+
+// Filter for select dropdown questions
+const filteredCardQuestionsList = computed(() => {
+  if (searchValue.value && searchValue.value.length > 0) {
+    return cardQuestionsList.value.filter((q: any) =>
+      q.questionText?.toLowerCase().includes(searchValue.value.toLowerCase())
     );
   }
-  return data.value.cardTestQuestions;
+  return cardQuestionsList.value;
 });
 
 const saveData = async (submit: SubmitEventPromise) => {
@@ -108,8 +115,22 @@ const fetchData = (val: string | number) => {
   if (!val || +val == 0) return;
 
   CardTestsService.GetById(val)
-    .then((res: AxiosResponse<ICardTestsDto>) => {
-      data.value = res.data;
+    .then((res: AxiosResponse<any>) => {
+      // Map questionText to question if it exists
+      const mappedQuestions = res.data.cardTestQuestions.map((q: any) => ({
+        ...q,
+        question: q.questionText || q.question || '', // Use questionText from backend or existing question
+      }));
+
+      data.value = {
+        ...res.data,
+        cardTestQuestions: mappedQuestions,
+      };
+
+      // Fetch questions for the dropdown if category exists
+      if (res.data.categoryId) {
+        fetchQuestions();
+      }
     })
     .catch((e) => {
       notify({
@@ -184,6 +205,7 @@ const fetchQuestions = () => {
       });
   }, 400);
 };
+
 const fetchCategories = () => {
   CategoriesService.SelectList().then((res) => {
     categories.value = res.data;
@@ -202,7 +224,6 @@ watch(
 
 onMounted(() => {
   fetchCategories();
-  // fetchQuestions();
 });
 </script>
 
@@ -228,17 +249,6 @@ onMounted(() => {
           <v-col lg="4" cols="12">
             <form-input v-model="data.fullName" :label="$t('fullName')" />
           </v-col>
-          <v-col lg="4" cols="12">
-            <form-select
-              :list="categories"
-              v-model="data.categoryId"
-              :label="$t('category')"
-              item-title="name"
-              item-value="id"
-              @update:model-value="fetchQuestions"
-            >
-            </form-select>
-          </v-col>
         </v-row>
         <FormTabRow
           :fields="fields"
@@ -255,10 +265,15 @@ onMounted(() => {
                 <h2>{{ $t("testPage") }}</h2>
               </v-col>
               <v-col lg="12" cols="12">
-                <form-input
-                  v-model="searchValue"
-                  :label="$t('searchQuestion')"
-                ></form-input>
+                <form-select
+                  :list="categories"
+                  v-model="data.categoryId"
+                  :label="$t('category')"
+                  item-title="name"
+                  item-value="id"
+                  @update:model-value="fetchQuestions"
+                >
+                </form-select>
               </v-col>
               <v-col lg="4" cols="12">
                 <form-input
@@ -266,13 +281,13 @@ onMounted(() => {
                   :label="$t('orderCode')"
                 />
               </v-col>
-              <v-col lg="4" cols="12">
+              <v-col lg="8" cols="12">
                 <v-label class="mb-2 font-weight-medium">
                   {{ $t("testPage") }}
                 </v-label>
                 <v-select
                   class="custom-select"
-                  :items="cardQuestionsList"
+                  :items="filteredCardQuestionsList"
                   v-model:model-value="tabRow.questionId"
                   :item-title="'questionText'"
                   item-value="id"
@@ -280,6 +295,20 @@ onMounted(() => {
                   @update:model-value="setField"
                   return-object
                 >
+                  <template #prepend-item>
+                    <v-list-item>
+                      <v-text-field
+                        v-model="searchValue"
+                        :placeholder="$t('searchQuestion')"
+                        density="compact"
+                        variant="outlined"
+                        hide-details
+                        clearable
+                      />
+                    </v-list-item>
+                    <v-divider class="mt-2"></v-divider>
+                  </template>
+
                   <template #loader>
                     <v-list-item v-if="cardQuestionLoading">
                       <v-progress-circular indeterminate></v-progress-circular>
@@ -303,7 +332,7 @@ onMounted(() => {
                 </v-select>
               </v-col>
 
-              <v-col lg="4" cols="12" class="mt-7">
+              <v-col lg="12" cols="12" class="mt-2">
                 <v-btn
                   type="submit"
                   :color="editIndex > -1 ? 'success' : 'info'"

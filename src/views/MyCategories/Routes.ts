@@ -6,4 +6,14 @@ export const MyCategoriesRoutes: RouteRecordRaw[] = [
     name: "MyCategories",
     component: () => import("./index.vue"),
   },
+  {
+    path: "/admin/complete-test",
+    name: "CompleteTest",
+    component: () => import("./CompletePage.vue"),
+  },
+  {
+    path: "/result/:attemptId",
+    name: "ResultPage",
+    component: () => import("./ResultPage.vue"),
+  },
 ];

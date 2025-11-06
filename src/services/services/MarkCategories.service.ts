@@ -8,6 +8,9 @@ export const MarkCategoriesService = {
   DeleteMarkCategories(id: string | number) {
     return ApiService.delete(`MarkCategories/${id}`);
   },
+  Delete(id: string | number) {
+    return ApiService.delete(`MarkCategories/${id}`);
+  },
   PutMarkCategories(data: any, id: number | string) {
     return ApiService.put(`MarkCategories/${id}`, data);
   },
