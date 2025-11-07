@@ -24,7 +24,13 @@ fetchCards();
 const fetchCard = (item: any) => {
   if (!item?.isLocked) return;
 
-  router.push({ name: "CardTest", params: { cardId: item.id } });
+  // Agar card 100% yakunlangan bo'lsa va attemptId bo'lsa, natijalarni ko'rsatamiz
+  if (item.lastAttemptId && getProgress(item) === 100) {
+    router.push({ name: "CardResultPage", params: { attemptId: item.lastAttemptId } });
+  } else {
+    // Aks holda, testni davom ettiramiz
+    router.push({ name: "CardTest", params: { cardId: item.id } });
+  }
 };
 
 // Calculate progress percentage
@@ -140,11 +146,22 @@ const getProgressColor = (progress: number) => {
         <div class="card-footer">
           <button
             class="start-btn"
-            :class="{ 'start-btn--locked': !card.isLocked }"
+            :class="{
+              'start-btn--locked': !card.isLocked,
+              'start-btn--completed': card.isLocked && getProgress(card) === 100
+            }"
             @click.stop="fetchCard(card)"
           >
-            <span>{{ card.isLocked ? 'Davom etish' : 'Qulflangan' }}</span>
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+            <span>
+              {{ !card.isLocked ? 'Qulflangan' :
+                 getProgress(card) === 100 ? 'Natijalarni ko\'rish' :
+                 'Davom etish'
+              }}
+            </span>
+            <svg v-if="getProgress(card) === 100 && card.isLocked" width="20" height="20" viewBox="0 0 24 24" fill="none">
+              <path d="M9 12L11 14L15 10M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+            <svg v-else width="20" height="20" viewBox="0 0 24 24" fill="none">
               <path d="M5 12H19M19 12L12 5M19 12L12 19" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
             </svg>
           </button>
@@ -411,6 +428,16 @@ const getProgressColor = (progress: number) => {
     &:hover {
       transform: translateY(0);
       box-shadow: none;
+    }
+  }
+
+  &--completed {
+    background: linear-gradient(135deg, #10B981 0%, #059669 100%);
+    cursor: pointer;
+
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(16, 185, 129, 0.3);
     }
   }
 }
