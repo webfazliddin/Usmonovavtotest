@@ -22,7 +22,8 @@ const fetchCards = async () => {
 fetchCards();
 
 const fetchCard = (item: any) => {
-  if (!item?.isLocked) return;
+  // isLocked: true = ochiq, false = yopiq
+  if (item?.isLocked === false) return;
 
   // Agar card 100% yakunlangan bo'lsa va attemptId bo'lsa, natijalarni ko'rsatamiz
   if (item.lastAttemptId && getProgress(item) === 100) {
@@ -63,17 +64,17 @@ const getProgressColor = (progress: number) => {
         v-for="(card, index) in cards"
         :key="card.id"
         class="modern-card-item"
-        :class="{ 'modern-card-item--locked': !card.isLocked }"
+        :class="{ 'modern-card-item--locked': card.isLocked === false }"
         @click="fetchCard(card)"
       >
         <!-- Card Header -->
         <div class="card-header">
           <div class="card-title-section">
             <h3 class="card-title">{{ card.name }}</h3>
-            <div class="lock-badge" :class="{ 'lock-badge--unlocked': card.isLocked }">
-              <LockIcon v-if="!card.isLocked" :size="16" />
+            <div class="lock-badge" :class="{ 'lock-badge--unlocked': card.isLocked === true }">
+              <LockIcon v-if="card.isLocked === false" :size="16" />
               <LockOpenIcon v-else :size="16" />
-              <span>{{ card.isLocked ? 'Ochiq' : 'Yopiq' }}</span>
+              <span>{{ card.isLocked === true ? 'Ochiq' : 'Yopiq' }}</span>
             </div>
           </div>
         </div>
@@ -147,18 +148,18 @@ const getProgressColor = (progress: number) => {
           <button
             class="start-btn"
             :class="{
-              'start-btn--locked': !card.isLocked,
-              'start-btn--completed': card.isLocked && getProgress(card) === 100
+              'start-btn--locked': card.isLocked === false,
+              'start-btn--completed': card.isLocked === true && getProgress(card) === 100
             }"
             @click.stop="fetchCard(card)"
           >
             <span>
-              {{ !card.isLocked ? 'Qulflangan' :
+              {{ card.isLocked === false ? 'Qulflangan' :
                  getProgress(card) === 100 ? 'Natijalarni ko\'rish' :
                  'Davom etish'
               }}
             </span>
-            <svg v-if="getProgress(card) === 100 && card.isLocked" width="20" height="20" viewBox="0 0 24 24" fill="none">
+            <svg v-if="getProgress(card) === 100 && card.isLocked === true" width="20" height="20" viewBox="0 0 24 24" fill="none">
               <path d="M9 12L11 14L15 10M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
             </svg>
             <svg v-else width="20" height="20" viewBox="0 0 24 24" fill="none">
