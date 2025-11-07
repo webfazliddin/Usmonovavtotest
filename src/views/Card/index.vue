@@ -1,16 +1,15 @@
 <script setup lang="ts">
 import { CardService } from "@/services/services/Cards.service";
 import { setError } from "@/utils/helpers";
-import { ref } from "vue";
+import { ref, computed } from "vue";
 import { useRouter } from "vue-router";
-import { LockIcon, LockOpenIcon } from "vue-tabler-icons";
+import { LockIcon, LockOpenIcon, CheckIcon, XIcon } from "vue-tabler-icons";
 
 const router = useRouter();
 
 const cards = ref<any[]>([]);
 
 const fetchCards = async () => {
-  // const { data } = await CardService.GetCards();
   CardService.GetCards()
     .then((res) => {
       cards.value = res.data;
@@ -26,6 +25,20 @@ const fetchCard = (item: any) => {
   if (!item?.isLocked) return;
 
   router.push({ name: "CardTest", params: { cardId: item.id } });
+};
+
+// Calculate progress percentage
+const getProgress = (card: any) => {
+  if (!card.totalQuestions || card.totalQuestions === 0) return 0;
+  return Math.round((card.answeredQuestions / card.totalQuestions) * 100);
+};
+
+// Get progress color
+const getProgressColor = (progress: number) => {
+  if (progress === 0) return '#E5E7EB';
+  if (progress < 50) return '#EF4444';
+  if (progress < 80) return '#F59E0B';
+  return '#10B981';
 };
 </script>
 
@@ -47,32 +60,94 @@ const fetchCard = (item: any) => {
         :class="{ 'modern-card-item--locked': !card.isLocked }"
         @click="fetchCard(card)"
       >
-        <div class="card-background">
-          <div class="card-overlay"></div>
-          <div class="card-content">
-            <div class="card-icon">
-              <img src="@/assets/images/testIcon.png" alt="Test Icon" />
+        <!-- Card Header -->
+        <div class="card-header">
+          <div class="card-title-section">
+            <h3 class="card-title">{{ card.name }}</h3>
+            <div class="lock-badge" :class="{ 'lock-badge--unlocked': card.isLocked }">
+              <LockIcon v-if="!card.isLocked" :size="16" />
+              <LockOpenIcon v-else :size="16" />
+              <span>{{ card.isLocked ? 'Ochiq' : 'Yopiq' }}</span>
             </div>
-            <h3 class="card-name">{{ card.name }}</h3>
           </div>
         </div>
 
+        <!-- Progress Bar -->
+        <div class="progress-section">
+          <div class="progress-header">
+            <span class="progress-label">{{ $t("Progress") }}</span>
+            <span class="progress-value">{{ getProgress(card) }}%</span>
+          </div>
+          <div class="progress-bar-container">
+            <div
+              class="progress-bar-fill"
+              :style="{
+                width: `${getProgress(card)}%`,
+                backgroundColor: getProgressColor(getProgress(card))
+              }"
+            ></div>
+          </div>
+        </div>
+
+        <!-- Statistics Grid -->
+        <div class="stats-grid">
+          <div class="stat-item">
+            <div class="stat-icon stat-icon--total">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                <path d="M9 11H15M9 15H15M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+              </svg>
+            </div>
+            <div class="stat-content">
+              <span class="stat-label">Jami savollar</span>
+              <span class="stat-value">{{ card.totalQuestions || 0 }}</span>
+            </div>
+          </div>
+
+          <div class="stat-item">
+            <div class="stat-icon stat-icon--answered">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                <path d="M9 12L11 14L15 10M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+              </svg>
+            </div>
+            <div class="stat-content">
+              <span class="stat-label">Javob berilgan</span>
+              <span class="stat-value">{{ card.answeredQuestions || 0 }}</span>
+            </div>
+          </div>
+
+          <div class="stat-item">
+            <div class="stat-icon stat-icon--correct">
+              <CheckIcon :size="20" />
+            </div>
+            <div class="stat-content">
+              <span class="stat-label">To'g'ri</span>
+              <span class="stat-value">{{ card.correctAnswers || 0 }}</span>
+            </div>
+          </div>
+
+          <div class="stat-item">
+            <div class="stat-icon stat-icon--wrong">
+              <XIcon :size="20" />
+            </div>
+            <div class="stat-content">
+              <span class="stat-label">Xato</span>
+              <span class="stat-value">{{ card.wrongAnswers || 0 }}</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card Footer -->
         <div class="card-footer">
-          <div class="level-badge">
-            <span class="level-text">{{ card.name }}</span>
-          </div>
-          <div class="lock-status">
-            <LockIcon
-              v-if="!card.isLocked"
-              :size="20"
-              class="lock-icon"
-            />
-            <LockOpenIcon
-              v-else
-              :size="20"
-              class="unlock-icon"
-            />
-          </div>
+          <button
+            class="start-btn"
+            :class="{ 'start-btn--locked': !card.isLocked }"
+            @click.stop="fetchCard(card)"
+          >
+            <span>{{ card.isLocked ? 'Davom etish' : 'Qulflangan' }}</span>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+              <path d="M5 12H19M19 12L12 5M19 12L12 19" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </button>
         </div>
       </div>
     </div>
@@ -83,6 +158,7 @@ const fetchCard = (item: any) => {
 .modern-page {
   max-width: 1920px;
   margin: 0 auto;
+  padding: 24px;
   animation: fadeIn 0.4s ease;
 }
 
@@ -91,29 +167,6 @@ const fetchCard = (item: any) => {
   justify-content: space-between;
   align-items: center;
   margin-bottom: 32px;
-  flex-wrap: wrap;
-  gap: 16px;
-}
-
-.header-content {
-  flex: 1;
-  min-width: 0;
-}
-
-.page-title {
-  font-family: 'Poppins', sans-serif;
-  font-size: 32px;
-  font-weight: 700;
-  color: #111827;
-  margin: 0 0 8px 0;
-  line-height: 1.2;
-}
-
-.page-subtitle {
-  font-family: 'Poppins', sans-serif;
-  font-size: 15px;
-  color: #6B7280;
-  margin: 0;
 }
 
 .back-btn {
@@ -143,7 +196,7 @@ const fetchCard = (item: any) => {
 
 .modern-cards-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
   gap: 24px;
 }
 
@@ -151,28 +204,19 @@ const fetchCard = (item: any) => {
   background: white;
   border-radius: 16px;
   border: 1px solid #E8ECF4;
-  overflow: hidden;
+  padding: 24px;
   cursor: pointer;
   transition: all 0.3s ease;
   animation: scaleIn 0.3s ease;
 
   &:hover {
-    transform: translateY(-8px);
-    box-shadow: 0 12px 32px rgba(74, 144, 226, 0.2);
+    transform: translateY(-4px);
+    box-shadow: 0 12px 32px rgba(74, 144, 226, 0.15);
     border-color: #4A90E2;
-
-    .card-overlay {
-      opacity: 1;
-    }
-
-    .card-content {
-      transform: translateY(0);
-      opacity: 1;
-    }
   }
 
   &--locked {
-    opacity: 0.6;
+    opacity: 0.7;
     cursor: not-allowed;
 
     &:hover {
@@ -182,107 +226,193 @@ const fetchCard = (item: any) => {
   }
 }
 
-.card-background {
-  position: relative;
-  height: 200px;
-  background: url("@/assets/images/card-bg.png") no-repeat center/cover;
-  overflow: hidden;
+.card-header {
+  margin-bottom: 20px;
 }
 
-.card-overlay {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(135deg, rgba(74, 144, 226, 0.9) 0%, rgba(37, 99, 235, 0.9) 100%);
-  opacity: 0;
-  transition: opacity 0.3s ease;
-}
-
-.card-content {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  padding: 20px;
-  color: white;
-  z-index: 2;
-  transform: translateY(20px);
-  opacity: 0;
-  transition: all 0.3s ease;
-}
-
-.card-icon {
-  width: 48px;
-  height: 48px;
-  background: rgba(255, 255, 255, 0.2);
-  backdrop-filter: blur(10px);
-  border-radius: 12px;
+.card-title-section {
   display: flex;
+  justify-content: space-between;
   align-items: center;
-  justify-content: center;
-  margin-bottom: 12px;
-  border: 1px solid rgba(255, 255, 255, 0.3);
-
-  img {
-    width: 28px;
-    height: 28px;
-    object-fit: contain;
-  }
+  gap: 12px;
 }
 
-.card-name {
+.card-title {
   font-family: 'Poppins', sans-serif;
-  font-size: 18px;
+  font-size: 20px;
   font-weight: 600;
+  color: #111827;
   margin: 0;
   line-height: 1.3;
 }
 
-.card-footer {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 16px 20px;
-  background: #F8F9FC;
-  border-top: 1px solid #E8ECF4;
-}
-
-.level-badge {
+.lock-badge {
   display: flex;
   align-items: center;
   gap: 6px;
   padding: 6px 12px;
-  background: white;
+  background: #FEE2E2;
+  color: #EF4444;
   border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  white-space: nowrap;
+
+  &--unlocked {
+    background: #D1FAE5;
+    color: #10B981;
+  }
+}
+
+.progress-section {
+  margin-bottom: 20px;
+}
+
+.progress-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.progress-label {
+  font-family: 'Poppins', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  color: #6B7280;
+}
+
+.progress-value {
+  font-family: 'Poppins', sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  color: #111827;
+}
+
+.progress-bar-container {
+  width: 100%;
+  height: 8px;
+  background: #F3F4F6;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.progress-bar-fill {
+  height: 100%;
+  transition: width 0.3s ease, background-color 0.3s ease;
+  border-radius: 4px;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.stat-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px;
+  background: #F8F9FC;
+  border-radius: 10px;
   border: 1px solid #E8ECF4;
 }
 
-.level-text {
-  font-family: 'Poppins', sans-serif;
-  font-size: 14px;
-  font-weight: 600;
-  color: #4A90E2;
-}
-
-.lock-status {
+.stat-icon {
+  width: 40px;
+  height: 40px;
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 36px;
-  height: 36px;
   border-radius: 8px;
-  background: white;
-  border: 1px solid #E8ECF4;
+  flex-shrink: 0;
+
+  &--total {
+    background: #EFF6FF;
+    color: #3B82F6;
+  }
+
+  &--answered {
+    background: #F0F9FF;
+    color: #0EA5E9;
+  }
+
+  &--correct {
+    background: #D1FAE5;
+    color: #10B981;
+  }
+
+  &--wrong {
+    background: #FEE2E2;
+    color: #EF4444;
+  }
 }
 
-.lock-icon {
-  color: #EF4444;
+.stat-content {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
 }
 
-.unlock-icon {
-  color: #10B981;
+.stat-label {
+  font-family: 'Poppins', sans-serif;
+  font-size: 12px;
+  font-weight: 500;
+  color: #6B7280;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.stat-value {
+  font-family: 'Poppins', sans-serif;
+  font-size: 18px;
+  font-weight: 700;
+  color: #111827;
+}
+
+.card-footer {
+  margin-top: 20px;
+}
+
+.start-btn {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px 24px;
+  background: linear-gradient(135deg, #4A90E2 0%, #357ABD 100%);
+  color: white;
+  border: none;
+  border-radius: 10px;
+  font-family: 'Poppins', sans-serif;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(74, 144, 226, 0.3);
+  }
+
+  &:active {
+    transform: translateY(0);
+  }
+
+  &--locked {
+    background: linear-gradient(135deg, #9CA3AF 0%, #6B7280 100%);
+    cursor: not-allowed;
+
+    &:hover {
+      transform: translateY(0);
+      box-shadow: none;
+    }
+  }
 }
 
 @keyframes fadeIn {
@@ -309,30 +439,24 @@ const fetchCard = (item: any) => {
 
 @media (max-width: 1280px) {
   .modern-cards-grid {
-    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-    gap: 20px;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
   }
 }
 
 @media (max-width: 960px) {
-  .page-title {
-    font-size: 28px;
-  }
-
   .modern-cards-grid {
-    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-    gap: 16px;
-  }
-
-  .card-background {
-    height: 180px;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 20px;
   }
 }
 
 @media (max-width: 600px) {
+  .modern-page {
+    padding: 16px;
+  }
+
   .page-header {
-    flex-direction: column;
-    align-items: flex-start;
+    margin-bottom: 24px;
   }
 
   .back-btn {
@@ -340,6 +464,14 @@ const fetchCard = (item: any) => {
   }
 
   .modern-cards-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .card-title {
+    font-size: 18px;
+  }
+
+  .stats-grid {
     grid-template-columns: 1fr;
   }
 }
