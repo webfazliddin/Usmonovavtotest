@@ -59,7 +59,7 @@ const fetchCard = (item: any) => {
 
         <div class="card-footer">
           <div class="level-badge">
-            <span class="level-text">Level {{ index + 1 }}</span>
+            <span class="level-text">{{ card.name }}</span>
           </div>
           <div class="lock-status">
             <LockIcon
