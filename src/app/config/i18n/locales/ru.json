@@ -4,7 +4,7 @@
   "signInBannerDescription": "Помощь в оформлении и восстановлении документов!",
   "login": "Авторизоваться",
   "password": "Пароль",
-  "cardTests": "Экзамен",
+  "cardTests": "Темы",
   "enterText": "Введите текст",
   "singIn": "Введение",
   "rememberMe": "Запомнить пароль",
@@ -92,5 +92,5 @@
   "searchQuestion": "Поиск вопросов",
   "includedQuestions": "Этот вопрос уже добавлен",
   "randomTests": "Случайные тесты",
-  "cardTests": "Закрытые тесты"
+  "cardTests": "Темы"
 }

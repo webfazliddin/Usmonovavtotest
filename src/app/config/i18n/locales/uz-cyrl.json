@@ -60,7 +60,7 @@
   "finalTest": "Имтиҳон (50) та савол",
   "finishQuestion": "Якуний",
   "testResult": "Тест натижаси",
-  "cardTests": "Имтихон",
+  "cardTests": "Мавзулар",
   "correctAnswer": "Тўғри жавоб",
   "trafficMarks": "Белгилар маълумотлари (админ)",
   "wrongAnswer": "Нотўғри жавоб",
@@ -95,5 +95,5 @@
                "searchQuestion": "Саволларни қидириш",
                "includedQuestions": "Бу савол аллақачон қўшилган",
                "randomTests": "Рандом тестлар",
-               "cardTests": "Қулфлик тестлар"
+               "cardTests": "Мавзулар"
 }
