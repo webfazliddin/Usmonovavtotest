@@ -44,25 +44,95 @@ const returnToLessons = () => {
 </script>
 
 <template>
-  <div>
-    <v-card>
-      <v-card-title>
-        <div class="d-flex justify-space-between align-center mb-4">
-          <h1 class="my-4">{{ $t("LevelUp") }}</h1>
-          <v-btn color="error" @click="router.back()">
-            {{ $t("back") }}
-          </v-btn>
-        </div>
-      </v-card-title>
-      <v-card-text>
-        <CardTest @show-result="showResult" />
+  <div class="modern-test-page">
+    <!-- Header -->
+    <div class="test-header">
+      <button class="back-btn" @click="router.back()">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+          <path d="M19 12H5M5 12L12 19M5 12L12 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <span>{{ $t("back") }}</span>
+      </button>
+    </div>
 
-        <v-dialog width="600" v-model:model-value="isResult">
-          <CardResultModal :data="result" @lool-result="loolResult" @return-to-lessons="returnToLessons" />
-        </v-dialog>
-      </v-card-text>
-    </v-card>
+    <!-- Test Content -->
+    <div class="test-content">
+      <CardTest @show-result="showResult" />
+    </div>
+
+    <!-- Result Modal -->
+    <v-dialog width="600" v-model:model-value="isResult">
+      <CardResultModal :data="result" @lool-result="loolResult" @return-to-lessons="returnToLessons" />
+    </v-dialog>
   </div>
 </template>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.modern-test-page {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 24px;
+  animation: fadeIn 0.4s ease;
+}
+
+.test-header {
+  margin-bottom: 24px;
+}
+
+.back-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: 'Poppins', sans-serif;
+  font-size: 15px;
+  font-weight: 600;
+  padding: 12px 24px;
+  border-radius: 10px;
+  background: #F8F9FC;
+  color: #4A90E2;
+  border: 1px solid #E8ECF4;
+  cursor: pointer;
+  transition: all 0.2s ease;
+
+  &:hover {
+    background: #4A90E2;
+    color: white;
+    border-color: #4A90E2;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(74, 144, 226, 0.2);
+  }
+
+  &:active {
+    transform: translateY(0);
+  }
+}
+
+.test-content {
+  background: white;
+  border-radius: 16px;
+  border: 1px solid #E8ECF4;
+  overflow: hidden;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (max-width: 768px) {
+  .modern-test-page {
+    padding: 16px;
+  }
+
+  .back-btn {
+    width: 100%;
+    justify-content: center;
+  }
+}
+</style>
