@@ -3,7 +3,7 @@ import { CardService } from "@/services/services/Cards.service";
 import { setError } from "@/utils/helpers";
 import { ref, computed } from "vue";
 import { useRouter } from "vue-router";
-import { LockIcon, LockOpenIcon, CheckIcon, XIcon } from "vue-tabler-icons";
+import { LockIcon, LockOpenIcon } from "vue-tabler-icons";
 
 const router = useRouter();
 
@@ -97,49 +97,17 @@ const getProgressColor = (progress: number) => {
           </div>
         </div>
 
-        <!-- Statistics Grid -->
-        <div class="stats-grid">
-          <div class="stat-item">
+        <!-- Statistics -->
+        <div class="stats-section">
+          <div class="stat-item-large">
             <div class="stat-icon stat-icon--total">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
                 <path d="M9 11H15M9 15H15M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
               </svg>
             </div>
             <div class="stat-content">
               <span class="stat-label">Jami savollar</span>
               <span class="stat-value">{{ card.questionsCount || 0 }}</span>
-            </div>
-          </div>
-
-          <div class="stat-item">
-            <div class="stat-icon stat-icon--answered">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-                <path d="M9 12L11 14L15 10M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-              </svg>
-            </div>
-            <div class="stat-content">
-              <span class="stat-label">Javob berilgan</span>
-              <span class="stat-value">{{ (card.successCorrectAnswersCount || 0) + (card.successIncorrectAnswersCount || 0) }}</span>
-            </div>
-          </div>
-
-          <div class="stat-item">
-            <div class="stat-icon stat-icon--correct">
-              <CheckIcon :size="20" />
-            </div>
-            <div class="stat-content">
-              <span class="stat-label">To'g'ri</span>
-              <span class="stat-value">{{ card.successCorrectAnswersCount || 0 }}</span>
-            </div>
-          </div>
-
-          <div class="stat-item">
-            <div class="stat-icon stat-icon--wrong">
-              <XIcon :size="20" />
-            </div>
-            <div class="stat-content">
-              <span class="stat-label">Xato</span>
-              <span class="stat-value">{{ card.successIncorrectAnswersCount || 0 }}</span>
             </div>
           </div>
         </div>
@@ -322,30 +290,27 @@ const getProgressColor = (progress: number) => {
   border-radius: 4px;
 }
 
-.stats-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 12px;
+.stats-section {
   margin-bottom: 20px;
 }
 
-.stat-item {
+.stat-item-large {
   display: flex;
   align-items: center;
-  gap: 12px;
-  padding: 12px;
+  gap: 16px;
+  padding: 16px 20px;
   background: #F8F9FC;
-  border-radius: 10px;
+  border-radius: 12px;
   border: 1px solid #E8ECF4;
 }
 
 .stat-icon {
-  width: 40px;
-  height: 40px;
+  width: 48px;
+  height: 48px;
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 8px;
+  border-radius: 10px;
   flex-shrink: 0;
 
   &--total {
@@ -378,7 +343,7 @@ const getProgressColor = (progress: number) => {
 
 .stat-label {
   font-family: 'Poppins', sans-serif;
-  font-size: 12px;
+  font-size: 14px;
   font-weight: 500;
   color: #6B7280;
   white-space: nowrap;
@@ -388,7 +353,7 @@ const getProgressColor = (progress: number) => {
 
 .stat-value {
   font-family: 'Poppins', sans-serif;
-  font-size: 18px;
+  font-size: 24px;
   font-weight: 700;
   color: #111827;
 }
@@ -498,10 +463,6 @@ const getProgressColor = (progress: number) => {
 
   .card-title {
     font-size: 18px;
-  }
-
-  .stats-grid {
-    grid-template-columns: 1fr;
   }
 }
 </style>
