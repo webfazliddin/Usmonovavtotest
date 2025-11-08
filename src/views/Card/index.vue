@@ -26,8 +26,8 @@ const fetchCard = (item: any) => {
   if (item?.isLocked === false) return;
 
   // Agar card 100% yakunlangan bo'lsa va attemptId bo'lsa, natijalarni ko'rsatamiz
-  if (item.lastAttemptId && getProgress(item) === 100) {
-    router.push({ name: "CardResultPage", params: { attemptId: item.lastAttemptId } });
+  if (item.successAttemptId && getProgress(item) === 100) {
+    router.push({ name: "CardResultPage", params: { attemptId: item.successAttemptId } });
   } else {
     // Aks holda, testni davom ettiramiz
     router.push({ name: "CardTest", params: { cardId: item.id } });
@@ -36,8 +36,9 @@ const fetchCard = (item: any) => {
 
 // Calculate progress percentage
 const getProgress = (card: any) => {
-  if (!card.totalQuestions || card.totalQuestions === 0) return 0;
-  return Math.round((card.answeredQuestions / card.totalQuestions) * 100);
+  if (!card.questionsCount || card.questionsCount === 0) return 0;
+  const answeredQuestions = (card.successCorrectAnswersCount || 0) + (card.successIncorrectAnswersCount || 0);
+  return Math.round((answeredQuestions / card.questionsCount) * 100);
 };
 
 // Get progress color
@@ -106,7 +107,7 @@ const getProgressColor = (progress: number) => {
             </div>
             <div class="stat-content">
               <span class="stat-label">Jami savollar</span>
-              <span class="stat-value">{{ card.totalQuestions || 0 }}</span>
+              <span class="stat-value">{{ card.questionsCount || 0 }}</span>
             </div>
           </div>
 
@@ -118,7 +119,7 @@ const getProgressColor = (progress: number) => {
             </div>
             <div class="stat-content">
               <span class="stat-label">Javob berilgan</span>
-              <span class="stat-value">{{ card.answeredQuestions || 0 }}</span>
+              <span class="stat-value">{{ (card.successCorrectAnswersCount || 0) + (card.successIncorrectAnswersCount || 0) }}</span>
             </div>
           </div>
 
@@ -128,7 +129,7 @@ const getProgressColor = (progress: number) => {
             </div>
             <div class="stat-content">
               <span class="stat-label">To'g'ri</span>
-              <span class="stat-value">{{ card.correctAnswers || 0 }}</span>
+              <span class="stat-value">{{ card.successCorrectAnswersCount || 0 }}</span>
             </div>
           </div>
 
@@ -138,7 +139,7 @@ const getProgressColor = (progress: number) => {
             </div>
             <div class="stat-content">
               <span class="stat-label">Xato</span>
-              <span class="stat-value">{{ card.wrongAnswers || 0 }}</span>
+              <span class="stat-value">{{ card.successIncorrectAnswersCount || 0 }}</span>
             </div>
           </div>
         </div>
