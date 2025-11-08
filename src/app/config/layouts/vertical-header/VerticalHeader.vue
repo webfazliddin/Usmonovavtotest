@@ -3,7 +3,7 @@ import { ref, watch, computed } from "vue";
 import { useRouter } from "vue-router";
 import navMenu from "@/app/config/permissions/index";
 import { useTheme } from "vuetify";
-import { UserIcon, LogoutIcon, LanguageIcon } from "vue-tabler-icons";
+import { UserIcon, LogoutIcon, LanguageIcon, MenuIcon } from "vue-tabler-icons";
 import axios from "axios";
 import { useI18n } from "vue-i18n";
 import { loadLocaleMessages } from "@/app/config/i18n";
@@ -14,6 +14,7 @@ const { locale } = useI18n();
 const valueIn = ref(false);
 const profileMenuOpen = ref(false);
 const languageMenuOpen = ref(false);
+const mobileMenuOpen = ref(false);
 
 // Language options
 const languages = [
@@ -108,6 +109,26 @@ watch(
 
       <!-- Actions -->
       <div class="header-actions">
+        <!-- Mobile Menu Button -->
+        <v-menu v-model="mobileMenuOpen" offset-y class="mobile-menu-wrapper">
+          <template v-slot:activator="{ props }">
+            <v-btn class="mobile-menu-btn" icon v-bind="props">
+              <MenuIcon :size="22" />
+            </v-btn>
+          </template>
+          <v-list class="mobile-menu-list">
+            <v-list-item
+              v-for="item in navItems"
+              :key="item.to"
+              @click="router.push(item.to); mobileMenuOpen = false"
+              class="mobile-menu-item"
+              :class="{ active: $route.path === item.to }"
+            >
+              <v-list-item-title>{{ $t(item.title) }}</v-list-item-title>
+            </v-list-item>
+          </v-list>
+        </v-menu>
+
         <!-- Language Menu -->
         <v-menu v-model="languageMenuOpen" offset-y>
           <template v-slot:activator="{ props }">
@@ -165,6 +186,10 @@ watch(
   border-bottom: 1px solid rgba(230, 240, 253, 0.8);
   box-shadow: 0 2px 12px rgba(93, 135, 255, 0.06);
   z-index: 1100;
+
+  @media (max-width: 768px) {
+    height: 60px;
+  }
 }
 
 .header-content {
@@ -182,7 +207,12 @@ watch(
   }
 
   @media (max-width: 960px) {
-    gap: 24px;
+    gap: 16px;
+  }
+
+  @media (max-width: 768px) {
+    padding: 0 12px;
+    gap: 12px;
   }
 }
 
@@ -288,6 +318,61 @@ watch(
   display: flex;
   align-items: center;
   gap: 8px;
+}
+
+// Mobile Menu Button
+.mobile-menu-btn {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  color: #64748b;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  display: none;
+
+  &:hover {
+    background: linear-gradient(135deg, rgba(93, 135, 255, 0.08) 0%, rgba(93, 135, 255, 0.12) 100%);
+    color: #5d87ff;
+    transform: translateY(-1px);
+  }
+
+  @media (max-width: 960px) {
+    display: flex;
+  }
+
+  @media (max-width: 768px) {
+    width: 36px;
+    height: 36px;
+  }
+}
+
+.mobile-menu-list {
+  min-width: 200px;
+  padding: 8px;
+  background: rgba(255, 255, 255, 0.98);
+  backdrop-filter: blur(10px);
+  border-radius: 12px;
+  box-shadow: 0 4px 16px rgba(93, 135, 255, 0.1);
+  border: 1px solid rgba(230, 240, 253, 0.6);
+}
+
+.mobile-menu-item {
+  border-radius: 8px;
+  cursor: pointer;
+  font-family: 'Poppins', sans-serif;
+  font-size: 14px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  margin: 2px 0;
+
+  &:hover {
+    background: linear-gradient(135deg, rgba(93, 135, 255, 0.08) 0%, rgba(93, 135, 255, 0.12) 100%);
+    transform: translateX(2px);
+  }
+
+  &.active {
+    background: linear-gradient(135deg, rgba(93, 135, 255, 0.15) 0%, rgba(93, 135, 255, 0.2) 100%);
+    color: #5d87ff;
+    font-weight: 600;
+  }
 }
 
 // Language Button

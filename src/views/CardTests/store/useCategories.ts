@@ -25,8 +25,9 @@ export const useCardTests = defineStore("card-tests", {
       if (this.data.length) return;
 
       this.dataLoading = true;
+      const searchParam = this.filter.search ? `&Search=${this.filter.search}` : '';
       CardTestsService.GetCardTests(
-        `Page=${this.filter.page}&Size=${this.filter.size}`
+        `Page=${this.filter.page}&Size=${this.filter.size}${searchParam}`
       )
         .then((res) => {
           this.data = res.data.data;
@@ -42,8 +43,9 @@ export const useCardTests = defineStore("card-tests", {
     },
     refreshData() {
       this.dataLoading = true;
+      const searchParam = this.filter.search ? `&Search=${this.filter.search}` : '';
       CardTestsService.GetCardTests(
-        `Page=${this.filter.page}&Size=${this.filter.size}`
+        `Page=${this.filter.page}&Size=${this.filter.size}${searchParam}`
       )
         .then((res) => {
           this.data = res.data.data;

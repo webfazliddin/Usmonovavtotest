@@ -48,9 +48,11 @@ const returnToLessons = () => {
     <CardTest @show-result="showResult" />
 
     <v-dialog
-      width="600"
+      v-if="isResult"
       v-model:model-value="isResult"
-      class="result-dialog"
+      fullscreen
+      :transition="false"
+      :scrim="false"
     >
       <CardResultModal
         :data="result"
@@ -85,13 +87,35 @@ const returnToLessons = () => {
     padding: 0;
   }
 }
+
+// Fullscreen dialog styles
+:deep(.v-dialog--fullscreen) {
+  .v-overlay__content {
+    width: 100vw !important;
+    height: 100vh !important;
+    max-width: 100vw !important;
+    max-height: 100vh !important;
+    margin: 0 !important;
+    border-radius: 0 !important;
+  }
+}
 </style>
 
 <style>
-/* Result dialog styles */
-.result-dialog .v-overlay__content {
-  background: white;
-  border-radius: 16px;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+/* Global fullscreen dialog fix */
+.v-dialog.v-dialog--fullscreen {
+  width: 100vw !important;
+  height: 100vh !important;
+  max-width: 100vw !important;
+  max-height: 100vh !important;
+}
+
+.v-dialog.v-dialog--fullscreen .v-overlay__content {
+  width: 100vw !important;
+  height: 100vh !important;
+  max-width: 100vw !important;
+  max-height: 100vh !important;
+  margin: 0 !important;
+  border-radius: 0 !important;
 }
 </style>

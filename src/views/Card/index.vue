@@ -52,12 +52,6 @@ const getProgressColor = (progress: number) => {
 
 <template>
   <div class="modern-page">
-    <!-- Page Header -->
-    <div class="page-header">
-      <button class="back-btn" @click="router.back()">
-        <span>{{ $t("back") }}</span>
-      </button>
-    </div>
 
     <!-- Cards Grid -->
     <div class="modern-cards-grid">
@@ -71,7 +65,7 @@ const getProgressColor = (progress: number) => {
         <!-- Card Header -->
         <div class="card-header">
           <div class="card-title-section">
-            <h3 class="card-title">{{ card.name }}</h3>
+            <h3 class="card-title">{{ index + 1 }}-Mavzu</h3>
             <div class="lock-badge" :class="{ 'lock-badge--unlocked': card.isLocked === true }">
               <LockIcon v-if="card.isLocked === false" :size="16" />
               <LockOpenIcon v-else :size="16" />
@@ -80,21 +74,9 @@ const getProgressColor = (progress: number) => {
           </div>
         </div>
 
-        <!-- Progress Bar -->
-        <div class="progress-section">
-          <div class="progress-header">
-            <span class="progress-label">{{ $t("Progress") }}</span>
-            <span class="progress-value">{{ getProgress(card) }}%</span>
-          </div>
-          <div class="progress-bar-container">
-            <div
-              class="progress-bar-fill"
-              :style="{
-                width: `${getProgress(card)}%`,
-                backgroundColor: getProgressColor(getProgress(card))
-              }"
-            ></div>
-          </div>
+        <!-- Card Name -->
+        <div class="card-name-section">
+          <p class="card-name">{{ card.name }}</p>
         </div>
 
         <!-- Statistics -->
@@ -128,10 +110,7 @@ const getProgressColor = (progress: number) => {
                  'Davom etish'
               }}
             </span>
-            <svg v-if="getProgress(card) === 100 && card.isLocked === true" width="20" height="20" viewBox="0 0 24 24" fill="none">
-              <path d="M9 12L11 14L15 10M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-            </svg>
-            <svg v-else width="20" height="20" viewBox="0 0 24 24" fill="none">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
               <path d="M5 12H19M19 12L12 5M19 12L12 19" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
             </svg>
           </button>
@@ -149,37 +128,6 @@ const getProgressColor = (progress: number) => {
   animation: fadeIn 0.4s ease;
 }
 
-.page-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 32px;
-}
-
-.back-btn {
-  font-family: 'Poppins', sans-serif;
-  font-size: 15px;
-  font-weight: 600;
-  padding: 12px 24px;
-  border-radius: 10px;
-  background: #F8F9FC;
-  color: #4A90E2;
-  border: 1px solid #E8ECF4;
-  cursor: pointer;
-  transition: all 0.2s ease;
-
-  &:hover {
-    background: #4A90E2;
-    color: white;
-    border-color: #4A90E2;
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(74, 144, 226, 0.2);
-  }
-
-  &:active {
-    transform: translateY(0);
-  }
-}
 
 .modern-cards-grid {
   display: grid;
@@ -195,6 +143,9 @@ const getProgressColor = (progress: number) => {
   cursor: pointer;
   transition: all 0.3s ease;
   animation: scaleIn 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
 
   &:hover {
     transform: translateY(-4px);
@@ -231,6 +182,12 @@ const getProgressColor = (progress: number) => {
   color: #111827;
   margin: 0;
   line-height: 1.3;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  word-break: break-word;
 }
 
 .lock-badge {
@@ -249,6 +206,32 @@ const getProgressColor = (progress: number) => {
     background: #D1FAE5;
     color: #10B981;
   }
+}
+
+.card-name-section {
+  margin-bottom: 20px;
+  padding: 16px 20px;
+  background: #F8F9FC;
+  border-radius: 12px;
+  border: 1px solid #E8ECF4;
+  min-height: 90px;
+  display: flex;
+  align-items: center;
+}
+
+.card-name {
+  font-family: 'Poppins', sans-serif;
+  font-size: 16px;
+  font-weight: 600;
+  color: #374151;
+  margin: 0;
+  line-height: 1.5;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  word-break: break-word;
 }
 
 .progress-section {
@@ -292,25 +275,30 @@ const getProgressColor = (progress: number) => {
 
 .stats-section {
   margin-bottom: 20px;
+  flex-grow: 1;
+  display: flex;
+  align-items: flex-start;
 }
 
 .stat-item-large {
   display: flex;
   align-items: center;
-  gap: 16px;
-  padding: 16px 20px;
-  background: #F8F9FC;
-  border-radius: 12px;
+  gap: 10px;
+  padding: 10px 14px;
+  background: transparent;
+  border-radius: 8px;
   border: 1px solid #E8ECF4;
+  width: 100%;
+  min-height: 56px;
 }
 
 .stat-icon {
-  width: 48px;
-  height: 48px;
+  width: 32px;
+  height: 32px;
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 10px;
+  border-radius: 6px;
   flex-shrink: 0;
 
   &--total {
@@ -332,20 +320,25 @@ const getProgressColor = (progress: number) => {
     background: #FEE2E2;
     color: #EF4444;
   }
+
+  svg {
+    width: 18px;
+    height: 18px;
+  }
 }
 
 .stat-content {
   display: flex;
   flex-direction: column;
-  gap: 2px;
+  gap: 1px;
   min-width: 0;
 }
 
 .stat-label {
   font-family: 'Poppins', sans-serif;
-  font-size: 14px;
+  font-size: 11px;
   font-weight: 500;
-  color: #6B7280;
+  color: #9CA3AF;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -353,13 +346,13 @@ const getProgressColor = (progress: number) => {
 
 .stat-value {
   font-family: 'Poppins', sans-serif;
-  font-size: 24px;
-  font-weight: 700;
+  font-size: 16px;
+  font-weight: 600;
   color: #111827;
 }
 
 .card-footer {
-  margin-top: 20px;
+  margin-top: auto;
 }
 
 .start-btn {

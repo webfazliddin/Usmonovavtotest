@@ -373,7 +373,7 @@ fetchAttemp();
           <line x1="19" y1="12" x2="5" y2="12"></line>
           <polyline points="12 19 5 12 12 5"></polyline>
         </svg>
-        Ortga
+        <span>Ortga</span>
       </button>
 
       <div class="question-navigator" v-if="attempt.length">
@@ -399,7 +399,7 @@ fetchAttemp();
         :disabled="!activeQuestion?.choiceId"
         :class="{ 'disabled': !activeQuestion?.choiceId }"
       >
-        Keyingi savol
+        <span>Keyingi savol</span>
         <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
           <line x1="5" y1="12" x2="19" y2="12"></line>
           <polyline points="12 5 19 12 12 19"></polyline>
@@ -838,7 +838,7 @@ fetchAttemp();
   }
 }
 
-// Mobile styles
+// Mobile styles - Optimized for mobile-first usage
 @media (max-width: 768px) {
   .modern-test-container {
     position: fixed;
@@ -848,8 +848,8 @@ fetchAttemp();
   }
 
   .test-header {
-    padding: 12px 16px;
-    gap: 12px;
+    padding: 10px 12px;
+    gap: 8px;
     flex-direction: column;
     align-items: stretch;
   }
@@ -860,64 +860,62 @@ fetchAttemp();
   }
 
   .current-question {
-    font-size: 16px;
+    font-size: 15px;
   }
 
   .total-questions {
-    font-size: 13px;
+    font-size: 12px;
   }
 
   .time-info {
-    font-size: 13px;
+    font-size: 12px;
     justify-content: center;
   }
 
   .progress-indicator {
     order: 3;
     width: 100%;
+    height: 6px;
   }
 
   .test-content {
-    padding: 12px;
+    padding: 8px;
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
   }
 
   .test-layout {
     grid-template-columns: 1fr;
-    gap: 20px;
+    gap: 12px;
   }
 
   .question-card {
-    padding: 16px;
-    border-radius: 12px;
+    padding: 12px;
+    border-radius: 10px;
   }
 
   .question-number-badge {
-    font-size: 11px;
-    padding: 4px 10px;
-    margin-bottom: 12px;
+    font-size: 10px;
+    padding: 4px 8px;
+    margin-bottom: 8px;
   }
 
   .question-title {
-    font-size: 16px;
+    font-size: 15px;
     line-height: 1.5;
-    margin-bottom: 10px;
+    margin-bottom: 8px;
   }
 
   .keyboard-hint {
-    font-size: 11px;
-    padding: 6px 10px;
-    flex-wrap: wrap;
-    line-height: 1.4;
+    display: none; // Hide keyboard hints on mobile
   }
 
   .answers-list {
-    gap: 8px;
+    gap: 10px;
   }
 
   .description-toggle {
-    padding: 10px 14px;
+    padding: 10px 12px;
     font-size: 13px;
   }
 
@@ -933,35 +931,36 @@ fetchAttemp();
   }
 
   .image-container {
-    min-height: 250px;
-    padding: 12px;
-    border-radius: 12px;
+    min-height: 220px;
+    padding: 10px;
+    border-radius: 10px;
   }
 
   .test-image {
-    max-height: 350px;
-    min-height: 200px;
+    max-height: 300px;
+    min-height: 180px;
     border-radius: 8px;
   }
 
   .image-loading {
-    min-height: 250px;
+    min-height: 220px;
 
     p {
-      font-size: 13px;
+      font-size: 12px;
     }
   }
 
   .test-footer {
-    padding: 12px 16px;
-    gap: 12px;
+    padding: 10px 12px;
+    gap: 8px;
     flex-wrap: nowrap;
   }
 
   .footer-btn {
-    padding: 10px 16px;
-    font-size: 13px;
+    padding: 10px 12px;
+    font-size: 12px;
     border-radius: 8px;
+    white-space: nowrap;
 
     svg {
       width: 16px;
@@ -970,32 +969,44 @@ fetchAttemp();
 
     &.back-btn {
       flex: 0 0 auto;
-      min-width: 80px;
+      padding: 10px;
+      min-width: auto;
+
+      // Show only icon on mobile
+      span {
+        display: none;
+      }
     }
 
     &.next-btn {
       flex: 0 0 auto;
-      min-width: 120px;
+      min-width: 100px;
+      font-size: 12px;
     }
   }
 
   .question-navigator {
     flex: 1;
-    gap: 6px;
-    padding: 2px 0;
+    gap: 5px;
+    padding: 0 4px;
     overflow-x: auto;
     -webkit-overflow-scrolling: touch;
+    scrollbar-width: none; // Firefox
 
     &::-webkit-scrollbar {
-      height: 3px;
+      display: none; // Hide scrollbar on mobile
     }
   }
 
   .nav-number {
-    min-width: 36px;
-    height: 36px;
+    min-width: 38px;
+    height: 38px;
     font-size: 13px;
     border-radius: 8px;
+    border-width: 2px;
+
+    // Better touch target
+    touch-action: manipulation;
   }
 }
 

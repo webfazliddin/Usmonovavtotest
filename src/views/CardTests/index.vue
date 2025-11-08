@@ -25,6 +25,8 @@ const fields: IFields[] = [
   { key: "fullName", label: "fullName" },
 ];
 
+let searchTimeout: NodeJS.Timeout | null = null;
+
 const fetchDetail = (item: any) => {
   router.push({
     name: "EditCardTests",
@@ -33,6 +35,16 @@ const fetchDetail = (item: any) => {
     },
   });
   isDialog.value = true;
+};
+
+const handleSearch = () => {
+  if (searchTimeout) {
+    clearTimeout(searchTimeout);
+  }
+  searchTimeout = setTimeout(() => {
+    filter.value.page = 1;
+    store.refreshData();
+  }, 500);
 };
 
 store.fetchData();
@@ -58,6 +70,28 @@ watch(
         <v-btn color="info" class="create-button" @click="fetchDetail(0)">
           {{ $t("createTest") }}
         </v-btn>
+      </v-col>
+    </v-row>
+
+    <v-row class="search-row">
+      <v-col cols="12">
+        <v-text-field
+          v-model="filter.search"
+          placeholder="Qidiruv..."
+          variant="outlined"
+          density="comfortable"
+          hide-details
+          clearable
+          @input="handleSearch"
+          class="search-input"
+        >
+          <template v-slot:prepend-inner>
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="11" cy="11" r="8"></circle>
+              <path d="m21 21-4.35-4.35"></path>
+            </svg>
+          </template>
+        </v-text-field>
       </v-col>
     </v-row>
 
@@ -142,6 +176,38 @@ watch(
   min-width: 140px;
 }
 
+.search-row {
+  margin-bottom: 16px;
+}
+
+.search-input {
+  max-width: 500px;
+  font-family: 'Poppins', sans-serif;
+
+  :deep(.v-field__prepend-inner) {
+    padding-top: 8px;
+
+    svg {
+      color: #6B7280;
+    }
+  }
+
+  :deep(.v-field__input) {
+    font-size: 14px;
+    padding: 12px 0;
+  }
+
+  :deep(.v-field__outline) {
+    border-radius: 10px;
+  }
+
+  :deep(.v-field--focused) {
+    .v-field__outline {
+      border-color: #4A90E2;
+    }
+  }
+}
+
 // Tablet styles
 @media (max-width: 960px) {
   .page-title {
@@ -150,6 +216,10 @@ watch(
 
   .create-button {
     min-width: 120px;
+  }
+
+  .search-input {
+    max-width: 100%;
   }
 }
 
@@ -176,6 +246,22 @@ watch(
   .create-button {
     width: 100%;
     max-width: 100%;
+  }
+
+  .search-row {
+    margin-bottom: 12px;
+
+    .v-col {
+      padding: 8px 12px !important;
+    }
+  }
+
+  .search-input {
+    max-width: 100%;
+
+    :deep(.v-field__input) {
+      font-size: 13px;
+    }
   }
 }
 

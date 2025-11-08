@@ -12,7 +12,10 @@
       "Bash(taskkill:*)",
       "Bash(powershell \"Stop-Process -Id 43056 -Force\")",
       "Bash(git add:*)",
-      "Bash(git log:*)"
+      "Bash(git log:*)",
+      "Bash(git commit -m \"$(cat <<''EOF''\nImprove UI/UX and fix admin permissions\n\n- Remove page titles from all view pages for cleaner UI\n- Fix logout redirect from /auth/sign-in to /sign-in\n- Fix admin permission check to allow admins access to all pages\n- Optimize image preloading in CompleteTest component\n- Add comprehensive SEO meta tags\n- Clean up unnecessary UI text and loading messages\n\n🤖 Generated with [Claude Code](https://claude.com/claude-code)\n\nCo-Authored-By: Claude <noreply@anthropic.com>\nEOF\n)\")",
+      "Bash(git push)",
+      "Bash(git commit:*)"
     ],
     "deny": [],
     "ask": []
