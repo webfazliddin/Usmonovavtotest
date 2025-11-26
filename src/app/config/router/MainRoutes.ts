@@ -6,6 +6,8 @@ import { QuestionRoutes } from "@/views/Questions/Routes";
 import { TrafficMarksRoutes } from "@/views/TrafficMarks/Routes";
 import { UserRoutes } from "@/views/User/Routes";
 import { CardRoutes } from "@/views/Card/Routes";
+import { ExamRoutes } from "@/views/Exam/Routes";
+import { ExamResultsRoutes } from "@/views/ExamResults/Routes";
 import { RouteRecordRaw } from "vue-router";
 
 const MainRoutes: RouteRecordRaw = {
@@ -33,6 +35,8 @@ const MainRoutes: RouteRecordRaw = {
     ...TrafficMarksRoutes,
     ...CardTestsRoutes,
     ...CardRoutes,
+    ...ExamRoutes,
+    ...ExamResultsRoutes,
   ],
 };
 
