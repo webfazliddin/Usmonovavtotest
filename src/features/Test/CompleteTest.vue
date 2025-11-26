@@ -534,6 +534,7 @@ onUnmounted(() => {
 .test-content {
   flex: 1;
   padding: 32px;
+  padding-bottom: 120px;
   overflow-y: auto;
 }
 
@@ -739,6 +740,11 @@ onUnmounted(() => {
   align-items: center;
   gap: 20px;
   box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.04);
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
 }
 
 .footer-btn {
@@ -861,6 +867,7 @@ onUnmounted(() => {
 
   .test-content {
     padding: 20px;
+    padding-bottom: 110px;
   }
 
   .test-footer {
@@ -921,6 +928,7 @@ onUnmounted(() => {
 
   .test-content {
     padding: 12px;
+    padding-bottom: 140px;
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
   }
@@ -1028,6 +1036,7 @@ onUnmounted(() => {
 
   .test-content {
     padding: 10px;
+    padding-bottom: 130px;
   }
 
   .question-card {
@@ -1071,6 +1080,7 @@ onUnmounted(() => {
 
   .test-content {
     padding: 12px 16px;
+    padding-bottom: 100px;
   }
 
   .test-layout {
