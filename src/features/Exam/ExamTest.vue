@@ -33,7 +33,9 @@ const activeQuestion = computed(() => {
 const fetchExam = async () => {
   try {
     const { data } = await ExamService.StartExam(4); // testTypeId = 4 for exam
-    attempt.value = data.map((item: any) => ({ ...item, canChange: true }));
+    // Take only first 20 questions for exam
+    const examData = data.slice(0, 20);
+    attempt.value = examData.map((item: any) => ({ ...item, canChange: true }));
     preloadAllImages();
   } catch (error: any) {
     notify({
