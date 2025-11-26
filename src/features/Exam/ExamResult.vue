@@ -33,7 +33,9 @@ const percentage = computed(() =>
 const fetchAttemptResult = () => {
   ExamService.GetAttemptResult(attemptId.value)
     .then((res) => {
-      attempt.value = res.data;
+      // Take only first 20 questions for exam result
+      const examData = res.data.slice(0, 20);
+      attempt.value = examData;
     })
     .catch((e) => {
       notify({
