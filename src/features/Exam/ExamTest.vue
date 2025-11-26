@@ -116,6 +116,20 @@ const checkImageCache = () => {
 const nextQuestion = () => {
   if (!activeQuestion.value?.choiceId) return;
 
+  // If already submitted, just move to next question
+  if (!activeQuestion.value.canChange) {
+    if (activeQuestionIndex.value !== attempt.value.length - 1) {
+      activeQuestionIndex.value = activeQuestionIndex.value + 1;
+      checkImageCache();
+      isDescriptionVisible.value = false;
+    } else {
+      // Last question - show result
+      emits("showResult", activeQuestion.value.attemptId);
+    }
+    return;
+  }
+
+  // If not yet submitted, submit first
   const result: IExamSubmitAnswer = {
     questionId: activeQuestion.value.question.id,
     choiceId: activeQuestion.value.choiceId,
@@ -151,6 +165,29 @@ const nextQuestion = () => {
 const handleAnswerClick = (answerId: number) => {
   if (activeQuestion.value?.canChange) {
     activeQuestion.value.choiceId = answerId;
+
+    // Immediately submit the answer to get feedback
+    const result: IExamSubmitAnswer = {
+      questionId: activeQuestion.value.question.id,
+      choiceId: answerId,
+    };
+
+    saveLoading.value = true;
+    ExamService.SubmitAnswer(activeQuestion.value.attemptId, result)
+      .then((res) => {
+        activeQuestion.value.isCorrect = res.data.isCorrect;
+        activeQuestion.value.correctChoiceId = res.data.correctChoiceId;
+        activeQuestion.value.canChange = false;
+      })
+      .catch((e) => {
+        notify({
+          text: e.response?.data?.message || "Javobni saqlashda xatolik yuz berdi",
+          type: "error",
+        });
+      })
+      .finally(() => {
+        saveLoading.value = false;
+      });
   }
 };
 
