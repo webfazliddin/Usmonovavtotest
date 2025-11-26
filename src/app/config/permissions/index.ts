@@ -5,6 +5,8 @@ import {
   LockBoltIcon,
   LockOffIcon,
   UsersIcon,
+  SchoolIcon,
+  ClipboardListIcon,
 } from "vue-tabler-icons";
 import { useUserStore } from "../layouts/store/user";
 import { computed } from "vue";
@@ -65,6 +67,20 @@ const result = computed(() => {
           to: "/card",
           icon: LockBoltIcon,
           visible: true, // Available for all users
+        },
+        // BOTH - Exam (20 questions) (available for all users)
+        {
+          title: "exam",
+          to: "/exam",
+          icon: SchoolIcon,
+          visible: true, // Available for all users
+        },
+        // ADMIN ONLY - Exam Results
+        {
+          title: "examResults",
+          to: "/admin/exam-results",
+          icon: ClipboardListIcon,
+          visible: isAdmin, // Only admins can see
         },
         // ADMIN ONLY - Mark categories (commented out, restore if needed)
         // {
