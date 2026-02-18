@@ -61,40 +61,42 @@ watch(
 </script>
 
 <template>
-  <div class="admin-page-container">
-    <v-row class="page-header">
-      <v-col md="6" cols="12" class="header-left">
-        <h2 class="page-title">{{ $t("cardTests") }}</h2>
-      </v-col>
-      <v-col md="6" cols="12" class="header-right">
-        <v-btn color="info" class="create-button" @click="fetchDetail(0)">
-          {{ $t("createTest") }}
-        </v-btn>
-      </v-col>
-    </v-row>
+  <div class="modern-admin-page">
+    <!-- Page Header -->
+    <div class="page-header">
+      <div class="header-left">
+        <h1 class="page-title">{{ $t("cardTests") }}</h1>
+      </div>
+      <button class="modern-btn modern-btn--primary" @click="fetchDetail(0)">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+          <path d="M10 4V16M4 10H16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+        <span>{{ $t("createTest") }}</span>
+      </button>
+    </div>
 
-    <v-row class="search-row">
-      <v-col cols="12">
-        <v-text-field
-          v-model="filter.search"
-          placeholder="Qidiruv..."
-          variant="outlined"
-          density="comfortable"
-          hide-details
-          clearable
-          @input="handleSearch"
-          class="search-input"
-        >
-          <template v-slot:prepend-inner>
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <circle cx="11" cy="11" r="8"></circle>
-              <path d="m21 21-4.35-4.35"></path>
-            </svg>
-          </template>
-        </v-text-field>
-      </v-col>
-    </v-row>
+    <!-- Search -->
+    <div class="search-section">
+      <v-text-field
+        v-model="filter.search"
+        :placeholder="$t('search') + '...'"
+        variant="outlined"
+        density="comfortable"
+        hide-details
+        clearable
+        @input="handleSearch"
+        class="search-input"
+      >
+        <template v-slot:prepend-inner>
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="11" cy="11" r="8"></circle>
+            <path d="m21 21-4.35-4.35"></path>
+          </svg>
+        </template>
+      </v-text-field>
+    </div>
 
+    <!-- Table Card -->
     <UiParentCard>
       <FormTable
         :fields="fields"
@@ -105,79 +107,110 @@ watch(
         append-action
       >
         <template #actions="{ item }">
-          <v-btn size="30" icon variant="flat" class="grey100">
-            <v-avatar size="22">
-              <DotsVerticalIcon size="20" color="grey100" />
-            </v-avatar>
-            <v-menu activator="parent">
-              <v-list>
-                <v-list-item
-                  value="edit"
-                  hide-details
-                  min-height="38"
-                  @click="fetchDetail(item)"
-                >
-                  <v-list-item-title>
-                    <v-avatar size="20" class="mr-2">
-                      <component :is="PencilIcon" stroke-width="2" size="20" />
-                    </v-avatar>
-                    {{ $t("edit") }}
-                  </v-list-item-title>
-                </v-list-item>
+          <div class="action-menu">
+            <button class="action-btn">
+              <DotsVerticalIcon :size="20" />
+            </button>
+            <v-menu activator="parent" offset="8">
+              <div class="modern-menu">
+                <button class="menu-item" @click="fetchDetail(item)">
+                  <PencilIcon :size="18" />
+                  <span>{{ $t("edit") }}</span>
+                </button>
                 <DeleteAction
                   :item="item"
                   :service="CardTestsService"
-                  @refresh="store.fetchData()"
-                >
-                </DeleteAction>
-              </v-list>
+                  @refresh="store.refreshData()"
+                />
+              </div>
             </v-menu>
-          </v-btn>
+          </div>
         </template>
       </FormTable>
     </UiParentCard>
 
-    <v-dialog v-model="isDialog" width="90%" persistent>
+    <v-dialog v-model="isDialog" width="90%" max-width="1200" persistent>
       <Edit v-model="isDialog" @update:model-value="store.refreshData()" />
     </v-dialog>
   </div>
 </template>
 
 <style lang="scss" scoped>
-.admin-page-container {
-  width: 100%;
-  max-width: 100%;
+.modern-admin-page {
+  animation: fadeIn 0.4s ease;
 }
 
 .page-header {
-  margin-bottom: 16px;
   display: flex;
+  justify-content: space-between;
   align-items: center;
+  margin-bottom: 24px;
+  gap: 24px;
+  flex-wrap: wrap;
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+    align-items: stretch;
+  }
 }
 
 .header-left {
-  display: flex;
-  align-items: center;
+  flex: 1;
+  min-width: 0;
 }
 
 .page-title {
+  font-family: 'Poppins', sans-serif;
   font-size: 24px;
-  font-weight: 600;
+  font-weight: 700;
+  color: #1F2937;
   margin: 0;
+  line-height: 1.2;
+
+  @media (max-width: 768px) {
+    font-size: 22px;
+  }
 }
 
-.header-right {
-  display: flex;
-  justify-content: flex-end;
+.modern-btn {
+  font-family: 'Poppins', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  padding: 12px 24px;
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: inline-flex;
   align-items: center;
+  gap: 8px;
+  white-space: nowrap;
+
+  &--primary {
+    background: #5D87FF;
+    color: white;
+
+    &:hover {
+      background: #4A73E8;
+    }
+
+    &:active {
+      transform: translateY(0);
+    }
+
+    svg {
+      stroke: currentColor;
+    }
+  }
+
+  @media (max-width: 768px) {
+    width: 100%;
+    justify-content: center;
+  }
 }
 
-.create-button {
-  min-width: 140px;
-}
-
-.search-row {
-  margin-bottom: 16px;
+.search-section {
+  margin-bottom: 20px;
 }
 
 .search-input {
@@ -203,72 +236,78 @@ watch(
 
   :deep(.v-field--focused) {
     .v-field__outline {
-      border-color: #4A90E2;
+      border-color: #5D87FF;
     }
   }
-}
 
-// Tablet styles
-@media (max-width: 960px) {
-  .page-title {
-    font-size: 22px;
-  }
-
-  .create-button {
-    min-width: 120px;
-  }
-
-  .search-input {
+  @media (max-width: 768px) {
     max-width: 100%;
   }
 }
 
-// Mobile styles
-@media (max-width: 600px) {
-  .page-header {
-    margin-bottom: 12px;
-  }
+.action-menu {
+  position: relative;
+}
 
-  .header-left,
-  .header-right {
-    padding: 8px 12px !important;
-  }
+.action-btn {
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #F9FAFB;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  color: #6B7280;
 
-  .page-title {
-    font-size: 20px;
-  }
-
-  .header-right {
-    justify-content: flex-start;
-    margin-top: -8px;
-  }
-
-  .create-button {
-    width: 100%;
-    max-width: 100%;
-  }
-
-  .search-row {
-    margin-bottom: 12px;
-
-    .v-col {
-      padding: 8px 12px !important;
-    }
-  }
-
-  .search-input {
-    max-width: 100%;
-
-    :deep(.v-field__input) {
-      font-size: 13px;
-    }
+  &:hover {
+    background: #5D87FF;
+    color: white;
   }
 }
 
-// Small mobile
-@media (max-width: 375px) {
-  .page-title {
-    font-size: 18px;
+.modern-menu {
+  background: white;
+  border-radius: 12px;
+  padding: 8px;
+  min-width: 160px;
+}
+
+.menu-item {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px;
+  background: transparent;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-family: 'Poppins', sans-serif;
+  font-size: 14px;
+  color: #1F2937;
+  text-align: left;
+
+  &:hover {
+    background: #F9FAFB;
+    color: #5D87FF;
+  }
+
+  svg {
+    color: currentColor;
+    flex-shrink: 0;
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
   }
 }
 </style>

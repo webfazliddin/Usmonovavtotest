@@ -53,7 +53,7 @@ const ChangeLanguage = (item: ILanguageList) => {
   width: clamp(38px, 5vw, 44px) !important;
   height: clamp(38px, 5vw, 44px) !important;
   min-width: clamp(38px, 5vw, 44px) !important;
-  background: #F8F9FC !important;
+  background: #F9FAFB !important;
   border: 1px solid #E8ECF4 !important;
   border-radius: 10px !important;
   transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1) !important;
@@ -78,18 +78,11 @@ const ChangeLanguage = (item: ILanguageList) => {
   }
 
   &:hover {
-    background: linear-gradient(135deg, #4A90E2 0%, #5BA3F5 100%) !important;
-    border-color: #4A90E2 !important;
-    transform: translateY(-1px) !important;
-    box-shadow: 0 4px 12px rgba(74, 144, 226, 0.3) !important;
-
-    .lang-avatar {
-      transform: scale(1.05) rotate(-2deg) !important;
-    }
+    background: #5D87FF !important;
+    border-color: #5D87FF !important;
 
     .lang-text {
       color: #fff !important;
-      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     }
   }
 
@@ -123,13 +116,13 @@ const ChangeLanguage = (item: ILanguageList) => {
 .lang-text {
   font-family: 'Poppins', sans-serif !important;
   font-weight: 600 !important;
-  font-size: clamp(13px, 1.6vw, 16px) !important;
+  font-size: clamp(13px, 1.6vw, 14px) !important;
   transition: all 0.25s ease !important;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 
   @media (max-width: 768px) {
-    font-size: 15px !important;
+    font-size: 14px !important;
   }
 
   @media (max-width: 600px) {

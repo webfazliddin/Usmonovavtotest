@@ -38,39 +38,21 @@ const props = defineProps({ item: Object, level: Number });
 
 <style scoped lang="scss">
 .nav-item {
-  min-height: 42px !important;
-  margin-bottom: 2px !important;
-  border-radius: 8px !important;
-  transition: all 0.2s ease !important;
-  padding: 10px 12px !important;
+  min-height: 44px !important;
+  margin-bottom: 3px !important;
+  border-radius: 10px !important;
+  padding: 10px 14px !important;
   align-items: center !important;
-  border: 1px solid transparent;
-
-  &:hover {
-    background: #F8F9FC !important;
-    border-color: #E8ECF4;
-
-    .nav-title {
-      color: #111827 !important;
-    }
-
-    :deep(.main-icon) {
-      color: #4A90E2 !important;
-    }
-  }
-
   &.v-list-item--active {
-    background: #EFF6FF !important;
-    border: 1px solid #BFDBFE !important;
-    box-shadow: 0 2px 8px rgba(74, 144, 226, 0.1);
+    background: #F9FAFB !important;
 
     .nav-title {
-      color: #4A90E2 !important;
+      color: #1F2937 !important;
       font-weight: 600 !important;
     }
 
     :deep(.main-icon) {
-      color: #4A90E2 !important;
+      color: #1F2937 !important;
     }
 
     :deep(.v-list-item__prepend) {
@@ -80,12 +62,11 @@ const props = defineProps({ item: Object, level: Number });
 
   .nav-title {
     font-family: 'Poppins', sans-serif;
-    font-size: 15px;
-    color: #374151;
+    font-size: 14px;
+    color: #1F2937;
     font-weight: 500;
     letter-spacing: 0px;
     line-height: 1.5;
-    transition: color 0.2s ease;
   }
 
   :deep(.v-list-item__prepend) {

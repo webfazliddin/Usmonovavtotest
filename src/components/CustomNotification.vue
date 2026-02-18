@@ -108,9 +108,9 @@ watch(
 .my-notification {
   margin-top: 20px;
   padding: 15px 15px 15px 5px;
-  font-size: 16px;
+  font-size: 14px;
   color: #ffffff;
-  background: #44a4fc;
+  background: #5D87FF;
   display: flex;
   white-space: inherit;
   word-break: break-word;
@@ -123,8 +123,8 @@ watch(
     background: #fff;
     padding: 6px 18px;
     border-radius: 8px;
-    border: 2px solid #44a4fc;
-    color: #44a4fc;
+    border: 2px solid #5D87FF;
+    color: #5D87FF;
     font-size: 14px;
     font-weight: 500;
     line-height: 1.5;
@@ -149,15 +149,15 @@ watch(
     margin-right: 10px;
   }
   &.success {
-    background: #68cd86;
+    background: #10B981;
   }
 
   &.warn {
-    background: #ffb648;
+    background: #F59E0B;
   }
 
   &.error {
-    background: #e54d42;
+    background: #EF4444;
   }
 }
 </style>

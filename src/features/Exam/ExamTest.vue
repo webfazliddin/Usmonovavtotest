@@ -32,10 +32,8 @@ const activeQuestion = computed(() => {
 
 const fetchExam = async () => {
   try {
-    const { data } = await ExamService.StartExam(4); // testTypeId = 4 for exam
-    // Take only first 20 questions for exam
-    const examData = data.slice(0, 20);
-    attempt.value = examData.map((item: any) => ({ ...item, canChange: true }));
+    const { data } = await ExamService.StartExam(4);
+    attempt.value = data.map((item: any) => ({ ...item, canChange: true }));
     preloadAllImages();
   } catch (error: any) {
     notify({
@@ -113,6 +111,10 @@ const checkImageCache = () => {
   }
 };
 
+const finishExam = () => {
+  emits("showResult", activeQuestion.value.attemptId);
+};
+
 const nextQuestion = () => {
   if (!activeQuestion.value?.choiceId) return;
 
@@ -123,8 +125,8 @@ const nextQuestion = () => {
       checkImageCache();
       isDescriptionVisible.value = false;
     } else {
-      // Last question - show result
-      emits("showResult", activeQuestion.value.attemptId);
+      // Last question - finish exam
+      finishExam();
     }
     return;
   }
@@ -147,8 +149,9 @@ const nextQuestion = () => {
         checkImageCache();
         isDescriptionVisible.value = false;
       } else {
-        // Last question - show result
-        emits("showResult", activeQuestion.value.attemptId);
+        // Last question - finish exam after submission completes
+        saveLoading.value = false;
+        finishExam();
       }
     })
     .catch((e) => {
@@ -158,7 +161,9 @@ const nextQuestion = () => {
       });
     })
     .finally(() => {
-      saveLoading.value = false;
+      if (activeQuestionIndex.value !== attempt.value.length - 1) {
+        saveLoading.value = false;
+      }
     });
 };
 
@@ -276,10 +281,10 @@ onUnmounted(() => {
     <div class="test-header">
       <div class="question-progress">
         <span class="current-question">Savol {{ activeQuestionIndex + 1 }}</span>
-        <span class="total-questions">/ 20</span>
+        <span class="total-questions">/ {{ attempt.length }}</span>
       </div>
       <div class="progress-indicator">
-        <div class="progress-bar" :style="{ width: `${((activeQuestionIndex + 1) / 20) * 100}%` }"></div>
+        <div class="progress-bar" :style="{ width: `${((activeQuestionIndex + 1) / attempt.length) * 100}%` }"></div>
       </div>
       <div class="exam-badge">
         <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -376,7 +381,7 @@ onUnmounted(() => {
           <line x1="19" y1="12" x2="5" y2="12"></line>
           <polyline points="12 19 5 12 12 5"></polyline>
         </svg>
-        Ortga
+        <span>Ortga</span>
       </button>
 
       <div class="question-navigator" v-if="attempt.length">
@@ -434,7 +439,6 @@ onUnmounted(() => {
   align-items: center;
   gap: 24px;
   border-bottom: 1px solid #E8ECF4;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
 }
 
 .question-progress {
@@ -466,7 +470,7 @@ onUnmounted(() => {
 
 .progress-bar {
   height: 100%;
-  background: linear-gradient(90deg, #5D87FF 0%, #4A7FCC 100%);
+  background: #5D87FF;
   border-radius: 10px;
   transition: width 0.3s ease;
 }
@@ -512,8 +516,6 @@ onUnmounted(() => {
   background: white;
   border-radius: 16px;
   padding: 24px;
-  border: 1px solid #E8ECF4;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
 }
 
 .question-number-badge {
@@ -564,7 +566,6 @@ onUnmounted(() => {
   align-items: center;
   gap: 8px;
   background: white;
-  border: 1px solid #E8ECF4;
   border-radius: 10px;
   padding: 12px 16px;
   font-size: 14px;
@@ -575,7 +576,6 @@ onUnmounted(() => {
 
   &:hover {
     background: #F0F4F8;
-    border-color: #5D87FF;
   }
 }
 
@@ -610,8 +610,6 @@ onUnmounted(() => {
   background: white;
   border-radius: 16px;
   padding: 16px;
-  border: 1px solid #E8ECF4;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
   width: 100%;
   min-height: 400px;
   display: flex;
@@ -657,7 +655,6 @@ onUnmounted(() => {
   display: flex;
   align-items: center;
   gap: 20px;
-  box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.04);
   position: fixed;
   bottom: 0;
   left: 0;
@@ -688,14 +685,8 @@ onUnmounted(() => {
   }
 
   &.next-btn {
-    background: linear-gradient(135deg, #5D87FF 0%, #4A7FCC 100%);
+    background: #5D87FF;
     color: white;
-    box-shadow: 0 4px 12px rgba(93, 135, 255, 0.3);
-
-    &:hover:not(:disabled) {
-      box-shadow: 0 6px 16px rgba(93, 135, 255, 0.4);
-      transform: translateY(-1px);
-    }
 
     &:disabled,
     &.disabled {
@@ -703,7 +694,6 @@ onUnmounted(() => {
       cursor: not-allowed;
       background: #E5E7EB;
       color: #9CA3AF;
-      box-shadow: none;
       transform: none;
     }
   }
@@ -826,22 +816,48 @@ onUnmounted(() => {
   }
 
   .test-footer {
-    padding: 12px 16px;
-    gap: 12px;
+    padding: 10px 12px;
+    gap: 8px;
+    flex-wrap: nowrap;
   }
 
   .footer-btn {
-    padding: 10px 16px;
-    font-size: 13px;
+    padding: 10px 12px;
+    font-size: 12px;
+    border-radius: 8px;
+    white-space: nowrap;
+
+    svg {
+      width: 16px;
+      height: 16px;
+    }
 
     &.back-btn {
       flex: 0 0 auto;
-      min-width: 80px;
+      padding: 10px;
+      min-width: auto;
+
+      span {
+        display: none;
+      }
     }
 
     &.next-btn {
       flex: 0 0 auto;
-      min-width: 120px;
+      min-width: 100px;
+      font-size: 12px;
+    }
+  }
+
+  .question-navigator {
+    flex: 1;
+    gap: 5px;
+    padding: 0 4px;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+
+    &::-webkit-scrollbar {
+      display: none;
     }
   }
 
@@ -849,6 +865,87 @@ onUnmounted(() => {
     min-width: 36px;
     height: 36px;
     font-size: 13px;
+    border-radius: 8px;
+    touch-action: manipulation;
+  }
+
+  .keyboard-hint {
+    display: none;
+  }
+
+  .question-card {
+    padding: 12px;
+    border-radius: 10px;
+  }
+
+  .question-number-badge {
+    font-size: 11px;
+    padding: 4px 8px;
+    margin-bottom: 8px;
+  }
+
+  .question-title {
+    font-size: 15px;
+    line-height: 1.5;
+    margin-bottom: 8px;
+  }
+
+  .image-section {
+    position: relative;
+    top: 0;
+  }
+
+  .image-container {
+    min-height: 220px;
+    padding: 10px;
+    border-radius: 10px;
+  }
+
+  .test-image {
+    max-height: 300px;
+    min-height: 180px;
+    border-radius: 8px;
+  }
+
+  .description-toggle {
+    padding: 10px 12px;
+    font-size: 13px;
+  }
+
+  .description-box {
+    padding: 12px;
+    font-size: 13px;
+    border-radius: 10px;
+  }
+}
+
+@media (max-width: 375px) {
+  .test-header {
+    padding: 10px 12px;
+  }
+
+  .current-question {
+    font-size: 15px;
+  }
+
+  .test-content {
+    padding: 10px;
+    padding-bottom: 130px;
+  }
+
+  .footer-btn {
+    padding: 8px 12px;
+    font-size: 12px;
+
+    &.next-btn {
+      min-width: 90px;
+    }
+  }
+
+  .nav-number {
+    min-width: 32px;
+    height: 32px;
+    font-size: 12px;
   }
 }
 </style>

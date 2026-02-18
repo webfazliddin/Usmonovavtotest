@@ -30,19 +30,15 @@ withDefaults(defineProps<IProps>(), {
   align-items: center;
   gap: 2rem;
   // background: var(--kurs-nomi-bg-gradient);
-  background: linear-gradient(91.88deg, #0e449b 0%, #4284eb 100%);
-
-  // box-shadow: var(--website-top-language-bar-bg);
-  box-shadow: 0px 2px 4px 0px #2964c21a, -1px 6px 6px 0px #2964c217,
-    -3px 14px 9px 0px #2964c20d, -5px 25px 10px 0px #2964c203,
-    -8px 39px 11px 0px #2964c200;
+  background: #0e449b;
 
   color: #fff;
   border-radius: 1rem;
   margin: 1rem 0;
   p {
-    font-size: 20px;
-    line-height: 30px;
+    font-size: 18px;
+    font-weight: 600;
+    line-height: 28px;
   }
   .img {
     display: flex;

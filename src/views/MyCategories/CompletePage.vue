@@ -60,5 +60,6 @@ const returnToLessons = (val: number | null) => {
   bottom: 0;
   overflow: hidden;
   background: #F8FAFB;
+  z-index: 9999;
 }
 </style>

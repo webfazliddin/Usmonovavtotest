@@ -458,12 +458,9 @@ onMounted(() => {
 
   .page-title {
     font-family: 'Poppins', sans-serif;
-    font-size: 28px;
+    font-size: 24px;
     font-weight: 700;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
+    color: #1F2937;
     margin: 0;
   }
 }
@@ -473,7 +470,6 @@ onMounted(() => {
   border-radius: 12px;
   padding: 24px;
   margin-bottom: 24px;
-  box-shadow: 0 2px 8px rgba(74, 144, 226, 0.08);
 }
 
 .section-header {
@@ -487,7 +483,7 @@ onMounted(() => {
     font-family: 'Poppins', sans-serif;
     font-size: 18px;
     font-weight: 600;
-    color: #111827;
+    color: #1F2937;
     margin: 0;
   }
 
@@ -502,7 +498,6 @@ onMounted(() => {
   border-radius: 12px;
   padding: 20px;
   margin-top: 16px;
-  box-shadow: 0 2px 8px rgba(74, 144, 226, 0.08);
 }
 
 .action-btn {
@@ -521,7 +516,6 @@ onMounted(() => {
   padding: 20px;
   background: white;
   border-radius: 12px;
-  box-shadow: 0 2px 8px rgba(74, 144, 226, 0.08);
 
   :deep(.v-btn) {
     font-family: 'Poppins', sans-serif;

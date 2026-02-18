@@ -77,10 +77,7 @@ table {
     background: #c8ffdb;
   }
   .header {
-    background: linear-gradient(91.88deg, #0e449b 0%, #4284eb 100%);
-    --oquv-kurslari-card-bg-shadow: 0px 2px 4px 0px #2964c21a,
-      -1px 6px 6px 0px #2964c217, -3px 14px 9px 0px #2964c20d,
-      -5px 25px 10px 0px #2964c203, -8px 39px 11px 0px #2964c200;
+    background: #0e449b;
 
     color: rgb(var(--v-theme-light));
     border-radius: 0.5rem;

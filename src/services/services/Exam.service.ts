@@ -1,9 +1,9 @@
 import ApiService from "../api.service";
 
 export const ExamService = {
-  // Start exam with testTypeId (2 = marathon, 4 = exam)
+  // Start exam - testTypeId as query parameter (2 = marathon, 4 = exam)
   StartExam(testTypeId: number = 4) {
-    return ApiService.post(`/Exams`, { testTypeId });
+    return ApiService.post(`/Exams?testTypeId=${testTypeId}`);
   },
 
   // Get current exam results

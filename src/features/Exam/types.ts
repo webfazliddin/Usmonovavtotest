@@ -40,6 +40,7 @@ export interface IAttemptReport {
   userId: number;
   userName: string;
   userEmail: string;
+  userPhoneNumber: string;
   attemptId: number;
   testType: string;
   totalQuestions: number;
@@ -53,23 +54,16 @@ export interface IAttemptReport {
 export interface IAttemptDetails {
   attemptId: number;
   userId: number;
-  userName: string;
-  userEmail: string;
-  testType: string;
+  startedDate: string;
+  testTypeId: number;
+  testTypeName: string;
+  isActive: boolean;
   totalQuestions: number;
+  answeredQuestions: number;
   correctAnswers: number;
-  incorrectAnswers: number;
-  percentage: number;
-  completedAt: string;
-  questions: IAttemptQuestionDetail[];
-}
-
-export interface IAttemptQuestionDetail {
-  questionId: number;
-  questionText: string;
-  fileId: string | null;
-  userChoiceId: number;
-  correctChoiceId: number;
-  isCorrect: boolean;
-  choices: IExamChoice[];
+  wrongAnswers: number;
+  successRate: number;
+  isPassed: boolean;
+  categoryId: number | null;
+  categoryName: string | null;
 }

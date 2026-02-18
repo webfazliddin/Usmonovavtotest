@@ -73,7 +73,7 @@ getMyCategories();
       <div class="loading-content">
         <v-progress-circular
           indeterminate
-          color="#4A90E2"
+          color="#5D87FF"
           :size="60"
           :width="5"
         ></v-progress-circular>
@@ -139,7 +139,7 @@ getMyCategories();
               }
             "
           >
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
               <polygon points="5 3 19 12 5 21 5 3"></polygon>
             </svg>
             Testni boshlash
@@ -155,7 +155,7 @@ getMyCategories();
               }
             "
           >
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
               <path d="M5 12h14M12 5l7 7-7 7"/>
             </svg>
             Davom ettirish
@@ -215,33 +215,14 @@ getMyCategories();
 
 <style scoped lang="scss">
 .modern-categories-page {
-  max-width: 1920px;
-  margin: 0 auto;
+  width: 100%;
+  max-width: 100%;
+  overflow: hidden;
   animation: fadeIn 0.4s ease;
 }
 
-.page-header {
-  margin-bottom: 32px;
-}
-
-.page-title {
-  font-family: 'Poppins', sans-serif;
-  font-size: 32px;
-  font-weight: 700;
-  color: #111827;
-  margin: 0 0 8px 0;
-  line-height: 1.2;
-}
-
-.page-subtitle {
-  font-family: 'Poppins', sans-serif;
-  font-size: 15px;
-  color: #6B7280;
-  margin: 0;
-}
-
 .loading-card {
-  min-height: 300px;
+  min-height: 200px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -251,69 +232,70 @@ getMyCategories();
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 20px;
+  gap: 16px;
 }
 
-.loading-text {
-  font-family: 'Poppins', sans-serif;
-  font-size: 16px;
-  color: #6B7280;
-  margin: 0;
-}
-
+// #1 Grid — desktop 3 ustun
 .categories-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-  gap: 20px;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  width: 100%;
 }
 
+// #7 Card shadow qo'shildi
 .modern-card {
-  background: white;
+  background: #ffffff;
   border-radius: 12px;
-  border: 1px solid #E8ECF4;
-  padding: 20px;
-  transition: all 0.3s ease;
+  padding: 16px;
+  transition: all 0.2s ease;
   animation: slideIn 0.4s ease both;
+  overflow: hidden;
+  min-width: 0;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
 
   &:hover {
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
-    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   }
 }
 
+// #3 Card header border qo'shildi
 .card-header {
-  margin-bottom: 20px;
-  padding-bottom: 16px;
-  border-bottom: 2px solid #E8ECF4;
+  margin-bottom: 14px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #E8ECF4;
 }
 
 .category-title {
   font-family: 'Poppins', sans-serif;
-  font-size: 20px;
+  font-size: 16px;
   font-weight: 700;
-  color: #111827;
+  color: #1F2937; // #2 Kontrastli qora
   margin: 0;
   line-height: 1.3;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .stats-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 12px;
-  margin-bottom: 20px;
+  gap: 8px;
+  margin-bottom: 14px;
 }
 
+// #4 Border qo'shildi — success/error ranglar ko'rinadi
 .stat-box {
-  background: #F8FAFB;
-  border: 1px solid #E8ECF4;
+  background: #f5f5f7;
+  border: 1px solid transparent;
   border-radius: 8px;
-  padding: 12px;
+  padding: 10px 8px;
   text-align: center;
   transition: all 0.2s ease;
 
   &:hover {
-    background: #F0F4F8;
-    transform: translateY(-1px);
+    background: #f0f0f2;
   }
 
   &.success {
@@ -330,102 +312,106 @@ getMyCategories();
     border-color: #FECACA;
 
     .stat-value {
-      color: #DC2626;
+      color: #EF4444;
     }
   }
 }
 
+// #1 Label — 9px -> 11px, #2 rang ochroq
 .stat-label {
   font-family: 'Poppins', sans-serif;
   font-size: 11px;
   font-weight: 500;
-  color: #6B7280;
-  margin-bottom: 4px;
+  color: #9CA3AF;
+  margin-bottom: 3px;
   text-transform: uppercase;
   letter-spacing: 0.3px;
 }
 
+// #2 Value rang kontrastli
 .stat-value {
   font-family: 'Poppins', sans-serif;
-  font-size: 24px;
+  font-size: 20px;
   font-weight: 700;
-  color: #111827;
+  color: #1F2937;
   line-height: 1;
 }
 
 .progress-section {
-  background: #F8FAFB;
+  background: #f5f5f7;
   border-radius: 8px;
-  padding: 12px;
-  margin-bottom: 20px;
+  padding: 10px 12px;
+  margin-bottom: 14px;
 }
 
 .progress-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 8px;
+  margin-bottom: 6px;
 }
 
+// #5 Progress label — 10px -> 11px
 .progress-label {
   font-family: 'Poppins', sans-serif;
-  font-size: 12px;
+  font-size: 11px;
   font-weight: 600;
-  color: #6B7280;
+  color: #9CA3AF;
   text-transform: uppercase;
   letter-spacing: 0.3px;
 }
 
+// #6 Foiz raqami — 14px -> 16px
 .progress-percentage {
   font-family: 'Poppins', sans-serif;
-  font-size: 18px;
+  font-size: 16px;
   font-weight: 700;
   color: #5D87FF;
 }
 
 .progress-bar-container {
   width: 100%;
-  height: 10px;
+  height: 8px;
   background: #E8ECF4;
-  border-radius: 10px;
+  border-radius: 8px;
   overflow: hidden;
 }
 
 .progress-bar-fill {
   height: 100%;
-  background: linear-gradient(90deg, #5D87FF 0%, #4A7FCC 100%);
-  border-radius: 10px;
+  background: #5D87FF;
+  border-radius: 8px;
   transition: width 0.4s ease;
-  box-shadow: 0 0 10px rgba(93, 135, 255, 0.3);
 }
 
 .card-actions {
   display: flex;
-  gap: 12px;
+  gap: 8px;
 }
 
+// #8 Tugmalar — padding va font kattaroq
 .action-btn {
   flex: 1;
   font-family: 'Poppins', sans-serif;
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 600;
   border: none;
   border-radius: 8px;
-  padding: 12px 20px;
+  padding: 10px 16px;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: all 0.2s ease;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 8px;
+  gap: 6px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 
   svg {
-    width: 16px;
-    height: 16px;
-  }
-
-  &:hover {
-    transform: translateY(-2px);
+    width: 14px;
+    height: 14px;
+    flex-shrink: 0;
   }
 
   &:active {
@@ -434,203 +420,147 @@ getMyCategories();
 
   &.primary-btn {
     color: white;
-    background: linear-gradient(135deg, #5D87FF 0%, #4A7FCC 100%);
-    box-shadow: 0 4px 12px rgba(93, 135, 255, 0.3);
+    background: #5D87FF;
 
     &:hover {
-      box-shadow: 0 6px 16px rgba(93, 135, 255, 0.4);
+      background: #4A78F0;
     }
   }
 
   &.continue-btn {
     color: white;
-    background: linear-gradient(135deg, #10B981 0%, #059669 100%);
-    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+    background: #10B981;
 
     &:hover {
-      box-shadow: 0 6px 16px rgba(16, 185, 129, 0.4);
+      background: #0EA472;
     }
   }
 }
 
 @keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
 
 @keyframes slideIn {
-  from {
-    opacity: 0;
-    transform: translateX(-20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateX(0);
-  }
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
 
-// Tablet styles
+// Tablet (1024px) — 2 ustun
 @media (max-width: 1024px) {
   .categories-grid {
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-    gap: 18px;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 14px;
   }
 
-  .page-title {
-    font-size: 28px;
+  .category-title {
+    font-size: 15px;
   }
 
-  .page-subtitle {
-    font-size: 14px;
+  .stat-value {
+    font-size: 18px;
   }
 }
 
-// Mobile styles
+// Mobile (768px) — 2 ustun, kompakt
 @media (max-width: 768px) {
   .modern-categories-page {
     padding: 0;
   }
 
-  .page-header {
-    margin-bottom: 20px;
-    padding: 16px;
-    background: white;
-    border-bottom: 1px solid #E8ECF4;
-  }
-
-  .page-title {
-    font-size: 22px;
-    margin-bottom: 6px;
-  }
-
-  .page-subtitle {
-    font-size: 13px;
-  }
-
   .loading-card {
-    min-height: 250px;
-    margin: 16px;
+    min-height: 180px;
+    margin: 12px;
   }
 
   .categories-grid {
-    grid-template-columns: 1fr;
-    gap: 12px;
-    padding: 16px;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+    padding: 12px;
   }
 
   .modern-card {
-    padding: 16px;
+    padding: 12px;
     border-radius: 10px;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
 
     &:hover {
-      transform: none;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
     }
   }
 
   .card-header {
-    margin-bottom: 16px;
-    padding-bottom: 12px;
+    margin-bottom: 10px;
+    padding-bottom: 8px;
   }
 
   .category-title {
-    font-size: 17px;
-    line-height: 1.4;
+    font-size: 14px;
   }
 
   .stats-grid {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 8px;
-    margin-bottom: 16px;
+    gap: 6px;
+    margin-bottom: 10px;
   }
 
   .stat-box {
-    padding: 10px;
+    padding: 8px 6px;
     border-radius: 6px;
-
-    &:hover {
-      transform: none;
-    }
   }
 
+  // #9 Mobile label — 7px -> 9px
   .stat-label {
-    font-size: 10px;
-    margin-bottom: 3px;
+    font-size: 9px;
+    margin-bottom: 2px;
   }
 
   .stat-value {
-    font-size: 20px;
-  }
-
-  .progress-section {
-    padding: 10px;
-    margin-bottom: 16px;
-    border-radius: 6px;
-  }
-
-  .progress-header {
-    margin-bottom: 6px;
-  }
-
-  .progress-label {
-    font-size: 11px;
-  }
-
-  .progress-percentage {
     font-size: 16px;
   }
 
-  .progress-bar-container {
-    height: 8px;
+  .progress-section {
+    padding: 8px 10px;
+    margin-bottom: 10px;
+    border-radius: 6px;
   }
 
+  .progress-label {
+    font-size: 9px;
+  }
+
+  .progress-percentage {
+    font-size: 14px;
+  }
+
+  .progress-bar-container {
+    height: 6px;
+  }
+
+  // #10 Mobileda tugmalar row qoladi
   .card-actions {
-    gap: 10px;
+    gap: 6px;
   }
 
   .action-btn {
-    padding: 10px 16px;
-    font-size: 13px;
+    padding: 9px 10px;
+    font-size: 11px;
     border-radius: 6px;
+    gap: 4px;
 
     svg {
-      width: 14px;
-      height: 14px;
-    }
-
-    &:hover {
-      transform: none;
-    }
-
-    &:active {
-      transform: scale(0.97);
+      width: 12px;
+      height: 12px;
     }
   }
 }
 
-// Small mobile (iPhone SE, small Android phones)
-@media (max-width: 375px) {
-  .page-header {
-    padding: 12px;
-  }
-
-  .page-title {
-    font-size: 20px;
-  }
-
-  .page-subtitle {
-    font-size: 12px;
-  }
-
+// Kichik mobil (480px) — 1 ustun
+@media (max-width: 480px) {
   .categories-grid {
-    padding: 12px;
+    grid-template-columns: 1fr;
     gap: 10px;
+    padding: 10px;
   }
 
   .modern-card {
@@ -638,50 +568,49 @@ getMyCategories();
   }
 
   .category-title {
-    font-size: 16px;
-  }
-
-  .stats-grid {
-    gap: 6px;
+    font-size: 15px;
+    white-space: normal;
   }
 
   .stat-box {
-    padding: 8px;
+    padding: 10px 8px;
   }
 
   .stat-label {
-    font-size: 9px;
+    font-size: 10px;
   }
 
   .stat-value {
     font-size: 18px;
   }
 
+  .progress-label {
+    font-size: 10px;
+  }
+
   .progress-percentage {
     font-size: 15px;
   }
 
+  .progress-bar-container {
+    height: 7px;
+  }
+
+  .card-actions {
+    gap: 8px;
+  }
+
   .action-btn {
-    padding: 9px 14px;
+    padding: 10px 14px;
     font-size: 12px;
-    gap: 6px;
   }
 }
 
-// Landscape mode for mobile
-@media (max-width: 768px) and (orientation: landscape) {
-  .page-header {
-    padding: 10px 16px;
-    margin-bottom: 16px;
-  }
-
-  .page-title {
-    font-size: 20px;
-  }
-
+// Juda kichik mobil (375px)
+@media (max-width: 375px) {
   .categories-grid {
-    grid-template-columns: repeat(2, 1fr);
-    padding: 12px 16px;
+    padding: 8px;
+    gap: 8px;
   }
 
   .modern-card {
@@ -689,15 +618,54 @@ getMyCategories();
   }
 
   .category-title {
-    font-size: 15px;
+    font-size: 14px;
   }
 
-  .stats-grid {
-    grid-template-columns: repeat(2, 1fr);
+  .stat-label {
+    font-size: 9px;
+  }
+
+  .stat-value {
+    font-size: 16px;
+  }
+
+  .action-btn {
+    padding: 9px 10px;
+    font-size: 11px;
   }
 }
 
-// Fullscreen dialog styles (unscoped to affect v-dialog)
+// Landscape rejim
+@media (max-width: 768px) and (orientation: landscape) {
+  .categories-grid {
+    grid-template-columns: repeat(3, 1fr);
+    padding: 10px;
+    gap: 8px;
+  }
+
+  .modern-card {
+    padding: 10px;
+  }
+
+  .category-title {
+    font-size: 13px;
+  }
+
+  .stat-label {
+    font-size: 9px;
+  }
+
+  .stat-value {
+    font-size: 15px;
+  }
+
+  .action-btn {
+    font-size: 10px;
+    padding: 7px 8px;
+  }
+}
+
+// Fullscreen dialog
 :deep(.v-dialog--fullscreen) {
   .v-overlay__content {
     width: 100vw !important;

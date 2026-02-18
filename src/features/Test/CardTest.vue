@@ -168,14 +168,17 @@ const nextAttemp = () => {
     .then((res) => {
       selected.value = null;
 
-      attempt.value.forEach((item) => {
-        item.question.choices.forEach((choice) => {
-          if (choice.id === res.data.choiceId) {
-            item.choiceId = res.data.choiceId;
-            item.isCorrect = res.data.isCorrect;
-          }
-        });
-      });
+      // Faqat hozirgi savolga javobni saqlash (attemptId bo'yicha)
+      const currentItem = attempt.value.find(
+        (item) => item.attemptId === activeQuestion.value.attemptId
+      );
+      if (currentItem) {
+        currentItem.choiceId = res.data.choiceId;
+        currentItem.isCorrect = res.data.isCorrect;
+        if (res.data.correctChoiceId) {
+          currentItem.correctChoiceId = res.data.correctChoiceId;
+        }
+      }
     })
     .catch((e) => {
       notify({
@@ -405,8 +408,9 @@ fetchAttemp();
           class="nav-number"
           :class="{
             'active': i === activeQuestionIndex,
-            'correct': n.isCorrect,
-            'incorrect': n.choiceId && !n.isCorrect
+            'correct': n.isCorrect === true,
+            'incorrect': n.isCorrect === false,
+            'answered': n.choiceId && n.isCorrect === null
           }"
           @click="setActiveQuestionIndex(i)"
         >
@@ -469,7 +473,6 @@ fetchAttemp();
   align-items: center;
   gap: 24px;
   border-bottom: 1px solid #E8ECF4;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
 }
 
 .question-progress {
@@ -501,7 +504,7 @@ fetchAttemp();
 
 .progress-bar {
   height: 100%;
-  background: linear-gradient(90deg, #5D87FF 0%, #4A7FCC 100%);
+  background: #5D87FF;
   border-radius: 10px;
   transition: width 0.3s ease;
 }
@@ -544,8 +547,6 @@ fetchAttemp();
   background: white;
   border-radius: 16px;
   padding: 24px;
-  border: 1px solid #E8ECF4;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
 }
 
 .question-number-badge {
@@ -596,7 +597,7 @@ fetchAttemp();
   align-items: center;
   gap: 8px;
   background: white;
-  border: 1px solid #E8ECF4;
+  border: none;
   border-radius: 10px;
   padding: 12px 16px;
   font-size: 14px;
@@ -607,7 +608,6 @@ fetchAttemp();
 
   &:hover {
     background: #F0F4F8;
-    border-color: #5D87FF;
   }
 }
 
@@ -642,8 +642,6 @@ fetchAttemp();
   background: white;
   border-radius: 16px;
   padding: 16px;
-  border: 1px solid #E8ECF4;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
   width: 100%;
   min-height: 400px;
   display: flex;
@@ -761,7 +759,6 @@ fetchAttemp();
   display: flex;
   align-items: center;
   gap: 16px;
-  box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.04);
   z-index: 101;
 }
 
@@ -788,14 +785,8 @@ fetchAttemp();
   }
 
   &.next-btn {
-    background: linear-gradient(135deg, #5D87FF 0%, #4A7FCC 100%);
+    background: #5D87FF;
     color: white;
-    box-shadow: 0 4px 12px rgba(93, 135, 255, 0.3);
-
-    &:hover:not(:disabled) {
-      box-shadow: 0 6px 16px rgba(93, 135, 255, 0.4);
-      transform: translateY(-1px);
-    }
 
     &:disabled,
     &.disabled {
@@ -803,20 +794,12 @@ fetchAttemp();
       cursor: not-allowed;
       background: #E5E7EB;
       color: #9CA3AF;
-      box-shadow: none;
-      transform: none;
     }
   }
 
   &.finish-btn {
-    background: linear-gradient(135deg, #10B981 0%, #059669 100%);
+    background: #10B981;
     color: white;
-    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
-
-    &:hover:not(:disabled) {
-      box-shadow: 0 6px 16px rgba(16, 185, 129, 0.4);
-      transform: translateY(-1px);
-    }
 
     &:disabled,
     &.disabled {
@@ -824,8 +807,6 @@ fetchAttemp();
       cursor: not-allowed;
       background: #E5E7EB;
       color: #9CA3AF;
-      box-shadow: none;
-      transform: none;
     }
   }
 }
@@ -867,6 +848,12 @@ fetchAttemp();
     background: #EF4444;
     border-color: #EF4444;
     color: white;
+  }
+
+  &.answered {
+    background: #E8ECF4;
+    border-color: #D1D5DB;
+    color: #6B7280;
   }
 }
 
@@ -966,7 +953,7 @@ fetchAttemp();
   }
 
   .question-number-badge {
-    font-size: 10px;
+    font-size: 11px;
     padding: 4px 8px;
     margin-bottom: 8px;
   }
@@ -1105,7 +1092,7 @@ fetchAttemp();
   }
 
   .keyboard-hint {
-    font-size: 10px;
+    font-size: 11px;
     padding: 5px 8px;
   }
 

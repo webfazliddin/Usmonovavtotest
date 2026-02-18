@@ -116,5 +116,21 @@
                "passed": "Ўтди",
                "failed": "Ўтмади",
                "viewDetails": "Кўриш",
-               "userResult": "Фойдаланувчи натижаси"
+               "userResult": "Фойдаланувчи натижаси",
+               "myExamResult": "Менинг натижам",
+               "examResultTitle": "Имтиҳон натижангиз",
+               "noExamYet": "Сиз ҳали имтиҳон топширмагансиз",
+               "takeExam": "Имтиҳон топшириш",
+               "successful": "Муваффақиятли",
+               "unsuccessful": "Муваффақиятсиз",
+               "viewDetailedResults": "Батафсил кўриш",
+               "backToHome": "Бош саҳифага қайтиш",
+               "examPassedMessage": "Сиз имтиҳондан муваффақиятли ўтдингиз",
+               "examFailedMessage": "Сиз имтиҳондан ўта олмадингиз",
+               "examPassedDetails": "Сиз 20 та саволдан {correctCount} тасига тўғри жавоб бердингиз. Ўтиш бали 90% (18 та тўғри жавоб).",
+               "examFailedDetails": "Ўтиш учун камида 18 та тўғри жавоб керак еди (90%). Сиз {correctCount} та тўғри жавоб бердингиз.",
+               "loading": "Юкланмоқда...",
+               "errorLoadingData": "Маълумотларни юклашда хатолик юз берди",
+               "menu": "Меню",
+               "admin": "Админ"
 }

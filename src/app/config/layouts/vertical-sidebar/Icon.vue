@@ -14,7 +14,7 @@ const props = defineProps({ item: Object, level: Number });
   <template v-else>
     <component
       :is="item"
-      size="21"
+      size="20"
       stroke-width="1.5"
       class="iconClass main-icon"
     ></component>
@@ -23,19 +23,19 @@ const props = defineProps({ item: Object, level: Number });
 
 <style scoped lang="scss">
 .iconClass {
-  transition: all 0.2s ease;
+  transition: all 0.25s ease;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
 .main-icon {
-  color: #6b7280;
+  color: #555555;
   stroke-width: 1.5;
 }
 
 .sub-icon {
-  color: #9ca3af;
+  color: #777777;
   stroke-width: 1.5;
 }
 </style>

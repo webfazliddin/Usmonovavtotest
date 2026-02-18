@@ -125,7 +125,7 @@ watch(
     font-family: 'Poppins', sans-serif;
     font-size: 14px;
     font-weight: 600;
-    color: #374151;
+    color: #1F2937;
     margin-bottom: 8px;
     display: block;
 
@@ -148,8 +148,7 @@ watch(
       font-family: 'Poppins', sans-serif;
 
       &:hover {
-        border-color: #4A90E2 !important;
-        box-shadow: 0 2px 8px rgba(74, 144, 226, 0.08);
+        border-color: #5D87FF !important;
       }
     }
 
@@ -158,8 +157,7 @@ watch(
     }
 
     :deep(.v-field--focused) {
-      border-color: #4A90E2 !important;
-      box-shadow: 0 4px 12px rgba(74, 144, 226, 0.12);
+      border-color: #5D87FF !important;
     }
 
     :deep(.v-field--error) {
@@ -169,7 +167,7 @@ watch(
     :deep(.v-field__input) {
       font-family: 'Poppins', sans-serif;
       font-size: 14px;
-      color: #111827;
+      color: #1F2937;
       padding: 12px 16px;
       min-height: 48px;
 
@@ -193,19 +191,19 @@ watch(
 
         &:hover {
           opacity: 1;
-          color: #4A90E2;
+          color: #5D87FF;
         }
       }
     }
 
     :deep(.v-select__selection-text) {
       font-family: 'Poppins', sans-serif;
-      color: #111827;
+      color: #1F2937;
     }
 
     :deep(.v-chip) {
-      background: #EFF6FF;
-      color: #4A90E2;
+      background: #EFF4FF;
+      color: #5D87FF;
       font-family: 'Poppins', sans-serif;
       font-weight: 500;
     }
@@ -216,7 +214,6 @@ watch(
 :deep(.v-list) {
   border-radius: 10px;
   padding: 8px;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
 
   .v-list-item {
     border-radius: 8px;
@@ -225,15 +222,15 @@ watch(
     transition: all 0.2s ease;
 
     &:hover {
-      background: #F8F9FC;
+      background: #F9FAFB;
     }
 
     &--active {
-      background: #EFF6FF;
-      color: #4A90E2;
+      background: #EFF4FF;
+      color: #5D87FF;
 
       &:hover {
-        background: #EFF6FF;
+        background: #EFF4FF;
       }
     }
   }

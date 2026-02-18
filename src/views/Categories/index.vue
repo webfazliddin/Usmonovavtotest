@@ -105,9 +105,9 @@ store.fetchCategories();
 
 .page-title {
   font-family: 'Poppins', sans-serif;
-  font-size: 32px;
+  font-size: 24px;
   font-weight: 700;
-  color: #111827;
+  color: #1F2937;
   margin: 0 0 8px 0;
   line-height: 1.2;
 
@@ -118,14 +118,14 @@ store.fetchCategories();
 
 .page-subtitle {
   font-family: 'Poppins', sans-serif;
-  font-size: 15px;
+  font-size: 14px;
   color: #6B7280;
   margin: 0;
 }
 
 .modern-btn {
   font-family: 'Poppins', sans-serif;
-  font-size: 15px;
+  font-size: 14px;
   font-weight: 600;
   padding: 12px 24px;
   border-radius: 10px;
@@ -138,13 +138,11 @@ store.fetchCategories();
   white-space: nowrap;
 
   &--primary {
-    background: #4A90E2;
+    background: #5D87FF;
     color: white;
 
     &:hover {
-      background: #2563EB;
-      transform: translateY(-2px);
-      box-shadow: 0 4px 12px rgba(74, 144, 226, 0.3);
+      background: #4A73E8;
     }
 
     &:active {
@@ -173,15 +171,14 @@ store.fetchCategories();
   align-items: center;
   justify-content: center;
   background: #F8F9FC;
-  border: 1px solid #E8ECF4;
+  border: none;
   border-radius: 8px;
   cursor: pointer;
   transition: all 0.2s ease;
   color: #6B7280;
 
   &:hover {
-    background: #4A90E2;
-    border-color: #4A90E2;
+    background: #5D87FF;
     color: white;
   }
 }
@@ -190,7 +187,6 @@ store.fetchCategories();
   background: white;
   border-radius: 12px;
   padding: 8px;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
   min-width: 160px;
 }
 
@@ -207,12 +203,12 @@ store.fetchCategories();
   transition: all 0.2s ease;
   font-family: 'Poppins', sans-serif;
   font-size: 14px;
-  color: #374151;
+  color: #1F2937;
   text-align: left;
 
   &:hover {
     background: #F8F9FC;
-    color: #4A90E2;
+    color: #5D87FF;
   }
 
   svg {
@@ -224,11 +220,9 @@ store.fetchCategories();
 @keyframes fadeIn {
   from {
     opacity: 0;
-    transform: translateY(10px);
   }
   to {
     opacity: 1;
-    transform: translateY(0);
   }
 }
 </style>

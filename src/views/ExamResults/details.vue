@@ -1,29 +1,64 @@
 <script setup lang="ts">
-import { ref, onMounted, computed } from "vue";
+import { ref, onMounted, computed, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { AttemptsReportService } from "@/services/services/AttemptsReport.service";
+import { ExamService } from "@/services/services/Exam.service";
 import { notify } from "@kyvg/vue3-notification";
-import { IAttemptDetails } from "@/features/Exam/types";
+import { IAttemptDetails, IExamAttemptData } from "@/features/Exam/types";
 import defaultImage from "@/assets/images/car.jpg";
 
 const route = useRoute();
 const router = useRouter();
 
-const attemptDetails = ref<IAttemptDetails | null>(null);
+const allAttempts = ref<IAttemptDetails[]>([]);
+const selectedAttemptIndex = ref(0);
 const loading = ref(false);
+const questionsLoading = ref(false);
 const activeQuestionIndex = ref(0);
+const questions = ref<IExamAttemptData[]>([]);
+
+const attemptDetails = computed(() => {
+  if (allAttempts.value.length === 0) return null;
+  return allAttempts.value[selectedAttemptIndex.value];
+});
 
 const activeQuestion = computed(() => {
-  if (!attemptDetails.value?.questions) return null;
-  return attemptDetails.value.questions[activeQuestionIndex.value];
+  if (questions.value.length === 0) return null;
+  return questions.value[activeQuestionIndex.value];
+});
+
+const selectAttempt = (index: number) => {
+  selectedAttemptIndex.value = index;
+  activeQuestionIndex.value = 0;
+};
+
+// Load questions when selected attempt changes
+watch(() => selectedAttemptIndex.value, () => {
+  const attempt = attemptDetails.value;
+  if (attempt) {
+    fetchQuestions(attempt.attemptId);
+  }
 });
 
 const fetchDetails = async () => {
   loading.value = true;
   try {
-    const attemptId = Number(route.params.attemptId);
-    const { data } = await AttemptsReportService.GetUserAttemptDetails(attemptId);
-    attemptDetails.value = data;
+    const userId = Number(route.params.userId);
+    const { data } = await AttemptsReportService.GetUserAttemptDetails(userId, 4);
+
+    // API returns { attempts: [...] }
+    if (data.attempts && Array.isArray(data.attempts)) {
+      allAttempts.value = data.attempts;
+    } else if (Array.isArray(data)) {
+      allAttempts.value = data;
+    } else {
+      allAttempts.value = [data];
+    }
+
+    // Load questions for the first attempt
+    if (allAttempts.value.length > 0) {
+      await fetchQuestions(allAttempts.value[0].attemptId);
+    }
   } catch (error: any) {
     notify({
       text: error.response?.data?.message || "Ma'lumotlarni yuklashda xatolik yuz berdi",
@@ -32,6 +67,18 @@ const fetchDetails = async () => {
     router.back();
   } finally {
     loading.value = false;
+  }
+};
+
+const fetchQuestions = async (attemptId: number) => {
+  questionsLoading.value = true;
+  try {
+    const { data } = await ExamService.GetAttemptResult(attemptId);
+    questions.value = Array.isArray(data) ? data : [];
+  } catch (error: any) {
+    questions.value = [];
+  } finally {
+    questionsLoading.value = false;
   }
 };
 
@@ -54,7 +101,7 @@ const getChoiceClass = (choiceId: number) => {
   if (!activeQuestion.value) return "";
 
   const isCorrect = choiceId === activeQuestion.value.correctChoiceId;
-  const isUserChoice = choiceId === activeQuestion.value.userChoiceId;
+  const isUserChoice = choiceId === activeQuestion.value.choiceId;
 
   if (isCorrect) return "choice-correct";
   if (isUserChoice && !isCorrect) return "choice-incorrect";
@@ -73,103 +120,82 @@ onMounted(() => {
     </div>
 
     <div v-else-if="attemptDetails" class="details-container">
-      <!-- Header -->
-      <div class="details-header">
+      <!-- Top Bar -->
+      <div class="top-bar">
         <button class="back-button" @click="router.back()">
-          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <line x1="19" y1="12" x2="5" y2="12"></line>
             <polyline points="12 19 5 12 12 5"></polyline>
           </svg>
-          Orqaga
         </button>
 
-        <div class="header-info">
-          <h1 class="header-title">Imtihon natijalari - Batafsil</h1>
-          <div class="header-meta">
-            <div class="meta-item">
-              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-                <circle cx="12" cy="7" r="4"></circle>
-              </svg>
-              <span>{{ attemptDetails.userName }} ({{ attemptDetails.userEmail }})</span>
-            </div>
-            <div class="meta-item">
-              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <circle cx="12" cy="12" r="10"></circle>
-                <polyline points="12 6 12 12 16 14"></polyline>
-              </svg>
-              <span>{{ formatDate(attemptDetails.completedAt) }}</span>
-            </div>
+        <div class="top-bar-left">
+          <h1 class="top-bar-title">Imtihon natijalari</h1>
+          <div class="top-bar-meta">
+            <span class="meta-tag">{{ attemptDetails.testTypeName }}</span>
+            <span class="meta-date">{{ formatDate(attemptDetails.startedDate) }}</span>
+          </div>
+        </div>
+
+        <div class="top-bar-stats">
+          <div class="stat-item">
+            <span class="stat-number">{{ attemptDetails.totalQuestions }}</span>
+            <span class="stat-label">Jami</span>
+          </div>
+          <div class="stat-divider"></div>
+          <div class="stat-item stat-correct">
+            <span class="stat-number">{{ attemptDetails.correctAnswers }}</span>
+            <span class="stat-label">To'g'ri</span>
+          </div>
+          <div class="stat-divider"></div>
+          <div class="stat-item stat-incorrect">
+            <span class="stat-number">{{ attemptDetails.wrongAnswers }}</span>
+            <span class="stat-label">Noto'g'ri</span>
+          </div>
+          <div class="stat-divider"></div>
+          <div class="stat-item" :class="attemptDetails.isPassed ? 'stat-passed' : 'stat-failed'">
+            <span class="stat-number">{{ attemptDetails.successRate }}%</span>
+            <span class="stat-label">{{ attemptDetails.isPassed ? "O'tdi" : "O'tmadi" }}</span>
           </div>
         </div>
       </div>
 
-      <!-- Stats Cards -->
-      <div class="stats-grid">
-        <div class="stat-card">
-          <div class="stat-icon stat-icon-total">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M9 11H15M9 15H15M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z"/>
-            </svg>
-          </div>
-          <div class="stat-content">
-            <span class="stat-label">Jami savollar</span>
-            <span class="stat-value">{{ attemptDetails.totalQuestions }}</span>
-          </div>
+      <!-- Attempt Selector (when multiple attempts exist) -->
+      <div v-if="allAttempts.length > 1" class="attempt-selector">
+        <h3 class="selector-title">Urinishlar ({{ allAttempts.length }})</h3>
+        <div class="selector-list">
+          <button
+            v-for="(attempt, index) in allAttempts"
+            :key="attempt.attemptId"
+            class="selector-btn"
+            :class="{ active: selectedAttemptIndex === index, passed: attempt.isPassed }"
+            @click="selectAttempt(index)"
+          >
+            <span class="selector-number">#{{ index + 1 }}</span>
+            <span class="selector-score">{{ attempt.correctAnswers }}/{{ attempt.totalQuestions }}</span>
+            <span class="selector-percent">{{ attempt.successRate }}%</span>
+            <span class="selector-date">{{ formatDate(attempt.startedDate) }}</span>
+          </button>
         </div>
+      </div>
 
-        <div class="stat-card">
-          <div class="stat-icon stat-icon-correct">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <polyline points="20 6 9 17 4 12"></polyline>
-            </svg>
-          </div>
-          <div class="stat-content">
-            <span class="stat-label">To'g'ri javoblar</span>
-            <span class="stat-value">{{ attemptDetails.correctAnswers }}</span>
-          </div>
-        </div>
-
-        <div class="stat-card">
-          <div class="stat-icon stat-icon-incorrect">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <line x1="18" y1="6" x2="6" y2="18"></line>
-              <line x1="6" y1="6" x2="18" y2="18"></line>
-            </svg>
-          </div>
-          <div class="stat-content">
-            <span class="stat-label">Noto'g'ri javoblar</span>
-            <span class="stat-value">{{ attemptDetails.incorrectAnswers }}</span>
-          </div>
-        </div>
-
-        <div class="stat-card stat-card-result" :class="{ 'passed': attemptDetails.percentage >= 90 }">
-          <div class="stat-icon stat-icon-percentage">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M22 10v6M2 10l10-5 10 5-10 5z"></path>
-              <path d="M6 12v5c3 3 9 3 12 0v-5"></path>
-            </svg>
-          </div>
-          <div class="stat-content">
-            <span class="stat-label">Natija</span>
-            <span class="stat-value">{{ attemptDetails.percentage }}%</span>
-            <span class="stat-status">{{ attemptDetails.percentage >= 90 ? "O'tdi" : "O'tmadi" }}</span>
-          </div>
-        </div>
+      <!-- Questions Loading -->
+      <div v-if="questionsLoading" class="loading-container">
+        <v-progress-circular indeterminate color="primary" :size="40"></v-progress-circular>
       </div>
 
       <!-- Question Navigator -->
-      <div class="question-navigator">
+      <div v-else-if="questions.length > 0" class="question-navigator">
         <h3 class="navigator-title">Savollar</h3>
         <div class="navigator-grid">
           <button
-            v-for="(question, index) in attemptDetails.questions"
-            :key="question.questionId"
+            v-for="(q, index) in questions"
+            :key="index"
             class="navigator-btn"
             :class="{
               'active': index === activeQuestionIndex,
-              'correct': question.isCorrect,
-              'incorrect': !question.isCorrect
+              'correct': q.isCorrect === true,
+              'incorrect': q.choiceId !== null && q.isCorrect === false
             }"
             @click="setActiveQuestion(index)"
           >
@@ -178,8 +204,12 @@ onMounted(() => {
         </div>
       </div>
 
+      <div v-else class="empty-questions">
+        <p>Savollar topilmadi yoki imtihon hali yakunlanmagan</p>
+      </div>
+
       <!-- Question Details -->
-      <div v-if="activeQuestion" class="question-details">
+      <div v-if="activeQuestion && !questionsLoading" class="question-details">
         <div class="question-layout">
           <!-- Left: Question and Answers -->
           <div class="question-section">
@@ -197,12 +227,12 @@ onMounted(() => {
                   <span>{{ activeQuestion.isCorrect ? "To'g'ri" : "Noto'g'ri" }}</span>
                 </div>
               </div>
-              <h2 class="question-text">{{ activeQuestion.questionText }}</h2>
+              <h2 class="question-text">{{ activeQuestion.question.questionText }}</h2>
             </div>
 
             <div class="answers-list">
               <div
-                v-for="(choice, index) in activeQuestion.choices"
+                v-for="(choice, index) in activeQuestion.question.choices"
                 :key="choice.id"
                 class="answer-item"
                 :class="getChoiceClass(choice.id)"
@@ -218,7 +248,7 @@ onMounted(() => {
                     </svg>
                     To'g'ri javob
                   </div>
-                  <div v-else-if="choice.id === activeQuestion.userChoiceId" class="answer-badge user-badge">
+                  <div v-else-if="choice.id === activeQuestion.choiceId" class="answer-badge user-badge">
                     <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                       <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
                       <circle cx="12" cy="7" r="4"></circle>
@@ -234,7 +264,7 @@ onMounted(() => {
           <div class="image-section">
             <div class="image-container">
               <img
-                :src="activeQuestion.fileId ? `https://api.uatest.uz/api/Files?fileName=${activeQuestion.fileId}` : defaultImage"
+                :src="activeQuestion.question.fileId ? `https://api.uatest.uz/api/Files?fileName=${activeQuestion.question.fileId}` : defaultImage"
                 :alt="`Savol ${activeQuestionIndex + 1} rasmi`"
                 class="question-image"
               />
@@ -250,254 +280,295 @@ onMounted(() => {
 .details-page {
   font-family: 'Poppins', sans-serif;
   min-height: 100vh;
-  background: #F8FAFB;
-  padding: 32px;
+  padding: clamp(8px, 2vw, 32px);
+  overflow-x: hidden;
 }
 
 .loading-container {
   display: flex;
   justify-content: center;
   align-items: center;
-  min-height: 400px;
+  min-height: 300px;
 }
 
 .details-container {
   max-width: 1400px;
   margin: 0 auto;
+  overflow: hidden;
 }
 
-.details-header {
-  margin-bottom: 32px;
+// ─── Top Bar ───
+.top-bar {
+  background: white;
+  border-radius: clamp(10px, 1.5vw, 14px);
+  padding: clamp(10px, 1.5vw, 14px) clamp(12px, 2vw, 20px);
+  display: flex;
+  align-items: center;
+  gap: clamp(10px, 1.5vw, 16px);
+  margin-bottom: clamp(14px, 2vw, 24px);
 }
 
 .back-button {
   font-family: 'Poppins', sans-serif;
-  display: inline-flex;
+  display: flex;
   align-items: center;
-  gap: 8px;
-  padding: 10px 20px;
-  background: white;
-  border: 1px solid #E5E7EB;
+  justify-content: center;
+  width: clamp(30px, 3.5vw, 36px);
+  height: clamp(30px, 3.5vw, 36px);
+  background: #F3F4F6;
+  border: none;
   border-radius: 10px;
   color: #6B7280;
-  font-size: 14px;
-  font-weight: 600;
   cursor: pointer;
   transition: all 0.2s ease;
-  margin-bottom: 20px;
+  flex-shrink: 0;
+
+  svg {
+    width: clamp(14px, 1.5vw, 18px);
+    height: clamp(14px, 1.5vw, 18px);
+  }
 
   &:hover {
-    background: #F9FAFB;
-    border-color: #5D87FF;
+    background: #EEF2FF;
     color: #5D87FF;
   }
 }
 
-.header-info {
-  background: white;
-  padding: 24px;
-  border-radius: 16px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+.top-bar-left {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex: 1;
+  min-width: 0;
 }
 
-.header-title {
-  font-size: 24px;
+.top-bar-title {
+  font-size: clamp(14px, 1.8vw, 18px);
   font-weight: 700;
   color: #1F2937;
-  margin: 0 0 16px 0;
+  margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
-.header-meta {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 24px;
-}
-
-.meta-item {
+.top-bar-meta {
   display: flex;
   align-items: center;
-  gap: 8px;
-  color: #6B7280;
-  font-size: 14px;
+  gap: clamp(8px, 1vw, 12px);
+}
 
-  svg {
+.meta-tag {
+  font-size: clamp(10px, 1.2vw, 12px);
+  font-weight: 600;
+  color: #5D87FF;
+  background: #EEF2FF;
+  padding: 2px clamp(6px, 1vw, 10px);
+  border-radius: 6px;
+  white-space: nowrap;
+}
+
+.meta-date {
+  font-size: clamp(10px, 1.2vw, 13px);
+  color: #9CA3AF;
+  white-space: nowrap;
+}
+
+.top-bar-stats {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.stat-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1px;
+  padding: 0 clamp(8px, 1.8vw, 20px);
+}
+
+.stat-number {
+  font-size: clamp(15px, 2vw, 20px);
+  font-weight: 700;
+  color: #1F2937;
+}
+
+.stat-label {
+  font-size: clamp(9px, 1.1vw, 11px);
+  font-weight: 500;
+  color: #9CA3AF;
+}
+
+.stat-correct .stat-number { color: #10B981; }
+.stat-incorrect .stat-number { color: #EF4444; }
+.stat-passed .stat-number { color: #10B981; }
+.stat-passed .stat-label { color: #10B981; font-weight: 600; }
+.stat-failed .stat-number { color: #EF4444; }
+.stat-failed .stat-label { color: #EF4444; font-weight: 600; }
+
+.stat-divider {
+  width: 1px;
+  height: clamp(22px, 3vw, 32px);
+  background: #E5E7EB;
+  flex-shrink: 0;
+}
+
+// ─── Attempt Selector ───
+.attempt-selector {
+  background: white;
+  padding: clamp(12px, 2vw, 24px);
+  border-radius: clamp(12px, 1.5vw, 16px);
+  margin-bottom: clamp(14px, 2.5vw, 32px);
+}
+
+.selector-title {
+  font-size: clamp(14px, 1.6vw, 18px);
+  font-weight: 600;
+  color: #1F2937;
+  margin: 0 0 clamp(10px, 1.5vw, 16px) 0;
+}
+
+.selector-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: clamp(8px, 1vw, 12px);
+}
+
+.selector-btn {
+  font-family: 'Poppins', sans-serif;
+  display: flex;
+  align-items: center;
+  gap: clamp(6px, 1vw, 10px);
+  padding: clamp(8px, 1vw, 12px) clamp(12px, 1.5vw, 20px);
+  background: #F9FAFB;
+  border: none;
+  border-radius: clamp(8px, 1vw, 12px);
+  cursor: pointer;
+  transition: all 0.2s ease;
+
+  &.active { background: #EEF2FF; }
+  &.passed .selector-percent { color: #10B981; }
+
+  .selector-number {
+    font-size: clamp(12px, 1.3vw, 14px);
+    font-weight: 700;
+    color: #5D87FF;
+  }
+
+  .selector-score {
+    font-size: clamp(12px, 1.3vw, 14px);
+    font-weight: 600;
+    color: #1F2937;
+  }
+
+  .selector-percent {
+    font-size: clamp(12px, 1.3vw, 14px);
+    font-weight: 700;
+    color: #EF4444;
+  }
+
+  .selector-date {
+    font-size: clamp(10px, 1.1vw, 12px);
     color: #9CA3AF;
   }
 }
 
-.stats-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 20px;
-  margin-bottom: 32px;
-}
-
-.stat-card {
-  background: white;
-  padding: 24px;
-  border-radius: 16px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
-  display: flex;
-  align-items: center;
-  gap: 16px;
-
-  &.stat-card-result {
-    border: 2px solid #FEE2E2;
-
-    &.passed {
-      border-color: #D1FAE5;
-    }
-  }
-}
-
-.stat-icon {
-  width: 56px;
-  height: 56px;
-  border-radius: 12px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-
-  &.stat-icon-total {
-    background: #EEF2FF;
-    color: #5D87FF;
-  }
-
-  &.stat-icon-correct {
-    background: #D1FAE5;
-    color: #10B981;
-  }
-
-  &.stat-icon-incorrect {
-    background: #FEE2E2;
-    color: #EF4444;
-  }
-
-  &.stat-icon-percentage {
-    background: #F3E8FF;
-    color: #7C3AED;
-  }
-}
-
-.stat-content {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-}
-
-.stat-label {
-  font-size: 13px;
-  color: #6B7280;
-  font-weight: 500;
-}
-
-.stat-value {
-  font-size: 28px;
-  font-weight: 700;
-  color: #1F2937;
-}
-
-.stat-status {
-  font-size: 12px;
-  font-weight: 600;
-  color: #EF4444;
-
-  .stat-card-result.passed & {
-    color: #10B981;
-  }
-}
-
+// ─── Question Navigator ───
 .question-navigator {
   background: white;
-  padding: 24px;
-  border-radius: 16px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
-  margin-bottom: 32px;
+  padding: clamp(12px, 2vw, 24px);
+  border-radius: clamp(12px, 1.5vw, 16px);
+  margin-bottom: clamp(14px, 2.5vw, 32px);
 }
 
 .navigator-title {
-  font-size: 18px;
+  font-size: clamp(14px, 1.6vw, 18px);
   font-weight: 600;
   color: #1F2937;
-  margin: 0 0 16px 0;
+  margin: 0 0 clamp(10px, 1.5vw, 16px) 0;
 }
 
 .navigator-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(50px, 1fr));
-  gap: 10px;
+  grid-template-columns: repeat(auto-fill, minmax(clamp(36px, 4.5vw, 50px), 1fr));
+  gap: clamp(4px, 0.8vw, 10px);
 }
 
 .navigator-btn {
-  height: 50px;
+  height: clamp(36px, 4.5vw, 50px);
   background: white;
-  border: 2px solid #E5E7EB;
-  border-radius: 10px;
-  font-size: 14px;
+  border: none;
+  border-radius: clamp(6px, 1vw, 10px);
+  font-size: clamp(12px, 1.3vw, 14px);
   font-weight: 600;
   color: #6B7280;
   cursor: pointer;
   transition: all 0.2s ease;
 
-  &:hover {
-    border-color: #5D87FF;
-    color: #5D87FF;
-  }
-
-  &.active {
-    background: #5D87FF;
-    border-color: #5D87FF;
-    color: white;
-  }
+  &:hover { color: #5D87FF; }
+  &.active { background: #5D87FF; color: white; }
 
   &.correct:not(.active) {
     background: #D1FAE5;
-    border-color: #10B981;
+    border: 2px solid #10B981;
     color: #10B981;
   }
 
   &.incorrect:not(.active) {
     background: #FEE2E2;
-    border-color: #EF4444;
+    border: 2px solid #EF4444;
     color: #EF4444;
   }
 }
 
+.empty-questions {
+  background: white;
+  padding: clamp(24px, 4vw, 48px) clamp(12px, 2vw, 24px);
+  border-radius: clamp(12px, 1.5vw, 16px);
+  margin-bottom: clamp(14px, 2.5vw, 32px);
+  text-align: center;
+  color: #9CA3AF;
+  font-size: clamp(13px, 1.4vw, 16px);
+  font-weight: 500;
+}
+
+// ─── Question Details ───
 .question-details {
   background: white;
-  padding: 32px;
-  border-radius: 16px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  padding: clamp(12px, 2.5vw, 32px);
+  border-radius: clamp(12px, 1.5vw, 16px);
 }
 
 .question-layout {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 32px;
+  gap: clamp(14px, 2.5vw, 32px);
 }
 
 .question-card {
   background: #F9FAFB;
-  padding: 20px;
-  border-radius: 12px;
-  margin-bottom: 20px;
+  padding: clamp(12px, 1.8vw, 20px);
+  border-radius: clamp(8px, 1vw, 12px);
+  margin-bottom: clamp(12px, 1.8vw, 20px);
 }
 
 .question-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 16px;
+  margin-bottom: clamp(10px, 1.4vw, 16px);
+  flex-wrap: wrap;
+  gap: 8px;
 }
 
 .question-badge {
   display: inline-block;
-  padding: 6px 12px;
+  padding: clamp(3px, 0.5vw, 6px) clamp(8px, 1vw, 12px);
   background: #EEF2FF;
   color: #5D87FF;
   border-radius: 8px;
-  font-size: 12px;
+  font-size: clamp(10px, 1.1vw, 12px);
   font-weight: 700;
   text-transform: uppercase;
 }
@@ -506,21 +577,23 @@ onMounted(() => {
   display: flex;
   align-items: center;
   gap: 6px;
-  padding: 6px 12px;
+  padding: clamp(3px, 0.5vw, 6px) clamp(8px, 1vw, 12px);
   background: #FEE2E2;
   color: #EF4444;
   border-radius: 8px;
-  font-size: 13px;
+  font-size: clamp(11px, 1.2vw, 13px);
   font-weight: 600;
 
-  &.correct {
-    background: #D1FAE5;
-    color: #10B981;
+  &.correct { background: #D1FAE5; color: #10B981; }
+
+  svg {
+    width: clamp(14px, 1.5vw, 18px);
+    height: clamp(14px, 1.5vw, 18px);
   }
 }
 
 .question-text {
-  font-size: 18px;
+  font-size: clamp(14px, 1.6vw, 18px);
   font-weight: 600;
   color: #1F2937;
   line-height: 1.6;
@@ -528,37 +601,31 @@ onMounted(() => {
   white-space: pre-wrap;
 }
 
+// ─── Answers ───
 .answers-list {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: clamp(6px, 1vw, 12px);
 }
 
 .answer-item {
   display: flex;
   align-items: flex-start;
-  gap: 12px;
-  padding: 16px;
+  gap: clamp(8px, 1vw, 12px);
+  padding: clamp(10px, 1.4vw, 16px);
   background: #F9FAFB;
-  border: 2px solid #E5E7EB;
-  border-radius: 12px;
+  border: none;
+  border-radius: clamp(8px, 1vw, 12px);
   transition: all 0.2s ease;
 
-  &.choice-correct {
-    background: #D1FAE5;
-    border-color: #10B981;
-  }
-
-  &.choice-incorrect {
-    background: #FEE2E2;
-    border-color: #EF4444;
-  }
+  &.choice-correct { background: #D1FAE5; border: 2px solid #10B981; }
+  &.choice-incorrect { background: #FEE2E2; border: 2px solid #EF4444; }
 }
 
 .answer-marker {
-  width: 32px;
-  height: 32px;
-  border-radius: 8px;
+  width: clamp(26px, 3vw, 32px);
+  height: clamp(26px, 3vw, 32px);
+  border-radius: clamp(6px, 0.8vw, 8px);
   background: white;
   display: flex;
   align-items: center;
@@ -567,7 +634,7 @@ onMounted(() => {
 }
 
 .answer-letter {
-  font-size: 14px;
+  font-size: clamp(11px, 1.3vw, 14px);
   font-weight: 700;
   color: #1F2937;
 }
@@ -576,11 +643,11 @@ onMounted(() => {
   flex: 1;
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 6px;
 }
 
 .answer-text {
-  font-size: 15px;
+  font-size: clamp(13px, 1.4vw, 15px);
   color: #1F2937;
   line-height: 1.5;
 }
@@ -589,23 +656,22 @@ onMounted(() => {
   display: inline-flex;
   align-items: center;
   gap: 4px;
-  padding: 4px 10px;
+  padding: clamp(2px, 0.4vw, 4px) clamp(6px, 0.8vw, 10px);
   border-radius: 6px;
-  font-size: 12px;
+  font-size: clamp(10px, 1.1vw, 12px);
   font-weight: 600;
   align-self: flex-start;
 
-  &.correct-badge {
-    background: #10B981;
-    color: white;
-  }
+  &.correct-badge { background: #10B981; color: white; }
+  &.user-badge { background: #5D87FF; color: white; }
 
-  &.user-badge {
-    background: #5D87FF;
-    color: white;
+  svg {
+    width: clamp(10px, 1.2vw, 14px);
+    height: clamp(10px, 1.2vw, 14px);
   }
 }
 
+// ─── Image ───
 .image-section {
   position: sticky;
   top: 20px;
@@ -614,9 +680,8 @@ onMounted(() => {
 
 .image-container {
   background: #F9FAFB;
-  border-radius: 12px;
-  padding: 16px;
-  border: 1px solid #E5E7EB;
+  border-radius: clamp(8px, 1vw, 12px);
+  padding: clamp(8px, 1.4vw, 16px);
 }
 
 .question-image {
@@ -624,10 +689,10 @@ onMounted(() => {
   height: auto;
   border-radius: 8px;
   object-fit: contain;
-  max-height: 600px;
+  max-height: clamp(250px, 50vw, 600px);
 }
 
-// Responsive
+// ─── Tablet ───
 @media (max-width: 1024px) {
   .question-layout {
     grid-template-columns: 1fr;
@@ -636,32 +701,41 @@ onMounted(() => {
   .image-section {
     position: relative;
     top: 0;
+    order: -1;
   }
 }
 
+// ─── Mobile ───
 @media (max-width: 768px) {
-  .details-page {
-    padding: 16px;
+  .top-bar {
+    flex-wrap: wrap;
   }
 
-  .header-title {
-    font-size: 20px;
+  .top-bar-stats {
+    width: 100%;
+    justify-content: space-around;
+    border-top: 1px solid #F3F4F6;
+    padding-top: 10px;
   }
 
-  .stats-grid {
-    grid-template-columns: 1fr;
+  .selector-list {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    padding-bottom: 4px;
+    -webkit-overflow-scrolling: touch;
+
+    &::-webkit-scrollbar { height: 3px; }
+    &::-webkit-scrollbar-thumb { background: #D1D5DB; border-radius: 3px; }
   }
 
-  .navigator-grid {
-    grid-template-columns: repeat(auto-fill, minmax(45px, 1fr));
+  .selector-btn {
+    flex-shrink: 0;
+
+    .selector-date { display: none; }
   }
 
-  .question-details {
-    padding: 20px;
-  }
-
-  .question-text {
-    font-size: 16px;
+  .loading-container {
+    min-height: 200px;
   }
 }
 </style>

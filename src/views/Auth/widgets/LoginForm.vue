@@ -55,7 +55,7 @@ const submit = async (submitEvent: SubmitEventPromise) => {
         class="custom-input"
       >
         <template #prepend-inner>
-          <v-icon color="#757575" size="20">mdi-account-outline</v-icon>
+          <v-icon color="#6B7280" size="20">mdi-account-outline</v-icon>
         </template>
       </v-text-field>
     </div>
@@ -73,13 +73,13 @@ const submit = async (submitEvent: SubmitEventPromise) => {
         class="custom-input"
       >
         <template #prepend-inner>
-          <v-icon color="#757575" size="20">mdi-lock-outline</v-icon>
+          <v-icon color="#6B7280" size="20">mdi-lock-outline</v-icon>
         </template>
         <template #append-inner>
           <v-icon
             @click="isPasswordVisible = !isPasswordVisible"
             class="cursor-pointer"
-            color="#757575"
+            color="#6B7280"
             size="20"
           >
             {{ isPasswordVisible ? 'mdi-eye-off-outline' : 'mdi-eye-outline' }}
@@ -132,15 +132,15 @@ const submit = async (submitEvent: SubmitEventPromise) => {
 
   &.v-field--focused {
     background: #fff;
-    border-color: #5c6ec0;
-    box-shadow: 0 0 0 3px rgba(92, 110, 192, 0.1);
+    border-color: #5D87FF;
+    box-shadow: none;
   }
 
   .v-field__input {
     padding: 12px 16px;
     min-height: 48px;
     font-family: 'Poppins', sans-serif;
-    color: #2d3561;
+    color: #1F2937;
 
     &::placeholder {
       color: #9e9e9e;
@@ -168,19 +168,19 @@ const submit = async (submitEvent: SubmitEventPromise) => {
   :deep(.v-checkbox-btn) {
     .v-selection-control__input {
       .v-icon {
-        color: #5c6ec0;
+        color: #5D87FF;
       }
     }
   }
 
   :deep(.v-selection-control--dirty .v-icon) {
-    color: #5c6ec0;
+    color: #5D87FF;
   }
 
   .checkbox-label {
     font-family: 'Poppins', sans-serif;
     font-size: 14px;
-    color: #616161;
+    color: #6B7280;
     margin-left: 8px;
   }
 }
@@ -189,23 +189,20 @@ const submit = async (submitEvent: SubmitEventPromise) => {
   height: 54px !important;
   border-radius: 12px;
   font-family: 'Poppins', sans-serif;
-  font-size: 16px;
+  font-size: 14px;
   font-weight: 600;
   text-transform: none;
   letter-spacing: 0.5px;
-  background: #5c6ec0 !important;
-  box-shadow: 0 4px 12px rgba(92, 110, 192, 0.2);
+  background: #5D87FF !important;
   transition: all 0.2s ease;
   color: #fff;
 
   &:hover {
     background: #4a5ba8 !important;
-    box-shadow: 0 6px 16px rgba(92, 110, 192, 0.3);
-    transform: translateY(-2px);
   }
 
   &:active {
-    transform: translateY(0);
+    transform: scale(0.98);
   }
 }
 
@@ -214,7 +211,7 @@ const submit = async (submitEvent: SubmitEventPromise) => {
 @media (min-width: 1024px) {
   .custom-input {
     :deep(.v-field__input) {
-      font-size: 15px;
+      font-size: 14px;
     }
   }
 }
@@ -242,7 +239,7 @@ const submit = async (submitEvent: SubmitEventPromise) => {
 
   .submit-btn {
     height: 52px !important;
-    font-size: 15px;
+    font-size: 14px;
   }
 }
 
@@ -279,7 +276,7 @@ const submit = async (submitEvent: SubmitEventPromise) => {
 
   .submit-btn {
     height: 50px !important;
-    font-size: 15px;
+    font-size: 14px;
   }
 }
 
@@ -339,7 +336,7 @@ const submit = async (submitEvent: SubmitEventPromise) => {
 
   .submit-btn {
     height: 48px !important;
-    font-size: 15px;
+    font-size: 14px;
     border-radius: 10px;
   }
 }
@@ -412,11 +409,8 @@ const submit = async (submitEvent: SubmitEventPromise) => {
     height: 48px !important;
     font-size: 14px;
     border-radius: 10px;
-    box-shadow: 0 4px 12px rgba(92, 110, 192, 0.2);
-
     &:hover {
-      box-shadow: 0 6px 16px rgba(92, 110, 192, 0.3);
-      transform: translateY(-1px);
+      background: #4a5ba8 !important;
     }
   }
 }

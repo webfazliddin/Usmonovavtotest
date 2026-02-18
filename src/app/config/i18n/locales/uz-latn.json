@@ -120,5 +120,21 @@
         "passed": "O'tdi",
         "failed": "O'tmadi",
         "viewDetails": "Ko'rish",
-        "userResult": "Foydalanuvchi natijasi"
+        "userResult": "Foydalanuvchi natijasi",
+        "myExamResult": "Mening natijam",
+        "examResultTitle": "Imtihon natijangiz",
+        "noExamYet": "Siz hali imtihon topshirmagansiz",
+        "takeExam": "Imtihon topshirish",
+        "successful": "Muvaffaqiyatli",
+        "unsuccessful": "Muvaffaqiyatsiz",
+        "viewDetailedResults": "Batafsil ko'rish",
+        "backToHome": "Bosh sahifaga qaytish",
+        "examPassedMessage": "Siz imtihondan muvaffaqiyatli o'tdingiz",
+        "examFailedMessage": "Siz imtihondan o'ta olmadingiz",
+        "examPassedDetails": "Siz 20 ta savoldan {correctCount} tasiga to'g'ri javob berdingiz. O'tish bali 90% (18 ta to'g'ri javob).",
+        "examFailedDetails": "O'tish uchun kamida 18 ta to'g'ri javob kerak edi (90%). Siz {correctCount} ta to'g'ri javob berdingiz.",
+        "loading": "Yuklanmoqda...",
+        "errorLoadingData": "Ma'lumotlarni yuklashda xatolik yuz berdi",
+        "menu": "Menyu",
+        "admin": "Admin"
 }

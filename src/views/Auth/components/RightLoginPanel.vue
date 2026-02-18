@@ -14,7 +14,7 @@ import LoginForm from "../widgets/LoginForm.vue";
       </div>
 
       <!-- Auth Header -->
-      <div class="auth-header mb-8">
+      <div class="auth-header mb-8 animate-in" style="animation-delay: 0.1s">
         <v-chip color="primary" variant="flat" size="small" class="welcome-chip mb-4">
           <v-icon start size="16">mdi-star</v-icon>
           XUSH KELIBSIZ
@@ -24,17 +24,34 @@ import LoginForm from "../widgets/LoginForm.vue";
       </div>
 
       <!-- Login Form -->
-      <LoginForm />
+      <div class="animate-in" style="animation-delay: 0.3s">
+        <LoginForm />
+      </div>
     </v-card-text>
   </v-card>
 </template>
 
 <style lang="scss" scoped>
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-in {
+  opacity: 0;
+  animation: fadeInUp 0.6s ease-out forwards;
+}
+
 .auth-card {
   background: #fff !important;
   border-radius: 16px !important;
-  border: 1px solid #e3e8ef;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08) !important;
+  box-shadow: none !important;
   max-width: 480px;
   transition: all 0.3s ease;
 }
@@ -57,20 +74,20 @@ import LoginForm from "../widgets/LoginForm.vue";
     font-weight: 600;
     letter-spacing: 1px;
     height: 28px;
-    background: #5c6ec0 !important;
+    background: #5D87FF !important;
   }
 
   .auth-title {
-    font-size: 32px;
+    font-size: 24px;
     font-weight: 700;
-    color: #2d3561;
+    color: #1F2937;
     margin-bottom: 8px;
     line-height: 1.2;
   }
 
   .auth-subtitle {
-    font-size: 16px;
-    color: #616161;
+    font-size: 14px;
+    color: #6B7280;
     margin: 0;
   }
 }
@@ -84,7 +101,7 @@ import LoginForm from "../widgets/LoginForm.vue";
   }
 
   .auth-header .auth-title {
-    font-size: 28px;
+    font-size: 24px;
   }
 }
 
@@ -106,16 +123,16 @@ import LoginForm from "../widgets/LoginForm.vue";
     margin-bottom: 28px;
 
     .welcome-chip {
-      font-size: 10px;
+      font-size: 11px;
       height: 26px;
     }
 
     .auth-title {
-      font-size: 26px;
+      font-size: 24px;
     }
 
     .auth-subtitle {
-      font-size: 15px;
+      font-size: 14px;
     }
   }
 }
@@ -124,7 +141,7 @@ import LoginForm from "../widgets/LoginForm.vue";
 @media (max-width: 479px) {
   .auth-card {
     border-radius: 20px !important;
-    box-shadow: 0 15px 50px rgba(0, 0, 0, 0.3) !important;
+    box-shadow: none !important;
 
     :deep(.v-card-text) {
       padding: 24px 20px !important;
@@ -143,7 +160,7 @@ import LoginForm from "../widgets/LoginForm.vue";
     margin-bottom: 24px !important;
 
     .welcome-chip {
-      font-size: 10px;
+      font-size: 11px;
       height: 26px;
     }
 

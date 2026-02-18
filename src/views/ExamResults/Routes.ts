@@ -7,7 +7,7 @@ export const ExamResultsRoutes: RouteRecordRaw[] = [
     component: () => import("./index.vue"),
   },
   {
-    path: "/admin/exam-results/:attemptId",
+    path: "/admin/exam-results/:userId",
     name: "ExamResultDetails",
     component: () => import("./details.vue"),
   },

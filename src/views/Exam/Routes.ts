@@ -7,3 +7,12 @@ export const ExamRoutes: RouteRecordRaw[] = [
     component: () => import("./index.vue"),
   },
 ];
+
+export const ExamFullscreenRoutes: RouteRecordRaw[] = [
+  {
+    path: "/exam-test",
+    name: "ExamTest",
+    meta: { requiresAuth: true },
+    component: () => import("./ExamTestPage.vue"),
+  },
+];

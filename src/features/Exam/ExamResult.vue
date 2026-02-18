@@ -33,9 +33,7 @@ const percentage = computed(() =>
 const fetchAttemptResult = () => {
   ExamService.GetAttemptResult(attemptId.value)
     .then((res) => {
-      // Take only first 20 questions for exam result
-      const examData = res.data.slice(0, 20);
-      attempt.value = examData;
+      attempt.value = res.data;
     })
     .catch((e) => {
       notify({
@@ -110,17 +108,17 @@ onUnmounted(() => {
     <div class="test-header">
       <div class="question-progress">
         <span class="current-question">Savol {{ activeQuestionIndex + 1 }}</span>
-        <span class="total-questions">/ 20</span>
+        <span class="total-questions">/ {{ attempt.length }}</span>
       </div>
       <div class="progress-indicator">
-        <div class="progress-bar" :style="{ width: `${((activeQuestionIndex + 1) / 20) * 100}%` }"></div>
+        <div class="progress-bar" :style="{ width: `${((activeQuestionIndex + 1) / attempt.length) * 100}%` }"></div>
       </div>
       <div class="result-badge" :class="{ 'passed': percentage >= 90 }">
         <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
           <path d="M22 10v6M2 10l10-5 10 5-10 5z"></path>
           <path d="M6 12v5c3 3 9 3 12 0v-5"></path>
         </svg>
-        <span>{{ percentage }}% to'g'ri ({{ correctAnswersCount }}/20)</span>
+        <span>{{ percentage }}% to'g'ri ({{ correctAnswersCount }}/{{ attempt.length }})</span>
       </div>
     </div>
 
@@ -266,7 +264,6 @@ onUnmounted(() => {
   align-items: center;
   gap: 24px;
   border-bottom: 1px solid #E8ECF4;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
 }
 
 .question-progress {
@@ -298,7 +295,7 @@ onUnmounted(() => {
 
 .progress-bar {
   height: 100%;
-  background: linear-gradient(90deg, #5D87FF 0%, #4A7FCC 100%);
+  background: #5D87FF;
   border-radius: 10px;
   transition: width 0.3s ease;
 }
@@ -353,8 +350,6 @@ onUnmounted(() => {
   background: white;
   border-radius: 16px;
   padding: 24px;
-  border: 1px solid #E8ECF4;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
 }
 
 .question-number-badge {
@@ -405,7 +400,7 @@ onUnmounted(() => {
   align-items: center;
   gap: 8px;
   background: white;
-  border: 1px solid #E8ECF4;
+  border: none;
   border-radius: 10px;
   padding: 12px 16px;
   font-size: 14px;
@@ -416,7 +411,6 @@ onUnmounted(() => {
 
   &:hover {
     background: #F0F4F8;
-    border-color: #5D87FF;
   }
 }
 
@@ -451,8 +445,6 @@ onUnmounted(() => {
   background: white;
   border-radius: 16px;
   padding: 16px;
-  border: 1px solid #E8ECF4;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
   width: 100%;
   min-height: 400px;
   display: flex;
@@ -504,7 +496,6 @@ onUnmounted(() => {
   display: flex;
   align-items: center;
   gap: 16px;
-  box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.04);
   z-index: 101;
 }
 
@@ -540,14 +531,8 @@ onUnmounted(() => {
   }
 
   &.next-btn {
-    background: linear-gradient(135deg, #5D87FF 0%, #4A7FCC 100%);
+    background: #5D87FF;
     color: white;
-    box-shadow: 0 4px 12px rgba(93, 135, 255, 0.3);
-
-    &:hover {
-      box-shadow: 0 6px 16px rgba(93, 135, 255, 0.4);
-      transform: translateY(-1px);
-    }
   }
 }
 
@@ -662,7 +647,7 @@ onUnmounted(() => {
   }
 
   .question-number-badge {
-    font-size: 10px;
+    font-size: 11px;
     padding: 4px 8px;
     margin-bottom: 8px;
   }

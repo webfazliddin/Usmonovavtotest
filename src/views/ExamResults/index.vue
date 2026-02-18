@@ -1,14 +1,13 @@
 <script setup lang="ts">
-import { ref, onMounted, computed } from "vue";
+import { ref, onMounted } from "vue";
 import { useRouter } from "vue-router";
 import { AttemptsReportService } from "@/services/services/AttemptsReport.service";
 import { notify } from "@kyvg/vue3-notification";
-import { IAttemptReport } from "@/features/Exam/types";
 import UiParentCard from "@/components/UiParentCard.vue";
 
 const router = useRouter();
 
-const attempts = ref<IAttemptReport[]>([]);
+const attempts = ref<any[]>([]);
 const loading = ref(false);
 const filter = ref({
   page: 1,
@@ -22,13 +21,25 @@ let searchTimeout: NodeJS.Timeout | null = null;
 const fetchAttempts = async () => {
   loading.value = true;
   try {
-    const { data } = await AttemptsReportService.GetUsersAttemptsReport({
+    const response = await AttemptsReportService.GetUsersAttemptsReport({
       page: filter.value.page,
       size: filter.value.size,
-      search: filter.value.search,
+      search: filter.value.search || "",
+      testTypeId: 4,
     });
-    attempts.value = data.items || [];
-    totalPages.value = data.totalPages || 0;
+
+    const data = response.data;
+
+    // API returns { data: [...], page, size, totalCount, totalPages }
+    if (data.data && Array.isArray(data.data)) {
+      attempts.value = data.data;
+    } else if (data.items && Array.isArray(data.items)) {
+      attempts.value = data.items;
+    } else if (Array.isArray(data)) {
+      attempts.value = data;
+    }
+
+    totalPages.value = data.totalPages || Math.ceil((data.totalCount || 0) / filter.value.size) || 1;
   } catch (error: any) {
     notify({
       text: error.response?.data?.message || "Ma'lumotlarni yuklashda xatolik yuz berdi",
@@ -49,25 +60,25 @@ const handleSearch = () => {
   }, 500);
 };
 
+const handleClear = () => {
+  filter.value.search = "";
+  filter.value.page = 1;
+  fetchAttempts();
+};
+
 const handlePageChange = (page: number) => {
   filter.value.page = page;
   fetchAttempts();
 };
 
-const viewDetails = (attemptId: number) => {
-  router.push({ name: "ExamResultDetails", params: { attemptId } });
-};
-
-const getStatusClass = (percentage: number) => {
-  return percentage >= 90 ? "status-passed" : "status-failed";
-};
-
-const getStatusText = (percentage: number) => {
-  return percentage >= 90 ? "O'tdi" : "O'tmadi";
+const viewDetails = (userId: number) => {
+  router.push({ name: "ExamResultDetails", params: { userId } });
 };
 
 const formatDate = (dateString: string) => {
+  if (!dateString) return "-";
   const date = new Date(dateString);
+  if (isNaN(date.getTime())) return "-";
   return date.toLocaleString("uz-UZ", {
     year: "numeric",
     month: "2-digit",
@@ -84,14 +95,11 @@ onMounted(() => {
 
 <template>
   <div class="admin-page-container">
-    <v-row class="page-header">
-      <v-col md="6" cols="12" class="header-left">
-        <h2 class="page-title">Imtihon natijalari</h2>
-      </v-col>
-    </v-row>
+    <div class="page-header">
+      <h2 class="page-title">Imtihon natijalari</h2>
+    </div>
 
-    <v-row class="search-row">
-      <v-col cols="12">
+    <div class="search-row">
         <v-text-field
           v-model="filter.search"
           placeholder="Foydalanuvchi ismi yoki email bo'yicha qidirish..."
@@ -99,8 +107,9 @@ onMounted(() => {
           density="comfortable"
           hide-details
           clearable
-          @input="handleSearch"
           class="search-input"
+          @input="handleSearch"
+          @click:clear="handleClear"
         >
           <template v-slot:prepend-inner>
             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -109,8 +118,7 @@ onMounted(() => {
             </svg>
           </template>
         </v-text-field>
-      </v-col>
-    </v-row>
+    </div>
 
     <UiParentCard>
       <div v-if="loading" class="loading-container">
@@ -124,56 +132,48 @@ onMounted(() => {
         <p>Hozircha imtihon natijalari yo'q</p>
       </div>
 
-      <div v-else class="attempts-table">
+      <!-- Desktop Table -->
+      <div class="attempts-table desktop-only">
         <table>
           <thead>
             <tr>
-              <th>ID</th>
               <th>Foydalanuvchi</th>
-              <th>Email</th>
-              <th>Test turi</th>
-              <th>To'g'ri javoblar</th>
-              <th>Foiz</th>
-              <th>Status</th>
-              <th>Sana</th>
+              <th>Jami urinishlar</th>
+              <th>O'tgan</th>
+              <th>Yiqilgan</th>
+              <th>Oxirgi urinish</th>
               <th>Harakatlar</th>
             </tr>
           </thead>
           <tbody>
-            <tr v-for="attempt in attempts" :key="attempt.id">
-              <td>{{ attempt.attemptId }}</td>
+            <tr v-for="attempt in attempts" :key="attempt.userId">
               <td class="user-cell">
                 <div class="user-avatar">
-                  {{ attempt.userName.charAt(0).toUpperCase() }}
+                  {{ (attempt.fullName || attempt.userName || '?').charAt(0).toUpperCase() }}
                 </div>
-                <span>{{ attempt.userName }}</span>
-              </td>
-              <td>{{ attempt.userEmail }}</td>
-              <td>
-                <div class="test-type-badge">
-                  {{ attempt.testType }}
+                <div class="user-info">
+                  <span class="user-name">{{ attempt.fullName || attempt.userName }}</span>
+                  <span class="user-email">@{{ attempt.userName }}</span>
                 </div>
               </td>
               <td>
-                <div class="score-cell">
-                  <span class="correct">{{ attempt.correctAnswers }}</span>
-                  <span class="separator">/</span>
-                  <span class="total">{{ attempt.totalQuestions }}</span>
+                <div class="score-badge total-badge">
+                  {{ attempt.totalAttempts }}
                 </div>
               </td>
               <td>
-                <div class="percentage-badge" :class="getStatusClass(attempt.percentage)">
-                  {{ attempt.percentage }}%
+                <div class="score-badge correct-badge">
+                  {{ attempt.passedAttempts }}
                 </div>
               </td>
               <td>
-                <div class="status-badge" :class="getStatusClass(attempt.percentage)">
-                  {{ getStatusText(attempt.percentage) }}
+                <div class="score-badge incorrect-badge">
+                  {{ attempt.failedAttempts }}
                 </div>
               </td>
-              <td class="date-cell">{{ formatDate(attempt.completedAt) }}</td>
+              <td class="date-cell">{{ formatDate(attempt.lastAttemptDate) }}</td>
               <td>
-                <button class="view-btn" @click="viewDetails(attempt.attemptId)">
+                <button class="view-btn" @click="viewDetails(attempt.userId)">
                   <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
                     <circle cx="12" cy="12" r="3"></circle>
@@ -184,6 +184,48 @@ onMounted(() => {
             </tr>
           </tbody>
         </table>
+      </div>
+
+      <!-- Mobile Cards -->
+      <div class="mobile-cards mobile-only">
+        <div
+          v-for="attempt in attempts"
+          :key="'m-' + attempt.userId"
+          class="mobile-card"
+          @click="viewDetails(attempt.userId)"
+        >
+          <div class="mobile-card-header">
+            <div class="user-cell">
+              <div class="user-avatar">
+                {{ (attempt.fullName || attempt.userName || '?').charAt(0).toUpperCase() }}
+              </div>
+              <div class="user-info">
+                <span class="user-name">{{ attempt.fullName || attempt.userName }}</span>
+                <span class="user-email">@{{ attempt.userName }}</span>
+              </div>
+            </div>
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#9CA3AF" stroke-width="2">
+              <polyline points="9 18 15 12 9 6"></polyline>
+            </svg>
+          </div>
+          <div class="mobile-card-stats">
+            <div class="mobile-stat">
+              <span class="mobile-stat-label">Jami</span>
+              <div class="score-badge total-badge">{{ attempt.totalAttempts }}</div>
+            </div>
+            <div class="mobile-stat">
+              <span class="mobile-stat-label">O'tgan</span>
+              <div class="score-badge correct-badge">{{ attempt.passedAttempts }}</div>
+            </div>
+            <div class="mobile-stat">
+              <span class="mobile-stat-label">Yiqilgan</span>
+              <div class="score-badge incorrect-badge">{{ attempt.failedAttempts }}</div>
+            </div>
+          </div>
+          <div class="mobile-card-footer">
+            <span class="mobile-date">{{ formatDate(attempt.lastAttemptDate) }}</span>
+          </div>
+        </div>
       </div>
 
       <!-- Pagination -->
@@ -229,6 +271,7 @@ onMounted(() => {
   font-family: 'Poppins', sans-serif;
   width: 100%;
   max-width: 100%;
+  overflow-x: hidden;
 }
 
 .page-header {
@@ -270,7 +313,7 @@ onMounted(() => {
   }
 
   p {
-    font-size: 16px;
+    font-size: 14px;
     font-weight: 500;
     margin: 0;
   }
@@ -287,7 +330,6 @@ onMounted(() => {
 
   thead {
     background: #F9FAFB;
-    border-bottom: 2px solid #E5E7EB;
 
     th {
       padding: 16px 12px;
@@ -303,7 +345,6 @@ onMounted(() => {
 
   tbody {
     tr {
-      border-bottom: 1px solid #E5E7EB;
       transition: background-color 0.2s ease;
 
       &:hover {
@@ -325,11 +366,27 @@ onMounted(() => {
   gap: 12px;
 }
 
+.user-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.user-name {
+  font-weight: 600;
+  color: #1F2937;
+}
+
+.user-email {
+  font-size: 12px;
+  color: #9CA3AF;
+}
+
 .user-avatar {
   width: 36px;
   height: 36px;
   border-radius: 50%;
-  background: linear-gradient(135deg, #5D87FF 0%, #4A7FCC 100%);
+  background: #5D87FF;
   color: white;
   display: flex;
   align-items: center;
@@ -339,68 +396,27 @@ onMounted(() => {
   flex-shrink: 0;
 }
 
-.test-type-badge {
-  display: inline-block;
-  padding: 4px 12px;
-  background: #F3E8FF;
-  color: #7C3AED;
-  border-radius: 6px;
-  font-size: 12px;
-  font-weight: 600;
-  white-space: nowrap;
-}
-
-.score-cell {
-  display: flex;
+.score-badge {
+  display: inline-flex;
   align-items: center;
-  gap: 4px;
-  font-weight: 600;
-
-  .correct {
-    color: #10B981;
-  }
-
-  .separator {
-    color: #9CA3AF;
-  }
-
-  .total {
-    color: #6B7280;
-  }
-}
-
-.percentage-badge {
-  display: inline-block;
-  padding: 4px 12px;
-  border-radius: 6px;
-  font-size: 13px;
+  justify-content: center;
+  min-width: 40px;
+  padding: 6px 12px;
+  border-radius: 8px;
+  font-size: 14px;
   font-weight: 700;
 
-  &.status-passed {
+  &.total-badge {
+    background: #EEF2FF;
+    color: #5D87FF;
+  }
+
+  &.correct-badge {
     background: #D1FAE5;
     color: #10B981;
   }
 
-  &.status-failed {
-    background: #FEE2E2;
-    color: #EF4444;
-  }
-}
-
-.status-badge {
-  display: inline-block;
-  padding: 6px 14px;
-  border-radius: 8px;
-  font-size: 13px;
-  font-weight: 600;
-  white-space: nowrap;
-
-  &.status-passed {
-    background: #D1FAE5;
-    color: #10B981;
-  }
-
-  &.status-failed {
+  &.incorrect-badge {
     background: #FEE2E2;
     color: #EF4444;
   }
@@ -419,7 +435,7 @@ onMounted(() => {
   gap: 6px;
   padding: 8px 16px;
   background: white;
-  border: 1px solid #E5E7EB;
+  border: none;
   border-radius: 8px;
   color: #5D87FF;
   font-size: 13px;
@@ -429,7 +445,6 @@ onMounted(() => {
 
   &:hover {
     background: #EEF2FF;
-    border-color: #5D87FF;
   }
 
   svg {
@@ -444,7 +459,6 @@ onMounted(() => {
   gap: 12px;
   padding: 24px 16px 8px;
   margin-top: 20px;
-  border-top: 1px solid #E5E7EB;
 }
 
 .pagination-btn {
@@ -454,14 +468,13 @@ onMounted(() => {
   width: 36px;
   height: 36px;
   background: white;
-  border: 1px solid #E5E7EB;
+  border: none;
   border-radius: 8px;
   cursor: pointer;
   transition: all 0.2s ease;
 
   &:hover:not(:disabled) {
     background: #F9FAFB;
-    border-color: #5D87FF;
 
     svg {
       color: #5D87FF;
@@ -488,7 +501,7 @@ onMounted(() => {
   height: 36px;
   padding: 0 12px;
   background: white;
-  border: 1px solid #E5E7EB;
+  border: none;
   border-radius: 8px;
   font-size: 14px;
   font-weight: 600;
@@ -498,15 +511,84 @@ onMounted(() => {
 
   &:hover {
     background: #F9FAFB;
-    border-color: #5D87FF;
     color: #5D87FF;
   }
 
   &.active {
     background: #5D87FF;
-    border-color: #5D87FF;
     color: white;
   }
+}
+
+// Mobile cards
+.mobile-cards {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.mobile-card {
+  background: #F9FAFB;
+  border-radius: 14px;
+  padding: 16px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+
+  &:hover {
+    background: #F3F4F6;
+  }
+}
+
+.mobile-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 14px;
+}
+
+.mobile-card-stats {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.mobile-stat {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 6px;
+  background: white;
+  border-radius: 10px;
+}
+
+.mobile-stat-label {
+  font-size: 11px;
+  font-weight: 500;
+  color: #9CA3AF;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+
+.mobile-card-footer {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.mobile-date {
+  font-size: 12px;
+  color: #9CA3AF;
+}
+
+// Visibility toggles
+.mobile-only {
+  display: none;
+}
+
+.desktop-only {
+  display: block;
 }
 
 // Responsive
@@ -515,20 +597,26 @@ onMounted(() => {
     font-size: 20px;
   }
 
-  .attempts-table {
-    table {
-      font-size: 12px;
-    }
+  .page-header {
+    margin-bottom: 16px;
+  }
 
-    thead th {
-      padding: 12px 8px;
-      font-size: 11px;
-    }
+  .search-row {
+    margin-bottom: 12px;
+  }
 
-    tbody td {
-      padding: 12px 8px;
-      font-size: 12px;
-    }
+  .mobile-only {
+    display: flex;
+  }
+
+  .desktop-only {
+    display: none;
+  }
+
+  .score-badge {
+    min-width: 36px;
+    padding: 5px 10px;
+    font-size: 13px;
   }
 
   .user-avatar {
@@ -537,14 +625,23 @@ onMounted(() => {
     font-size: 12px;
   }
 
-  .view-btn {
-    padding: 6px 12px;
-    font-size: 12px;
+  .user-name {
+    font-size: 14px;
+  }
 
-    svg {
-      width: 16px;
-      height: 16px;
-    }
+  .user-email {
+    font-size: 11px;
+  }
+
+  .pagination-container {
+    padding: 16px 8px 4px;
+  }
+
+  .pagination-btn,
+  .pagination-page {
+    min-width: 32px;
+    height: 32px;
+    font-size: 13px;
   }
 }
 </style>

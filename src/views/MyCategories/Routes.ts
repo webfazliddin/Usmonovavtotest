@@ -7,13 +7,15 @@ export const MyCategoriesRoutes: RouteRecordRaw[] = [
     component: () => import("./index.vue"),
   },
   {
-    path: "/admin/complete-test",
-    name: "CompleteTest",
-    component: () => import("./CompletePage.vue"),
-  },
-  {
     path: "/result/:attemptId",
     name: "ResultPage",
     component: () => import("./ResultPage.vue"),
   },
 ];
+
+export const CompleteTestRoute: RouteRecordRaw = {
+  path: "/admin/complete-test",
+  name: "CompleteTest",
+  meta: { requiresAuth: true },
+  component: () => import("./CompletePage.vue"),
+};

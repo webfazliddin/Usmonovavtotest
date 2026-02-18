@@ -1,5 +1,8 @@
 import { createRouter, createWebHistory } from "vue-router";
 import MainRoutes from "./MainRoutes";
+import { CompleteTestRoute } from "@/views/MyCategories/Routes";
+import { CardFullscreenRoutes } from "@/views/Card/Routes";
+import { ExamFullscreenRoutes } from "@/views/Exam/Routes";
 import { useAdapter } from "@/utils/useAdapter";
 
 const { getAdapter } = useAdapter();
@@ -26,6 +29,9 @@ export const router = createRouter({
       name: "Marks",
       component: () => import("@/views/TrafficMarks/MarksUser.vue"),
     },
+    CompleteTestRoute,
+    ...CardFullscreenRoutes,
+    ...ExamFullscreenRoutes,
     MainRoutes,
   ],
 });

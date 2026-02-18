@@ -75,8 +75,6 @@ const alphabet = [
 
   &:hover {
     border-color: #5D87FF;
-    box-shadow: 0 4px 12px rgba(93, 135, 255, 0.15);
-    transform: translateY(-2px);
   }
 
   &.active {
@@ -138,7 +136,7 @@ const alphabet = [
 }
 
 .answer-text {
-  font-size: 16px;
+  font-size: 14px;
   font-weight: 500;
   color: #1F2937;
   line-height: 1.5;
@@ -161,7 +159,7 @@ const alphabet = [
   }
 
   .answer-text {
-    font-size: 15px;
+    font-size: 14px;
   }
 }
 
@@ -176,7 +174,6 @@ const alphabet = [
 
     &:hover {
       transform: none;
-      box-shadow: 0 2px 8px rgba(93, 135, 255, 0.12);
     }
 
     &:active {

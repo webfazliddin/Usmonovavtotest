@@ -1,188 +1,204 @@
 <script setup lang="ts">
-import LogoRu from "@/assets/images/logoMain.png";
 import navMenu from "@/app/config/permissions/index";
-import { CircleDotIcon, CircleIcon } from "vue-tabler-icons";
 import NavItem from "./NavItem/index.vue";
 import NavGroup from "./NavGroup/index.vue";
-import { useCustomizerStore } from "../store/customizer";
 import { useRouter } from "vue-router";
+import { watch } from "vue";
+import { useDisplay } from "vuetify";
+import { XIcon, LogoutIcon } from "vue-tabler-icons";
+import axios from "axios";
 
-const customizer = useCustomizerStore();
 const router = useRouter();
+const { mdAndDown } = useDisplay();
+
+const sidebarOpen = defineModel<boolean>("modelValue", { default: true });
+
+const handleLogout = async () => {
+  try {
+    await axios.post("/api/auth/logout");
+  } catch {
+    // ignore
+  }
+  localStorage.removeItem("token");
+  localStorage.removeItem("user");
+  localStorage.removeItem("isAdmin");
+  sessionStorage.clear();
+  router.replace("/sign-in");
+};
+
+// Close sidebar on mobile when navigating
+watch(
+  () => router.currentRoute.value.path,
+  () => {
+    if (mdAndDown.value) {
+      sidebarOpen.value = false;
+    }
+  }
+);
 </script>
 
 <template>
-  <v-navigation-drawer
-    left
-    v-model:model-value="customizer.Sidebar_drawer"
-    elevation="0"
-    rail-width="80"
-    :mobile-breakpoint="960"
-    app
-    class="leftSidebar"
-    :rail="customizer.mini_sidebar"
-    expand-on-hover
-    width="280"
-    :class="{ 'is-rail': customizer.mini_sidebar }"
+  <!-- Mobile overlay -->
+  <Transition name="fade">
+    <div
+      v-if="sidebarOpen && mdAndDown"
+      class="sidebar-overlay"
+      @click="sidebarOpen = false"
+    />
+  </Transition>
+
+  <aside
+    class="dashboard-sidebar"
+    :class="{ open: sidebarOpen, 'is-mobile': mdAndDown }"
   >
-    <div class="sidebar-header">
-      <div class="logo-section" @click="router.push('/')">
-        <img :src="LogoRu" alt="Logo" class="logo-img" />
-        <div class="brand-text" v-show="!customizer.mini_sidebar">
-          USMONOV<br>AVTO TEST
-        </div>
-      </div>
-      <v-btn
-        class="hidden-md-and-down toggle-btn"
-        icon
-        variant="text"
-        v-show="!customizer.mini_sidebar"
-        @click.stop="customizer.SET_MINI_SIDEBAR(!customizer.mini_sidebar)"
-      >
-        <CircleDotIcon color="#5c6ec0" size="20" stroke-width="1.5" />
-      </v-btn>
+    <!-- Mobile close button -->
+    <div v-if="mdAndDown" class="sidebar-mobile-header">
+      <button class="close-btn" @click="sidebarOpen = false">
+        <XIcon :size="18" />
+      </button>
     </div>
-    <div class="scrollnavbar">
-      <v-list class="nav-list py-6 px-4">
-        <template v-for="(item, _) in navMenu">
-          <NavGroup :item="item"></NavGroup>
-          <template v-for="child in item?.children">
-            <NavItem :item="child" class="leftPadding" v-if="child.visible" />
+
+    <!-- Navigation -->
+    <nav class="sidebar-nav">
+      <v-list class="nav-list">
+        <template v-for="(group, i) in navMenu" :key="i">
+          <NavGroup :item="group" />
+          <template v-for="child in group?.children" :key="child.to">
+            <NavItem :item="child" v-if="child.visible" />
           </template>
         </template>
       </v-list>
-    </div>
-  </v-navigation-drawer>
-</template>
-<style scoped lang="scss">
-.leftSidebar {
-  background: #fff !important;
-  box-shadow: 0 2px 8px rgba(74, 144, 226, 0.08) !important;
-  border-right: 1px solid #E8ECF4 !important;
-  overflow: hidden !important;
-  transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    </nav>
 
-  :deep(.v-navigation-drawer__content) {
-    overflow-y: hidden !important;
-    overflow-x: hidden !important;
+    <!-- Logout Button -->
+    <div class="sidebar-footer">
+      <button class="logout-btn" @click="handleLogout">
+        <LogoutIcon :size="20" />
+        <span>{{ $t("Logout") }}</span>
+      </button>
+    </div>
+  </aside>
+</template>
+
+<style scoped lang="scss">
+.dashboard-sidebar {
+  position: fixed;
+  top: 16px;
+  left: 16px;
+  bottom: 16px;
+  width: 260px;
+  background: #ffffff;
+  border-radius: 20px;
+  display: flex;
+  flex-direction: column;
+  z-index: 1200;
+  transition: transform 0.3s ease;
+  overflow: hidden;
+
+  &.is-mobile {
+    top: 0;
+    left: 0;
+    bottom: 0;
+    border-radius: 0 20px 20px 0;
+    transform: translateX(-110%);
+
+    &.open {
+      transform: translateX(0);
+      box-shadow: none;
+    }
+  }
+}
+
+.sidebar-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.25);
+  z-index: 1199;
+}
+
+// Mobile header
+.sidebar-mobile-header {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding: 16px 16px 8px;
+  flex-shrink: 0;
+}
+
+.close-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 10px;
+  border: none;
+  background: #F9FAFB;
+  color: #9CA3AF;
+  cursor: pointer;
+}
+
+// Navigation
+.sidebar-nav {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 12px 0 16px;
+
+  &::-webkit-scrollbar {
+    width: 3px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: #e5e5e5;
+    border-radius: 3px;
   }
 }
 
 .nav-list {
-  :deep(.v-list-item) {
-    transition: all 0.2s ease;
-  }
+  padding: 0 14px !important;
+  background: transparent !important;
 }
 
-.sidebar-header {
+// Logout footer
+.sidebar-footer {
+  flex-shrink: 0;
+  padding: 12px 14px 16px;
+}
+
+.logout-btn {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  padding: 24px 20px;
-  border-bottom: 1px solid #E8ECF4;
-  min-height: 80px;
-  background: #fff;
+  gap: 12px;
+  width: 100%;
+  padding: 12px 16px;
+  border: none;
+  border-radius: 12px;
+  background: #f9fafb;
+  color: #EF4444;
+  font-family: 'Poppins', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
 
-  .logo-section {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    cursor: pointer;
-    flex: 1;
-    padding: 6px 8px;
-    border-radius: 12px;
-    transition: all 0.2s ease;
-    min-width: 0;
-
-    &:hover {
-      background: #F8F9FC;
-    }
-
-    .logo-img {
-      border-radius: 10px;
-      width: 44px;
-      height: 44px;
-      min-width: 44px;
-      object-fit: contain;
-      padding: 6px;
-      background: #F8F9FC;
-      border: 1px solid #E8ECF4;
-      transition: all 0.2s ease;
-    }
-
-    .brand-text {
-      font-family: 'Poppins', sans-serif;
-      color: #111827;
-      font-size: 14px;
-      font-weight: 600;
-      line-height: 1.3;
-      letter-spacing: -0.3px;
-      opacity: 1;
-      transition: opacity 0.2s ease;
-      flex: 1;
-      min-width: 0;
-    }
-  }
-
-  .toggle-btn {
-    width: 36px;
-    height: 36px;
-    min-width: 36px;
-    background: #F8F9FC;
-    border: 1px solid #E8ECF4;
-    border-radius: 8px;
-    margin-left: 8px;
-    transition: all 0.2s ease;
-
-    &:hover {
-      background: #4A90E2;
-      border-color: #4A90E2;
-
-      :deep(svg) {
-        color: #fff !important;
-      }
-    }
-
-    &:active {
-      transform: scale(0.95);
-    }
+  &:hover {
+    background: #FEE2E2;
   }
 }
 
-// Rail mode adjustments
-.is-rail {
-  .sidebar-header {
-    padding: 24px 16px;
-
-    .logo-section {
-      justify-content: center;
-      padding: 6px;
-
-      .logo-img {
-        width: 40px;
-        height: 40px;
-        min-width: 40px;
-      }
-    }
-
-    .toggle-btn {
-      display: none;
-    }
-  }
-
-  .scrollnavbar {
-    .nav-list {
-      padding: 16px 8px !important;
-    }
-  }
+// Transitions
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.25s ease;
 }
 
-.scrollnavbar {
-  height: calc(100vh - 80px);
-  overflow: hidden !important;
-
-  :deep(.v-list) {
-    overflow: hidden !important;
-  }
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
 }
 </style>

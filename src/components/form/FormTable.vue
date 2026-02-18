@@ -247,7 +247,8 @@ const refresh = (props: any) => {
 .table-container {
   background: white;
   border-radius: 16px;
-  overflow: hidden;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
 }
 
 .modern-table {
@@ -267,7 +268,7 @@ const refresh = (props: any) => {
 
 // Header Styles
 .table-header-row {
-  background: #F8F9FC;
+  background: #F9FAFB;
   border-bottom: 1px solid #E8ECF4;
 
   .table-header-cell {
@@ -275,7 +276,7 @@ const refresh = (props: any) => {
     font-family: 'Poppins', sans-serif;
     font-size: 14px;
     font-weight: 600;
-    color: #374151;
+    color: #1F2937;
     text-align: left;
     border: none;
     white-space: nowrap;
@@ -297,7 +298,7 @@ const refresh = (props: any) => {
     }
 
     .sort-icon {
-      color: #4A90E2;
+      color: #5D87FF;
       flex-shrink: 0;
     }
   }
@@ -310,7 +311,7 @@ const refresh = (props: any) => {
   cursor: pointer;
 
   &:hover {
-    background: #F8F9FC;
+    background: #F9FAFB;
   }
 
   &:last-child {
@@ -321,7 +322,7 @@ const refresh = (props: any) => {
     padding: 16px 20px;
     font-family: 'Poppins', sans-serif;
     font-size: 14px;
-    color: #111827;
+    color: #1F2937;
     border: none;
     vertical-align: middle;
 
@@ -375,7 +376,7 @@ const refresh = (props: any) => {
     border-radius: 8px;
 
     &--is-active {
-      background: #4A90E2 !important;
+      background: #5D87FF !important;
       color: white;
     }
   }
@@ -385,11 +386,9 @@ const refresh = (props: any) => {
 @keyframes fadeIn {
   from {
     opacity: 0;
-    transform: translateY(10px);
   }
   to {
     opacity: 1;
-    transform: translateY(0);
   }
 }
 
@@ -434,6 +433,18 @@ const refresh = (props: any) => {
     &.prepend-action,
     &.append-action {
       width: 80px;
+    }
+  }
+
+  .table-container {
+    border-radius: 10px;
+  }
+
+  :deep(.v-pagination) {
+    .v-pagination__list {
+      flex-wrap: wrap;
+      gap: 4px;
+      justify-content: center;
     }
   }
 }

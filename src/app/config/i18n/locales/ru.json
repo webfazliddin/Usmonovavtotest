@@ -113,5 +113,21 @@
   "passed": "Сдано",
   "failed": "Не сдано",
   "viewDetails": "Просмотр",
-  "userResult": "Результат пользователя"
+  "userResult": "Результат пользователя",
+  "myExamResult": "Мой результат",
+  "examResultTitle": "Результат экзамена",
+  "noExamYet": "Вы еще не сдавали экзамен",
+  "takeExam": "Сдать экзамен",
+  "successful": "Успешно",
+  "unsuccessful": "Неуспешно",
+  "viewDetailedResults": "Подробнее",
+  "backToHome": "На главную",
+  "examPassedMessage": "Вы успешно сдали экзамен",
+  "examFailedMessage": "Вы не сдали экзамен",
+  "examPassedDetails": "Вы ответили правильно на {correctCount} из 20 вопросов. Проходной балл 90% (18 правильных ответов).",
+  "examFailedDetails": "Для прохождения требовалось минимум 18 правильных ответов (90%). Вы дали {correctCount} правильных ответов.",
+  "loading": "Загрузка...",
+  "errorLoadingData": "Ошибка при загрузке данных",
+  "menu": "Меню",
+  "admin": "Админ"
 }

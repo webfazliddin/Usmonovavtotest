@@ -107,17 +107,12 @@ const emits = defineEmits(["start", "continue"]);
 
 <style lang="scss" scoped>
 .modern-category-card {
-  background: linear-gradient(135deg, #4A90E2 0%, #2563EB 100%);
+  background: #5D87FF;
   border-radius: 16px;
   padding: 24px;
   color: white;
-  transition: all 0.3s ease;
+  transition: all 0.2s ease;
   animation: slideIn 0.3s ease;
-
-  &:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 12px 32px rgba(74, 144, 226, 0.3);
-  }
 }
 
 .stats-grid {
@@ -133,24 +128,15 @@ const emits = defineEmits(["start", "continue"]);
   gap: 12px;
   padding: 12px 16px;
   background: rgba(255, 255, 255, 0.15);
-  backdrop-filter: blur(10px);
   border-radius: 12px;
-  border: 1px solid rgba(255, 255, 255, 0.2);
   transition: all 0.2s ease;
-
-  &:hover {
-    background: rgba(255, 255, 255, 0.25);
-    transform: scale(1.02);
-  }
 
   &--success {
     background: rgba(16, 185, 129, 0.2);
-    border-color: rgba(16, 185, 129, 0.3);
   }
 
   &--empty {
     background: rgba(239, 68, 68, 0.2);
-    border-color: rgba(239, 68, 68, 0.3);
   }
 }
 
@@ -182,7 +168,7 @@ const emits = defineEmits(["start", "continue"]);
 }
 
 .stat-value {
-  font-size: 24px;
+  font-size: 20px;
   font-weight: 700;
   font-family: 'Poppins', sans-serif;
   line-height: 1.2;
@@ -190,7 +176,7 @@ const emits = defineEmits(["start", "continue"]);
 }
 
 .stat-label {
-  font-size: 12px;
+  font-size: 11px;
   font-weight: 500;
   opacity: 0.9;
   font-family: 'Poppins', sans-serif;
@@ -204,7 +190,7 @@ const emits = defineEmits(["start", "continue"]);
   padding: 12px;
   background: rgba(255, 255, 255, 0.1);
   border-radius: 8px;
-  border-left: 3px solid rgba(255, 255, 255, 0.5);
+  border-left: 3px solid rgba(255, 255, 255, 0.3);
   font-family: 'Poppins', sans-serif;
 }
 
@@ -216,7 +202,7 @@ const emits = defineEmits(["start", "continue"]);
 
 .modern-btn {
   font-family: 'Poppins', sans-serif;
-  font-size: 15px;
+  font-size: 14px;
   font-weight: 600;
   padding: 12px 28px;
   border-radius: 10px;
@@ -236,23 +222,19 @@ const emits = defineEmits(["start", "continue"]);
 
   &--primary {
     background: white;
-    color: #4A90E2;
+    color: #5D87FF;
 
     &:hover {
       background: #F8F9FC;
-      transform: translateY(-2px);
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
     }
   }
 
   &--secondary {
     background: rgba(255, 255, 255, 0.2);
     color: white;
-    border: 1px solid rgba(255, 255, 255, 0.3);
 
     &:hover {
       background: rgba(255, 255, 255, 0.3);
-      transform: translateY(-2px);
     }
   }
 }
@@ -275,7 +257,7 @@ const emits = defineEmits(["start", "continue"]);
   }
 
   .stat-value {
-    font-size: 20px;
+    font-size: 18px;
   }
 
   .action-buttons {
