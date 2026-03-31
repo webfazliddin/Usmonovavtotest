@@ -34,7 +34,7 @@ const activeQuestion = computed(() => {
 
   // Check if image is already cached
   if (question?.question?.fileId) {
-    const imageUrl = `https://api.uatest.uz/api/Files?fileName=${question.question.fileId}`;
+    const imageUrl = `https://api.usmonov-avtomaktab.uz/api/Files?fileName=${question.question.fileId}`;
     imageLoading.value = !imageCache.has(imageUrl);
   } else {
     imageLoading.value = false;
@@ -69,7 +69,7 @@ const fetchAttemp = () => {
 const preloadAllImages = () => {
   // HIGHEST PRIORITY: Load current image IMMEDIATELY (index 0)
   if (attempt.value[0]?.question?.fileId) {
-    const currentImageUrl = `https://api.uatest.uz/api/Files?fileName=${attempt.value[0].question.fileId}`;
+    const currentImageUrl = `https://api.usmonov-avtomaktab.uz/api/Files?fileName=${attempt.value[0].question.fileId}`;
 
     const currentImg = new Image();
     currentImg.fetchPriority = 'high';
@@ -94,7 +94,7 @@ const preloadAllImages = () => {
   const highPriorityBatch = attempt.value.slice(1, 6);
   highPriorityBatch.forEach((question) => {
     if (question?.question?.fileId) {
-      const imageUrl = `https://api.uatest.uz/api/Files?fileName=${question.question.fileId}`;
+      const imageUrl = `https://api.usmonov-avtomaktab.uz/api/Files?fileName=${question.question.fileId}`;
       if (imageCache.has(imageUrl)) return;
 
       const img = new Image();
@@ -118,7 +118,7 @@ const preloadAllImages = () => {
     const mediumPriorityBatch = attempt.value.slice(6, 16);
     mediumPriorityBatch.forEach((question) => {
       if (question?.question?.fileId) {
-        const imageUrl = `https://api.uatest.uz/api/Files?fileName=${question.question.fileId}`;
+        const imageUrl = `https://api.usmonov-avtomaktab.uz/api/Files?fileName=${question.question.fileId}`;
         if (imageCache.has(imageUrl)) return;
 
         const img = new Image();
@@ -143,7 +143,7 @@ const preloadAllImages = () => {
     const remainingBatch = attempt.value.slice(16);
     remainingBatch.forEach((question) => {
       if (question?.question?.fileId) {
-        const imageUrl = `https://api.uatest.uz/api/Files?fileName=${question.question.fileId}`;
+        const imageUrl = `https://api.usmonov-avtomaktab.uz/api/Files?fileName=${question.question.fileId}`;
         if (imageCache.has(imageUrl)) return;
 
         const img = new Image();
@@ -171,7 +171,7 @@ const checkImageCache = () => {
     return;
   }
 
-  const imageUrl = `https://api.uatest.uz/api/Files?fileName=${activeQuestion.value.question.fileId}`;
+  const imageUrl = `https://api.usmonov-avtomaktab.uz/api/Files?fileName=${activeQuestion.value.question.fileId}`;
   if (imageCache.has(imageUrl)) {
     imageLoading.value = false;
   }
@@ -401,7 +401,7 @@ onUnmounted(() => {
             </div>
             <img
               v-show="!imageLoading"
-              :src="activeQuestion?.question?.fileId ? `https://api.uatest.uz/api/Files?fileName=${activeQuestion.question.fileId}` : defaultImage"
+              :src="activeQuestion?.question?.fileId ? `https://api.usmonov-avtomaktab.uz/api/Files?fileName=${activeQuestion.question.fileId}` : defaultImage"
               class="test-image"
               @load="() => imageLoading = false"
               @error="() => imageLoading = false"

@@ -143,7 +143,7 @@ watch(
           </v-col>
           <v-col cols="12">
             <img
-              :src="`https://api.uatest.uz/api/TrafficMarks/downloadfile?fileName=${data.fileId}`"
+              :src="`https://api.usmonov-avtomaktab.uz/api/TrafficMarks/downloadfile?fileName=${data.fileId}`"
               alt=""
             />
           </v-col>

@@ -23,7 +23,7 @@ store.fetchData();
         <div
           class="card--inner"
           :style="{
-            backgroundImage: `url(https://api.uatest.uz/api/TrafficMarks/downloadfile?fileName=${card.fileId})`,
+            backgroundImage: `url(https://api.usmonov-avtomaktab.uz/api/TrafficMarks/downloadfile?fileName=${card.fileId})`,
           }"
         >
           <div class="card--inner__content"></div>

@@ -30,7 +30,7 @@ const activeQuestion = computed(() => {
 
   // Check if image is already cached
   if (question?.question?.fileId) {
-    const imageUrl = `https://api.uatest.uz/api/Files?fileName=${question.question.fileId}`;
+    const imageUrl = `https://api.usmonov-avtomaktab.uz/api/Files?fileName=${question.question.fileId}`;
     imageLoading.value = !imageCache.has(imageUrl);
   } else {
     imageLoading.value = false;
@@ -61,7 +61,7 @@ const preloadAllImages = () => {
   const firstBatch = attempt.value.slice(0, 3);
   firstBatch.forEach((question, index) => {
     if (question?.question?.fileId) {
-      const imageUrl = `https://api.uatest.uz/api/Files?fileName=${question.question.fileId}`;
+      const imageUrl = `https://api.usmonov-avtomaktab.uz/api/Files?fileName=${question.question.fileId}`;
       if (imageCache.has(imageUrl)) return;
 
       const img = new Image();
@@ -91,7 +91,7 @@ const preloadAllImages = () => {
     const secondBatch = attempt.value.slice(3, 10);
     secondBatch.forEach((question, index) => {
       if (question?.question?.fileId) {
-        const imageUrl = `https://api.uatest.uz/api/Files?fileName=${question.question.fileId}`;
+        const imageUrl = `https://api.usmonov-avtomaktab.uz/api/Files?fileName=${question.question.fileId}`;
         if (imageCache.has(imageUrl)) return;
 
         const img = new Image();
@@ -116,7 +116,7 @@ const preloadAllImages = () => {
     const remainingBatch = attempt.value.slice(10);
     remainingBatch.forEach((question) => {
       if (question?.question?.fileId) {
-        const imageUrl = `https://api.uatest.uz/api/Files?fileName=${question.question.fileId}`;
+        const imageUrl = `https://api.usmonov-avtomaktab.uz/api/Files?fileName=${question.question.fileId}`;
         if (imageCache.has(imageUrl)) return;
 
         const img = new Image();
@@ -144,7 +144,7 @@ const checkImageCache = () => {
     return;
   }
 
-  const imageUrl = `https://api.uatest.uz/api/Files?fileName=${activeQuestion.value.question.fileId}`;
+  const imageUrl = `https://api.usmonov-avtomaktab.uz/api/Files?fileName=${activeQuestion.value.question.fileId}`;
   if (imageCache.has(imageUrl)) {
     // Image is already cached, hide loading immediately
     imageLoading.value = false;
@@ -353,7 +353,7 @@ fetchAttemp();
             </div>
             <img
               v-show="!imageLoading"
-              :src="activeQuestion?.question?.fileId ? `https://api.uatest.uz/api/Files?fileName=${activeQuestion.question.fileId}` : defaultImage"
+              :src="activeQuestion?.question?.fileId ? `https://api.usmonov-avtomaktab.uz/api/Files?fileName=${activeQuestion.question.fileId}` : defaultImage"
               class="test-image"
               @load="() => imageLoading = false"
               @error="() => imageLoading = false"

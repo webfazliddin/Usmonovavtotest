@@ -177,7 +177,7 @@ onUnmounted(() => {
         <div class="image-section">
           <div class="image-container">
             <img
-              :src="activeQuestion?.question?.fileId ? `https://api.uatest.uz/api/Files?fileName=${activeQuestion.question.fileId}` : defaultImage"
+              :src="activeQuestion?.question?.fileId ? `https://api.usmonov-avtomaktab.uz/api/Files?fileName=${activeQuestion.question.fileId}` : defaultImage"
               class="test-image"
               :alt="`Savol ${activeQuestionIndex + 1} rasmi`"
             />
