@@ -55,6 +55,7 @@ const openCompleteTest = () => {
   router.push({ name: "CompleteTest" });
 };
 
+
 const toggleCategory = (index: number) => {
   const idx = defaultOpenPanels.value.indexOf(index);
   if (idx > -1) {
@@ -435,6 +436,22 @@ getMyCategories();
       background: #0EA472;
     }
   }
+
+  &.material-btn {
+    color: #5D87FF;
+    background: #EFF4FF;
+    border: 1px solid #DBE4FF;
+
+    &:hover {
+      background: #E0EAFF;
+      border-color: #5D87FF;
+    }
+  }
+}
+
+.card-actions {
+  flex-wrap: wrap;
+  row-gap: 8px;
 }
 
 @keyframes fadeIn {

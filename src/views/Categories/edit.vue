@@ -3,7 +3,7 @@ import { onMounted, ref } from "vue";
 import { CategoryModel } from "./types";
 import { useRoute, useRouter } from "vue-router";
 import UiParentCard from "@/components/UiParentCard.vue";
-import { SubmitEventPromise } from "vuetify/lib/framework.mjs"; 
+import { SubmitEventPromise } from "vuetify/lib/framework.mjs";
 import { notify } from "@kyvg/vue3-notification";
 import { useI18n } from "vue-i18n";
 import { setError } from "@/utils/helpers";
@@ -17,7 +17,7 @@ const { t } = useI18n();
 const id = route.params.id as string;
 
 const formModel = ref<CategoryModel>({
-    name: "", 
+  name: "",
 });
 
 const loading = ref(false);
@@ -28,11 +28,11 @@ const saveData = async (submit: SubmitEventPromise) => {
 
   if (valid) {
     const formData = new FormData();
-    formData.append('name',  formModel.value.name)
+    formData.append("name", formModel.value.name);
     saveLoading.value = true;
     const api = +String(id) ? "PutCategories" : "PostCategories";
     const text = +String(id) ? "Edited" : "Created";
-    const payload  = +String(id) ? formModel.value: formData
+    const payload = +String(id) ? formModel.value : formData;
     // @ts-ignore
     CategoriesService[api](payload, id)
       .then(() => {
@@ -77,7 +77,7 @@ onMounted(() => {
     <UiParentCard v-if="loading" class="text-center">
       <v-progress-circular indeterminate></v-progress-circular>
     </UiParentCard>
-    <v-form @submit.prevent="saveData" v-if="!loading" >
+    <v-form @submit.prevent="saveData" v-if="!loading">
       <UiParentCard>
         <v-row>
           <v-col lg="3" md="6" cols="12">
@@ -96,7 +96,7 @@ onMounted(() => {
           </v-btn>
         </v-col>
         <v-col cols="6" class="text-right">
-          <v-btn type="submit" color="success"> {{ $t("save") }} </v-btn>
+          <v-btn type="submit" color="success" :loading="saveLoading">{{ $t("save") }}</v-btn>
         </v-col>
       </v-row>
     </v-form>

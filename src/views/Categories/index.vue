@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { storeToRefs } from "pinia";
 import { useRouter } from "vue-router";
-import Banner from "@/components/Banner.vue";
 import UiParentCard from "@/components/UiParentCard.vue";
 import { DotsVerticalIcon, PencilIcon } from "vue-tabler-icons";
 import { useCategories } from "./store/useCategories";
@@ -98,31 +97,6 @@ store.fetchCategories();
   }
 }
 
-.header-left {
-  flex: 1;
-  min-width: 0;
-}
-
-.page-title {
-  font-family: 'Poppins', sans-serif;
-  font-size: 24px;
-  font-weight: 700;
-  color: #1F2937;
-  margin: 0 0 8px 0;
-  line-height: 1.2;
-
-  @media (max-width: 768px) {
-    font-size: 24px;
-  }
-}
-
-.page-subtitle {
-  font-family: 'Poppins', sans-serif;
-  font-size: 14px;
-  color: #6B7280;
-  margin: 0;
-}
-
 .modern-btn {
   font-family: 'Poppins', sans-serif;
   font-size: 14px;
@@ -145,10 +119,6 @@ store.fetchCategories();
       background: #4A73E8;
     }
 
-    &:active {
-      transform: translateY(0);
-    }
-
     svg {
       stroke: currentColor;
     }
@@ -160,9 +130,7 @@ store.fetchCategories();
   }
 }
 
-.action-menu {
-  position: relative;
-}
+.action-menu { position: relative; }
 
 .action-btn {
   width: 36px;
@@ -218,11 +186,7 @@ store.fetchCategories();
 }
 
 @keyframes fadeIn {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
 </style>

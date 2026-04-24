@@ -8,6 +8,8 @@ import { UserRoutes } from "@/views/User/Routes";
 import { CardRoutes, CardFullscreenRoutes } from "@/views/Card/Routes";
 import { ExamRoutes } from "@/views/Exam/Routes";
 import { ExamResultsRoutes } from "@/views/ExamResults/Routes";
+import { AssignmentSubmissionsRoutes } from "@/views/AssignmentSubmissions/Routes";
+import { MyCoursesRoutes } from "@/views/MyCourses/Routes";
 import { RouteRecordRaw } from "vue-router";
 
 const MainRoutes: RouteRecordRaw = {
@@ -37,6 +39,8 @@ const MainRoutes: RouteRecordRaw = {
     ...CardRoutes,
     ...ExamRoutes,
     ...ExamResultsRoutes,
+    ...AssignmentSubmissionsRoutes,
+    ...MyCoursesRoutes,
   ],
 };
 

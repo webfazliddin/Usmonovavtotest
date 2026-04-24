@@ -1,82 +1,70 @@
 <script setup lang="ts">
+import { onMounted, ref } from "vue";
+import { useRouter } from "vue-router";
 import { storeToRefs } from "pinia";
-import { useRoute, useRouter } from "vue-router";
 import UiParentCard from "@/components/UiParentCard.vue";
-import { DotsVerticalIcon, PencilIcon } from "vue-tabler-icons";
-import { IFields } from "@/models/basic";
 import FormTable from "@/components/form/FormTable.vue";
 import DeleteAction from "@/components/Actions/DeleteAction.vue";
-import Edit from "./edit.vue";
-import { ref, watch } from "vue";
-import { useCardTests } from "./store/useCategories";
-import { CardTestsService } from "@/services/services/CardTests.service";
+import { DotsVerticalIcon, PencilIcon } from "vue-tabler-icons";
+import { IFields } from "@/models/basic";
+import { useCourses } from "./store/useCourses";
+import { CoursesService } from "@/services/services/Courses.service";
+import { FilesService } from "@/services/services/Files.service";
 
-const store = useCardTests();
 const router = useRouter();
-
-const { data, dataLoading, filter } = storeToRefs(store);
-
-const route = useRoute();
-const isDialog = ref(false);
+const store = useCourses();
+const { courses, coursesLoading, filter } = storeToRefs(store);
 
 const fields: IFields[] = [
   { key: "id", label: "ID" },
-  { key: "shortName", label: "shortName" },
-  { key: "fullName", label: "fullName" },
+  { key: "name", label: "courseName" },
+  { key: "description", label: "courseDescription" },
+  { key: "testsCount", label: "courseTests" },
 ];
 
-let searchTimeout: NodeJS.Timeout | null = null;
+let searchTimeout: ReturnType<typeof setTimeout> | null = null;
 
-const fetchDetail = (item: any) => {
+const openEdit = (item: any) => {
   router.push({
     name: "EditCardTests",
-    params: {
-      id: item?.id ? item?.id : 0,
-    },
+    params: { id: item?.id ? item.id : 0 },
   });
-  isDialog.value = true;
 };
 
 const handleSearch = () => {
-  if (searchTimeout) {
-    clearTimeout(searchTimeout);
-  }
+  if (searchTimeout) clearTimeout(searchTimeout);
   searchTimeout = setTimeout(() => {
     filter.value.page = 1;
-    store.refreshData();
+    store.refresh();
   }, 500);
 };
 
-store.fetchData();
+const previewThumb = (row: any) =>
+  row.imageFileId
+    ? FilesService.buildFileUrl(row.imageFileId, "coursesImage")
+    : row.videoFileId
+    ? FilesService.buildFileUrl(row.videoFileId, "coursesVideo")
+    : null;
 
-watch(
-  () => route.params.id,
-  (val) => {
-    if (val) {
-      isDialog.value = true;
-    }
-  },
-  { immediate: true }
-);
+onMounted(() => store.refresh());
 </script>
 
 <template>
-  <div class="modern-admin-page">
-    <!-- Page Header -->
+  <div class="kurslar-admin">
     <div class="page-header">
       <div class="header-left">
-        <h1 class="page-title">{{ $t("cardTests") }}</h1>
+        <h1 class="page-title">{{ $t("cardTest") }}</h1>
+        <p class="page-subtitle">{{ $t("courseInfo") }}</p>
       </div>
-      <button class="modern-btn modern-btn--primary" @click="fetchDetail(0)">
+      <button class="modern-btn modern-btn--primary" @click="openEdit({ id: 0 })">
         <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
           <path d="M10 4V16M4 10H16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
         </svg>
-        <span>{{ $t("createTest") }}</span>
+        <span>{{ $t("createCourse") }}</span>
       </button>
     </div>
 
-    <!-- Search -->
-    <div class="search-section">
+    <div class="filters-row">
       <v-text-field
         v-model="filter.search"
         :placeholder="$t('search') + '...'"
@@ -86,26 +74,41 @@ watch(
         clearable
         @input="handleSearch"
         class="search-input"
-      >
-        <template v-slot:prepend-inner>
-          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <circle cx="11" cy="11" r="8"></circle>
-            <path d="m21 21-4.35-4.35"></path>
-          </svg>
-        </template>
-      </v-text-field>
+      />
     </div>
 
-    <!-- Table Card -->
     <UiParentCard>
       <FormTable
         :fields="fields"
-        :items="data"
-        :loading="dataLoading"
+        :items="courses"
+        :loading="coursesLoading"
         :filter="filter"
-        @refresh="store.fetchData"
+        @refresh="store.refresh"
         append-action
       >
+        <template #name="{ item }">
+          <td class="table-body-cell">
+            <div class="cell-course">
+              <div class="cell-course__thumb" :class="{ 'has-thumb': previewThumb(item) }">
+                <img v-if="item.imageFileId" :src="previewThumb(item)!" alt="" />
+                <svg v-else-if="!item.videoFileId" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <polygon points="23 7 16 12 23 17 23 7"/>
+                  <rect x="1" y="5" width="15" height="14" rx="2"/>
+                </svg>
+                <span v-else class="cell-course__thumb-dot"></span>
+              </div>
+              <div class="cell-course__body">
+                <div class="cell-course__name">{{ item.name }}</div>
+              </div>
+            </div>
+          </td>
+        </template>
+        <template #description="{ item }">
+          <td class="table-body-cell">
+            <span class="text-muted">{{ item.description || "—" }}</span>
+          </td>
+        </template>
+
         <template #actions="{ item }">
           <div class="action-menu">
             <button class="action-btn">
@@ -113,14 +116,14 @@ watch(
             </button>
             <v-menu activator="parent" offset="8">
               <div class="modern-menu">
-                <button class="menu-item" @click="fetchDetail(item)">
+                <button class="menu-item" @click="openEdit(item)">
                   <PencilIcon :size="18" />
                   <span>{{ $t("edit") }}</span>
                 </button>
                 <DeleteAction
                   :item="item"
-                  :service="CardTestsService"
-                  @refresh="store.refreshData()"
+                  :service="CoursesService"
+                  @refresh="store.refresh()"
                 />
               </div>
             </v-menu>
@@ -128,24 +131,18 @@ watch(
         </template>
       </FormTable>
     </UiParentCard>
-
-    <v-dialog v-model="isDialog" width="90%" max-width="1200" persistent>
-      <Edit v-model="isDialog" @update:model-value="store.refreshData()" />
-    </v-dialog>
   </div>
 </template>
 
 <style lang="scss" scoped>
-.modern-admin-page {
-  animation: fadeIn 0.4s ease;
-}
+.kurslar-admin { animation: fadeIn 0.25s ease; }
 
 .page-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 24px;
-  gap: 24px;
+  margin-bottom: 16px;
+  gap: 20px;
   flex-wrap: wrap;
 
   @media (max-width: 768px) {
@@ -154,22 +151,21 @@ watch(
   }
 }
 
-.header-left {
-  flex: 1;
-  min-width: 0;
-}
-
 .page-title {
   font-family: 'Poppins', sans-serif;
   font-size: 24px;
   font-weight: 700;
   color: #1F2937;
   margin: 0;
-  line-height: 1.2;
 
-  @media (max-width: 768px) {
-    font-size: 22px;
-  }
+  @media (max-width: 480px) { font-size: 20px; }
+}
+
+.page-subtitle {
+  font-family: 'Poppins', sans-serif;
+  font-size: 13px;
+  color: #6B7280;
+  margin: 2px 0 0;
 }
 
 .modern-btn {
@@ -180,74 +176,85 @@ watch(
   border-radius: 10px;
   border: none;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: all 0.2s;
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  white-space: nowrap;
 
   &--primary {
     background: #5D87FF;
     color: white;
-
-    &:hover {
-      background: #4A73E8;
-    }
-
-    &:active {
-      transform: translateY(0);
-    }
-
-    svg {
-      stroke: currentColor;
-    }
+    &:hover { background: #4A73E8; }
+    svg { stroke: currentColor; }
   }
 
-  @media (max-width: 768px) {
-    width: 100%;
-    justify-content: center;
-  }
+  @media (max-width: 768px) { width: 100%; justify-content: center; }
 }
 
-.search-section {
-  margin-bottom: 20px;
+.filters-row {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
 }
 
 .search-input {
-  max-width: 500px;
+  max-width: 420px;
   font-family: 'Poppins', sans-serif;
 
-  :deep(.v-field__prepend-inner) {
-    padding-top: 8px;
+  @media (max-width: 768px) { max-width: 100%; }
+}
 
-    svg {
-      color: #6B7280;
+.cell-course {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  &__thumb {
+    width: 40px;
+    height: 40px;
+    border-radius: 8px;
+    background: #EFF4FF;
+    color: #5D87FF;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    overflow: hidden;
+
+    &.has-thumb {
+      background: #1F2937;
+    }
+
+    &-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #10B981;
+    }
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
     }
   }
 
-  :deep(.v-field__input) {
+  &__name {
+    font-family: 'Poppins', sans-serif;
     font-size: 14px;
-    padding: 12px 0;
-  }
-
-  :deep(.v-field__outline) {
-    border-radius: 10px;
-  }
-
-  :deep(.v-field--focused) {
-    .v-field__outline {
-      border-color: #5D87FF;
-    }
-  }
-
-  @media (max-width: 768px) {
-    max-width: 100%;
+    font-weight: 600;
+    color: #1F2937;
   }
 }
 
-.action-menu {
-  position: relative;
+.text-muted {
+  color: #6B7280;
+  font-family: 'Poppins', sans-serif;
+  font-size: 13px;
 }
+
+.action-menu { position: relative; }
 
 .action-btn {
   width: 36px;
@@ -259,13 +266,9 @@ watch(
   border: none;
   border-radius: 8px;
   cursor: pointer;
-  transition: all 0.2s ease;
   color: #6B7280;
 
-  &:hover {
-    background: #5D87FF;
-    color: white;
-  }
+  &:hover { background: #5D87FF; color: white; }
 }
 
 .modern-menu {
@@ -285,29 +288,17 @@ watch(
   border: none;
   border-radius: 8px;
   cursor: pointer;
-  transition: all 0.2s ease;
   font-family: 'Poppins', sans-serif;
   font-size: 14px;
   color: #1F2937;
   text-align: left;
 
-  &:hover {
-    background: #F9FAFB;
-    color: #5D87FF;
-  }
-
-  svg {
-    color: currentColor;
-    flex-shrink: 0;
-  }
+  &:hover { background: #F9FAFB; color: #5D87FF; }
+  svg { color: currentColor; flex-shrink: 0; }
 }
 
 @keyframes fadeIn {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
 </style>

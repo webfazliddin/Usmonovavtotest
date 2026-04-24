@@ -35,7 +35,7 @@ const result = computed(() => {
         },
         {
           title: "cardTests",
-          to: "/card",
+          to: "/my-courses",
           icon: LockBoltIcon,
           visible: true,
         },
@@ -80,6 +80,12 @@ const result = computed(() => {
               {
                 title: "examResults",
                 to: "/admin/exam-results",
+                icon: ClipboardListIcon,
+                visible: true,
+              },
+              {
+                title: "assignmentSubmissions",
+                to: "/admin/assignment-submissions",
                 icon: ClipboardListIcon,
                 visible: true,
               },

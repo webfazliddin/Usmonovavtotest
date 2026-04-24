@@ -3,6 +3,7 @@ import MainRoutes from "./MainRoutes";
 import { CompleteTestRoute } from "@/views/MyCategories/Routes";
 import { CardFullscreenRoutes } from "@/views/Card/Routes";
 import { ExamFullscreenRoutes } from "@/views/Exam/Routes";
+import { CardTestsFullscreenRoutes } from "@/views/CardTests/Routes";
 import { useAdapter } from "@/utils/useAdapter";
 
 const { getAdapter } = useAdapter();
@@ -32,6 +33,7 @@ export const router = createRouter({
     CompleteTestRoute,
     ...CardFullscreenRoutes,
     ...ExamFullscreenRoutes,
+    ...CardTestsFullscreenRoutes,
     MainRoutes,
   ],
 });
@@ -54,6 +56,7 @@ router.beforeEach(async (to, from, next) => {
     "/admin/users",
     "/admin/mark-categories",
     "/admin/traffic-marks",
+    "/admin/assignment-submissions",
   ];
 
   const isAdminRoute = adminOnlyRoutes.some(route => to.path.startsWith(route));
